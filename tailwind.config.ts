@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import {plugin, content} from "flowbite-react/tailwind";
+import { plugin, content } from "flowbite-react/tailwind";
 
 export default {
   content: [
@@ -10,6 +10,9 @@ export default {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        custom: '0px 4px 4px 0px #00000040',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
