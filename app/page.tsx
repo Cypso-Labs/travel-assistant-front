@@ -1,7 +1,10 @@
+import { Datepicker } from "flowbite-react";
+
+
 export default function Home() {
   return (
     <div>
-      app
+      <Datepicker />
     </div>
   );
 }
