@@ -168,41 +168,49 @@ export default function ItineraryPage() {
             <label className="block text-gray-700 font-bold mb-2">
               Select a time period
             </label>
-            <div className="flex items-center justify-between gap-4">
-              <div className="w-full">
-                <label
-                  className="block text-gray-700 font-bold mb-2"
-                  htmlFor="start-date"
-                >
-                  Start Date *
-                </label>
-                <input
-                  id="start-date"
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2"
-                />
-              </div>
+            <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
+                {/* Start Date */}
+                <div className="w-full">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="start-date"
+                  >
+                    Start Date *
+                  </label>
+                  <input
+                    id="start-date"
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md px-4 py-2"
+                  />
+                </div>
 
-              <span className="text-xl font-semibold text-gray-700">To</span>
+                {/* Separator */}
+                <span className="hidden md:block text-xl font-semibold text-gray-700">
+                  To
+                </span>
+                <span className="md:hidden text-center font-semibold text-gray-700">
+                  To
+                </span>
 
-              <div className="w-full">
-                <label
-                  className="block text-gray-700 font-bold mb-2"
-                  htmlFor="end-date"
-                >
-                  End Date *
-                </label>
-                <input
-                  id="end-date"
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2"
-                />
+                {/* End Date */}
+                <div className="w-full">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="end-date"
+                  >
+                    End Date *
+                  </label>
+                  <input
+                    id="end-date"
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md px-4 py-2"
+                  />
+                </div>
               </div>
-            </div>
           </div>
 
           <div className="text-center mt-6">
@@ -218,81 +226,81 @@ export default function ItineraryPage() {
       </main>
 
       <footer className="bg-gray-900 text-white py-10">
-        <div className="container mx-auto flex flex-wrap justify-between items-start px-6 lg:px-16 space-y-6 md:space-y-0">
-          <div className="w-full md:w-1/3 space-y-4">
-            <div className="bg-gray-500 rounded-full w-10 h-10"></div>{" "}
-            
-            <h2 className="text-2xl font-bold">Make Your Own</h2>
-            <h3 className="text-green-500 text-xl font-bold">Itinerary</h3>
-            <button className="bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition-all duration-300">
-              Click Here
-            </button>
-          </div>
+          <div className="container mx-auto flex flex-col md:flex-row justify-between items-start px-6 lg:px-16 space-y-6 md:space-y-0">
+            {/* Section 1 */}
+            <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
+              <div className="bg-gray-500 rounded-full w-10 h-10 mx-auto md:mx-0"></div>
+              <h2 className="text-2xl font-bold">Make Your Own</h2>
+              <h3 className="text-green-500 text-xl font-bold">Itinerary</h3>
+              <button className="bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition-all duration-300">
+                Click Here
+              </button>
+            </div>
 
-          
-          <div className="w-full md:w-1/3 space-y-4">
-            <h3 className="text-xl font-bold">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="/"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/about"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/itinerary"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  Itinerary
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/events"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  Events
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/recipes"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  Recipe
-                </a>
-              </li>
-            </ul>
-          </div>
+            {/* Section 2 */}
+            <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
+              <h3 className="text-xl font-bold">Quick Links</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a
+                    href="/"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/about"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/itinerary"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    Itinerary
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/events"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    Events
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/recipes"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    Recipe
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-          
-          <div className="w-full md:w-1/3 space-y-4">
-            <div>
-              <h3 className="font-bold">More Inquiry</h3>
-              <p className="text-gray-300">+xxxx xxx xxxx</p>
-            </div>
-            <div>
-              <h3 className="font-bold">Send Mail</h3>
-              <p className="text-gray-300">info@example.com</p>
-            </div>
-            <div>
-              <h3 className="font-bold">Address</h3>
-              <p className="text-gray-300">Address Line Here</p>
+            {/* Section 3 */}
+            <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
+              <div>
+                <h3 className="font-bold">More Inquiry</h3>
+                <p className="text-gray-300">+xxxx xxx xxxx</p>
+              </div>
+              <div>
+                <h3 className="font-bold">Send Mail</h3>
+                <p className="text-gray-300">info@example.com</p>
+              </div>
+              <div>
+                <h3 className="font-bold">Address</h3>
+                <p className="text-gray-300">Address Line Here</p>
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </footer>
     </div>
     </body>    
   );
