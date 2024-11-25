@@ -1,12 +1,12 @@
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
-import googleIcon from "../../../public/images/icons/google_logo.png";
+// import googleIcon from "../../../public/images/icons/google_logo.png";
 import Link from "next/link";
 
 function SignUp() {
   return (
     <div className="h-full flex items-center">
-      <form className="max-w-sm w-full mx-auto">
+      <form className="max-w-md w-full mx-auto px-10 py-24 rounded-[10px] bg-white">
         <h1 className="text-[31px] font-[600] text-center mb-12">
           Create an account
         </h1>
@@ -83,7 +83,7 @@ function SignUp() {
             Get started
           </Link>
         </div>
-
+{/* 
         <div className="flex justify-center">
           <button
             type="submit"
@@ -92,7 +92,7 @@ function SignUp() {
             <Image src={googleIcon} alt="google icon" />
             <span>Start with google</span>
           </button>
-        </div>
+        </div> */}
 
         <div className="text-center mt-5">
           Already have an account ?
