@@ -12,7 +12,7 @@ export default function SignUpLayout({
         <Image src={sideImage} alt="sun rise image" />
       </div>
 
-      <div className="flex-grow max-lg:absolute w-full">{children}</div>
+      <div className="flex-grow max-lg:absolute max-lg:w-full">{children}</div>
     </div>
   );
 }
