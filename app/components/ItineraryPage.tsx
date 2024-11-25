@@ -1,6 +1,8 @@
 "use client"; // Add this line
 
 import React, { useState } from "react";
+import header_image from '../../public/images/hedar_Img.png'
+import Image from "next/image";
 
 export default function ItineraryPage() {
   const [location, setLocation] = useState("");
@@ -8,85 +10,123 @@ export default function ItineraryPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLocationOn, setIsLocationOn] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleCreate = () => {
     console.log({ location, budget, startDate, endDate });
     alert("Itinerary Created!");
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
   return (
     <body>
       <div className="min-h-screen bg-gray-50">
       <header className="relative bg-gray-900 text-white py-4">
-        <div className="absolute inset-0">
-          <img src="" alt="Background" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        </div>
-
-        <div className="relative container mx-auto flex justify-between items-center px-4 z-10">
-          <div className="flex items-center space-x-4">
-            <div className="bg-gray-500 rounded-full w-10 h-10"></div>
-            <h1 className="text-2xl font-bold">ITINERARY</h1>
+          <div className="absolute inset-0">
+            <Image src={header_image} alt="Background" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           </div>
 
-          <nav className="flex space-x-6">
-            <a href="/" className="hover:text-gray-300 text-lg">
-              Home
-            </a>
-            <a href="/itinerary" className="hover:text-gray-300 text-lg">
-              Itinerary
-            </a>
-            <a href="/events" className="hover:text-gray-300 text-lg">
-              Events
-            </a>
-            <a href="/recipes" className="hover:text-gray-300 text-lg">
-              Recipes
-            </a>
-            <a href="/emergency" className="hover:text-gray-300 text-lg">
-              Emergency
-            </a>
-            <a href="/about" className="hover:text-gray-300 text-lg">
-              About Us
-            </a>
+          <div className="relative container mx-auto flex justify-between items-center px-4 z-10">
+            {/* Logo */}
+            <div className="flex items-center space-x-4">
+              <div className="bg-gray-500 rounded-full w-10 h-10"></div>
+              <h1 className="text-2xl font-bold hidden md:block">ITINERARY</h1>
+            </div>
+
+            {/* Navigation for larger screens */}
+            <nav className="hidden md:flex space-x-6">
+              <a href="/" className="hover:text-gray-300 text-lg">Home</a>
+              <a href="/itinerary" className="hover:text-gray-300 text-lg">Itinerary</a>
+              <a href="/events" className="hover:text-gray-300 text-lg">Events</a>
+              <a href="/recipes" className="hover:text-gray-300 text-lg">Recipes</a>
+              <a href="/emergency" className="hover:text-gray-300 text-lg">Emergency</a>
+              <a href="/about" className="hover:text-gray-300 text-lg">About Us</a>
+            </nav>
+
+            {/* Icons for mobile and desktop */}
+            <div className="flex space-x-4">
+              {/* Menu Icon */}
+              <button
+                onClick={toggleSidebar}
+                className="md:hidden bg-gray-800 p-2 rounded-full hover:bg-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6h16.5M3.75 12h16.5M3.75 18h16.5"
+                  />
+                </svg>
+              </button>
+
+              {/* Notification Icon */}
+              <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+         {/* Sidebar */}
+         <div
+          className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 z-50`}
+        >
+          <div className="flex justify-between items-center p-4 border-b border-gray-700">
+            <h2 className="text-xl font-bold">Menu</h2>
+            <button
+              onClick={toggleSidebar}
+              className="text-white hover:text-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <nav className="p-4 space-y-4">
+            <a href="/" className="block hover:text-gray-300">Home</a>
+            <a href="/itinerary" className="block hover:text-gray-300">Itinerary</a>
+            <a href="/events" className="block hover:text-gray-300">Events</a>
+            <a href="/recipes" className="block hover:text-gray-300">Recipes</a>
+            <a href="/emergency" className="block hover:text-gray-300">Emergency</a>
+            <a href="/about" className="block hover:text-gray-300">About Us</a>
           </nav>
-
-          <div className="flex space-x-4">
-            <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
-                />
-              </svg>
-            </button>
-
-            <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 9V5.25m0 0h-7.5m7.5 0V9m0 0v4.5a6.75 6.75 0 01-6.75 6.75H9m6.75-6.75v4.5m0 0h-7.5m7.5 0a6.75 6.75 0 01-6.75-6.75V9m0 0v4.5M9 9V5.25m0 0H6.75"
-                />
-              </svg>
-            </button>
-          </div>
         </div>
-      </header>
 
       <main className="container mx-auto mt-10 px-4 pb-10">
        
