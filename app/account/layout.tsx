@@ -7,12 +7,12 @@ export default function SignUpLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex">
+    <div className="flex max-lg:items-center max-lg:justify-center">
       <div>
         <Image src={sideImage} alt="sun rise image" />
       </div>
 
-      <div className="flex-grow">{children}</div>
+      <div className="flex-grow max-lg:absolute max-lg:w-full">{children}</div>
     </div>
   );
 }

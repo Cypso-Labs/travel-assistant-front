@@ -6,8 +6,8 @@ import ToggleButton from "@/app/components/toggle-button";
 
 function ProfileCreationPage() {
   return (
-    <div className="h-[1024px] overflow-y-auto py-10">
-      <div className="max-w-sm w-full mx-auto">
+    <div className="h-[1024px] overflow-y-auto py-32">
+      <div className="max-w-md w-full mx-auto px-10 py-24 rounded-[10px] bg-white">
         <h1 className="text-[31px] font-[600]  mb-12">
           Let&apos;s create your profile
         </h1>
