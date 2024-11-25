@@ -6,13 +6,16 @@ import header_image from "../../public/images/hedar_Img.png";
 import Map from "../../public/images/Map_IMG.png";
 import Image from "next/image";
 import React, { useState } from "react";
+import VR360Image from './Modals/vrModal';
 
 export default function ItineraryPage_02() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedImageURl, setSelectedImageURL] = useState('');
   const locations = [
-    { id: 1, name: "Location 01", description: "Description", budget: "XXXX" },
-    { id: 2, name: "Location 02", description: "Description", budget: "XXXX" },
-    { id: 3, name: "Location 03", description: "Description", budget: "XXXX" },
+    { id: 1, name: "Location 01", description: "Description", budget: "XXXX", image: "https://i.ibb.co/ccLLzqF/ella-rock-4.jpg" },
+    { id: 2, name: "Location 02", description: "Description", budget: "XXXX", image: "https://i.ibb.co/ccLLzqF/ella-rock-3.jpg" },
+    { id: 3, name: "Location 03", description: "Description", budget: "XXXX", image: "https://i.ibb.co/ccLLzqF/ella-rock-2.jpg" },
   ];
 
   const itineraryData = Array(4).fill({
@@ -24,9 +27,10 @@ export default function ItineraryPage_02() {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  const handleImageClick = () => {
-    console.log("Image clicked!");
-  };
+  const handleImageModal = (imageURL: React.SetStateAction<string>) => {
+    setSelectedImageURL(imageURL);
+    setOpenModal(true);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -118,9 +122,8 @@ export default function ItineraryPage_02() {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 z-50`}
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 z-50`}
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
           <h2 className="text-xl font-bold">Menu</h2>
@@ -167,62 +170,63 @@ export default function ItineraryPage_02() {
       </div>
 
       <main className="container mx-auto mt-6 pb-10 px-4 sm:px-6 lg:px-8">
-  <h2 className="text-2xl font-semibold text-gray-700 mb-4">Your Itinerary</h2>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-    {itineraryData.map((item, index) => (
-      <div key={index} className="bg-white shadow rounded-lg p-4 flex flex-col relative">
-        <div className="w-full bg-gray-300 mb-4 rounded">
-          <Image
-            src={Map}
-            alt="Map"
-            className="w-full h-full object-cover rounded"
-          />
-        </div>
-        <div className="mb-4">
-          {item.locations.map((loc) => (
-            <div key={loc.id} className="flex items-center justify-between mb-2">
-              <label className="flex items-center text-gray-700 space-x-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-5 h-5 text-green-300"
-                >
-                  <circle cx="12" cy="12" r="8" />
-                </svg>
-                <span>
-                  {loc.name} <span className="text-sm">({loc.description})</span>
-                </span>
-              </label>
-
-              <span className="text-gray-500">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">Your Itinerary</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+          {itineraryData.map((item, index) => (
+            <div key={index} className="bg-white shadow rounded-lg p-4 flex flex-col relative">
+              <div className="w-full bg-gray-300 mb-4 rounded">
                 <Image
-                  src={VR}
-                  alt="Location Icon"
-                  className="w-5 h-5 cursor-pointer"
-                  onClick={handleImageClick}
+                  src={Map}
+                  alt="Map"
+                  className="w-full h-full object-cover rounded"
                 />
-              </span>
+              </div>
+              <div className="mb-4">
+                {item.locations.map((loc) => (
+                  <div key={loc.id} className="flex items-center justify-between mb-2">
+                    <label className="flex items-center text-gray-700 space-x-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-5 h-5 text-green-300"
+                      >
+                        <circle cx="12" cy="12" r="8" />
+                      </svg>
+                      <span>
+                        {loc.name} <span className="text-sm">({loc.description})</span>
+                      </span>
+                    </label>
+
+                    <span className="text-gray-500">
+                      <Image
+                        onClick={() => { handleImageModal(loc.image) }}
+                        src={VR}
+                        alt="Location Icon"
+                        className="w-5 h-5 cursor-pointer"
+                      />
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col items-center sm:items-start mt-4">
+                <p className="text-gray-700 font-semibold text-center sm:text-left">Total Budget</p>
+                <p className="text-xl font-bold text-green-600 text-center sm:text-left">
+                  RS {item.totalBudget}
+                </p>
+              </div>
+
+              <div className="relative mt-4 sm:mt-6 flex justify-end w-full">
+                <button className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
+                  SAVE
+                </button>
+              </div>
+
             </div>
           ))}
         </div>
-        <div className="flex flex-col items-center sm:items-start mt-4">
-  <p className="text-gray-700 font-semibold text-center sm:text-left">Total Budget</p>
-  <p className="text-xl font-bold text-green-600 text-center sm:text-left">
-    RS {item.totalBudget}
-  </p>
-</div>
-
-<div className="relative mt-4 sm:mt-6 flex justify-end w-full">
-  <button className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
-    SAVE
-  </button>
-</div>
-
-      </div>
-    ))}
-  </div>
-</main>
+        {openModal && <VR360Image imageURL={selectedImageURl} onClose={() => setOpenModal(false)} />}
+      </main>
 
 
       <footer className="bg-gray-900 text-white py-10">
