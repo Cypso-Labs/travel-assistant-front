@@ -1,0 +1,485 @@
+"use client"; // Add this line
+
+import React from "react";
+import header_image from "../../public/images/homePage.png";
+import header_image1 from "../../public/images/1.png";
+import header_image2 from "../../public/images/2.png";
+import header_image3 from "../../public/images/3.png";
+import header_image4 from "../../public/images/4.png";
+import Event_Image1 from "../../public/images/event01.png";
+import Event_Image2 from "../../public/images/event02.png";
+import Event_Image3 from "../../public/images/event03.png";
+import Chickn from "../../public/images/Image.png";
+import Image from "next/image";
+import Link from "next/link";
+
+export default function HomePage() {
+  return (
+    <body>
+      <div className="min-h-screen bg-gray-900 text-white ">
+        <header className="fixed top-0 left-1/2 transform -translate-x-1/2 w-[96vw] bg-black text-white shadow-lg z-50 mt-5 rounded-lg">
+          <div className="flex justify-between items-center px-4 lg:px-10 h-16">
+            <div className="text-lg font-bold">
+              <div className="h-8 w-24 bg-gray-700 rounded-sm"></div>{" "}
+            </div>
+
+            <nav>
+              <ul className="hidden md:flex space-x-6">
+                <li className="text-green-400 font-semibold cursor-pointer hover:underline">
+                  HOME
+                </li>
+                <li>
+                  <Link
+                    href="/itinerary"
+                    className="cursor-pointer hover:text-green-400"
+                  >
+                    ITINERARY
+                  </Link>
+                </li>
+                <li className="cursor-pointer hover:text-green-400">EVENTS</li>
+                <li className="cursor-pointer hover:text-green-400">RECIPES</li>
+                <li className="cursor-pointer hover:text-green-400">
+                  EMERGENCY
+                </li>
+                <li className="cursor-pointer hover:text-green-400">
+                  ABOUT US
+                </li>
+              </ul>
+            </nav>
+
+            <div className="flex items-center space-x-4">
+              <div className="h-8 w-8 bg-gray-700 rounded-full"></div>
+              <div className="h-6 w-6 bg-gray-700 rounded-md"></div>
+            </div>
+          </div>
+        </header>
+
+        <section
+          className="relative flex items-center justify-center h-screen bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/images/homePage.png')",
+          }}
+        >
+          <div className="absolute inset-0"></div>
+
+          <div className="relative z-10 text-center px-4 md:px-8">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-green-400">
+              Explore Sri Lanka Like Never Before!
+            </h1>
+            <p className="mt-4 text-sm sm:text-md md:text-xl text-white max-w-2xl mx-auto">
+              Welcome to Sri Lanka! Our travel app is your gateway to exploring
+              this stunning island. With personalized itineraries, budget tips,
+              local recipes, and immersive experiences, we’re here to help you
+              create unforgettable memories. Let the adventure begin!
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <div className=" bg-white text-gray-800 min-h-screen px-6 md:px-12 py-10 ">
+        {/* Page Header */}
+        <div className="absolute text-left mb-12">
+          <h2 className="text-lg font-bold text-green-500">About Us</h2>
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-4">
+            Let’s know about us
+          </h1>
+          <p className="text-lg max-w-3xl">
+            Welcome to your ultimate travel companion for exploring Sri Lanka!
+            Our app is designed to make your trip planning smooth, enjoyable,
+            and culturally enriching. With a range of exciting features, we
+            ensure that your experience is personalized, fun, and informative.
+          </p>
+        </div>
+
+        {/* Main Features Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Features Content */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6">Main Features:</h2>
+            <div className="space-y-6">
+              {/* Feature 1 */}
+              <div className="flex items-start">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6 text-green-500"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8.25 12.75l3 3 4.5-6"
+                    />
+                  </svg>
+                </div>
+                <div className="ml-4">
+                  <h3 className="font-bold text-lg">
+                    Personalized Trip Planning
+                  </h3>
+                  <p className="text-gray-600">
+                    Tailored itineraries based on your preferences.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 2 */}
+              <div className="flex items-start">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6 text-green-500"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
+                </div>
+                <div className="ml-4">
+                  <h3 className="font-bold text-lg">Local Recipes</h3>
+                  <p className="text-gray-600">
+                    Discover authentic Sri Lankan recipes and flavors.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="flex items-start">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6 text-green-500"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.75 6.75h.008v.008H9.75V6.75zm4.5 0h.008v.008h-.008V6.75zM9.75 17.25h.008v.008H9.75v-.008zm4.5 0h.008v.008h-.008v-.008zM6 12h12"
+                    />
+                  </svg>
+                </div>
+                <div className="ml-4">
+                  <h3 className="font-bold text-lg">
+                    AI-Powered Landmark Identification
+                  </h3>
+                  <p className="text-gray-600">
+                    Use AI to explore and learn about landmarks in real-time.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Ending Text */}
+            <p className="mt-8 text-gray-700">
+              Our app is here to guide you every step of the way, making travel
+              planning easy, fun, and enriching.
+            </p>
+            <p className="font-bold mt-4">
+              Start your <span className="text-green-500">adventure</span> with
+              us today and <span className="text-green-500">explore</span> Sri
+              Lanka like <span className="text-green-500">never before!</span>
+            </p>
+            <Link
+              href="#"
+              className="text-green-500 font-semibold hover:underline mt-2 inline-block"
+            >
+              Learn more...
+            </Link>
+          </div>
+
+          {/* Features Images */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="rounded-lg overflow-hidden">
+              <Image
+                src={header_image1}
+                alt="Feature 1"
+                width={400}
+                height={400}
+                className="w-full h-full"
+              />
+            </div>
+            <div className="rounded-lg overflow-hidden">
+              <Image
+                src={header_image4}
+                alt="Feature 2"
+                width={400}
+                height={400}
+                className="w-full h-auto"
+              />
+            </div>
+            <div className="rounded-lg overflow-hidden">
+              <Image
+                src={header_image3}
+                alt="Feature 3"
+                width={400}
+                height={400}
+                className="w-full h-auto"
+              />
+            </div>
+            <div className="rounded-lg overflow-hidden">
+              <Image
+                src={header_image2}
+                alt="Feature 4"
+                width={400}
+                height={400}
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section className="p-8 text-left">
+        <h1 className="text-5xl font-bold mb-5">
+          Essential Tools for Travelers
+        </h1>
+        <p className="text-lg text-gray-600 mb-8">
+        Essential Tools for Travelers: Plan your perfect itinerary, explore upcoming events, and discover popular local recipes to make the most of your trip
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1 */}
+          <div className="border rounded-lg shadow-lg p-4">
+            <Image
+              src={Event_Image1}
+              alt="Travel Itinerary"
+              width={500}
+              height={500}
+              className="rounded-md"
+            />
+            <p className="mt-4 font-semibold">Make Your Own Itinerary</p>
+          </div>
+
+          {/* Card 2 */}
+          <div className="border rounded-lg shadow-lg p-4">
+            <Image
+              src={Event_Image2} 
+              alt="Upcoming Events"
+              width={500}
+              height={500}
+              className="rounded-md"
+            />
+            <p className="mt-4 font-semibold">Upcoming Events</p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="border rounded-lg shadow-lg p-4">
+            <Image
+              src={Event_Image3} 
+              alt="Popular Recipes"
+              width={500}
+              height={500}
+              className="rounded-md"
+            />
+            <p className="mt-4 font-semibold">Popular Recipes</p>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+      <div className="p-8">
+  <div className="text-left mb-12">
+    <h1 className="text-6xl font-bold mb-4">Flavors of Sri Lanka</h1>
+    <p className="text-lg text-gray-600">
+      Sri Lankan cuisine is a vibrant blend of bold spices, fresh ingredients, and diverse cultural influences, creating unforgettable flavors. From spicy curries to sweet desserts, each dish reflects the island's rich heritage and unique cooking traditions. Explore beloved recipes that bring the authentic tastes of Sri Lanka to your kitchen!
+    </p>
+  </div>
+  {/* Cards Section */}
+  <div className="flex flex-wrap justify-center gap-6">
+    {/* Card 1 */}
+    <div className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]">
+      <div className="relative w-full h-48">
+        <Image
+          src={Chickn} // Replace with actual image path
+          alt="Sri Lankan Chicken Curry"
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-xl font-semibold mb-2">
+          Sri Lankan Chicken Curry (Kukul Mas Curry)
+        </h3>
+        <p className="text-gray-600 mb-4">
+          Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and aromatic dish made with a blend of spices, coconut milk, and tender chicken, embodying the vibrant flavors of Sri Lankan cuisine.
+        </p>
+        <a href="#" className="text-green-600 font-semibold hover:underline">
+          Learn More....
+        </a>
+      </div>
+    </div>
+
+    {/* Card 2 */}
+    <div className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]">
+      <div className="relative w-full h-48">
+        <Image
+          src={Chickn} // Replace with actual image path
+          alt="Sri Lankan Chicken Curry"
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-xl font-semibold mb-2">
+          Sri Lankan Chicken Curry (Kukul Mas Curry)
+        </h3>
+        <p className="text-gray-600 mb-4">
+          Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and aromatic dish made with a blend of spices, coconut milk, and tender chicken, embodying the vibrant flavors of Sri Lankan cuisine.
+        </p>
+        <a href="#" className="text-green-600 font-semibold hover:underline">
+          Learn More....
+        </a>
+      </div>
+    </div>
+
+    {/* Card 3 */}
+    <div className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]">
+      <div className="relative w-full h-48">
+        <Image
+          src={Chickn}
+          alt="Sri Lankan Chicken Curry"
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-xl font-semibold mb-2">
+          Sri Lankan Chicken Curry (Kukul Mas Curry)
+        </h3>
+        <p className="text-gray-600 mb-4">
+          Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and aromatic dish made with a blend of spices, coconut milk, and tender chicken, embodying the vibrant flavors of Sri Lankan cuisine.
+        </p>
+        <a href="#" className="text-green-600 font-semibold hover:underline">
+          Learn More....
+        </a>
+      </div>
+    </div>
+
+    <div className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]">
+      <div className="relative w-full h-48">
+        <Image
+          src={Chickn}
+          alt="Sri Lankan Chicken Curry"
+          fill
+          className="object-cover"
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-xl font-semibold mb-2">
+          Sri Lankan Chicken Curry (Kukul Mas Curry)
+        </h3>
+        <p className="text-gray-600 mb-4">
+          Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and aromatic dish made with a blend of spices, coconut milk, and tender chicken, embodying the vibrant flavors of Sri Lankan cuisine.
+        </p>
+        <a href="#" className="text-green-600 font-semibold hover:underline">
+          Learn More....
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  {/* More Recipes Section */}
+  <div className="text-right mt-8">
+    <a href="#" className="text-lg font-semibold text-green-600 hover:underline">
+      More Recipes →
+    </a>
+  </div>
+</div>
+
+<footer className="bg-gray-900 text-white py-10">
+          <div className="container mx-auto flex flex-col md:flex-row justify-between items-start px-6 lg:px-16 space-y-6 md:space-y-0">
+            {/* Section 1 */}
+            <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
+              <div className="bg-gray-500 rounded-full w-10 h-10 mx-auto md:mx-0"></div>
+              <h2 className="text-2xl font-bold">Make Your Own</h2>
+              <h3 className="text-green-500 text-xl font-bold">Itinerary</h3>
+              <button className="bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition-all duration-300">
+                Click Here
+              </button>
+            </div>
+
+            {/* Section 2 */}
+            <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
+              <h3 className="text-xl font-bold">Quick Links</h3>
+              <ul className="space-y-2">
+                <li>
+                  <a
+                    href="/"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/about"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/itinerary"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    Itinerary
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/events"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    Events
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/recipes"
+                    className="hover:text-green-500 transition-all duration-200"
+                  >
+                    Recipe
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Section 3 */}
+            <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
+              <div>
+                <h3 className="font-bold">More Inquiry</h3>
+                <p className="text-gray-300">+xxxx xxx xxxx</p>
+              </div>
+              <div>
+                <h3 className="font-bold">Send Mail</h3>
+                <p className="text-gray-300">info@example.com</p>
+              </div>
+              <div>
+                <h3 className="font-bold">Address</h3>
+                <p className="text-gray-300">Address Line Here</p>
+              </div>
+            </div>
+          </div>
+        </footer>
+
+
+    </body>
+  );
+}
