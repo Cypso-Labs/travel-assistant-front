@@ -1,4 +1,4 @@
-"use client"; // Add this line
+"use client"; 
 
 import React, { useState } from "react";
 import header_image from "../../public/images/hedar_Img.png";
@@ -12,63 +12,123 @@ export default function ItineraryPage() {
   const [isLocationOn, setIsLocationOn] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handleCreate = async () => {
-    if (!startDate || !endDate || !budget) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+  //   if (!startDate || !endDate || !budget) {
+  //     alert("Please fill in all required fields.");
+  //     return;
+  //   }
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  //   const start = new Date(startDate);
+  //   const end = new Date(endDate);
+  //   const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
-    if (days <= 0) {
-      alert("End date must be later than start date.");
-      return;
-    }
+  //   if (days <= 0) {
+  //     alert("End date must be later than start date.");
+  //     return;
+  //   }
 
-    let latitude = 0;
-    let longitude = 0;
+  //   let latitude = 0;
+  //   let longitude = 0;
 
-    if (isLocationOn && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          latitude = position.coords.latitude;
-          longitude = position.coords.longitude;
+  //   if (isLocationOn && navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         latitude = position.coords.latitude;
+  //         longitude = position.coords.longitude;
 
-          const payload = {
-            location: [latitude, longitude],
-            budget: parseInt(budget),
-            categories: ["Beach", "Cultural"],
-            days: days,
-          };
+  //         const payload = {
+  //           location: [latitude, longitude],
+  //           budget: parseInt(budget),
+  //           categories: ["Beach", "Cultural"],
+  //           days: days,
+  //         };
 
-          fetch("http://127.0.0.1:5000/recommend", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
+  //         fetch("http://127.0.0.1:5000/recommend", {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(payload),
+  //         })
+  //           .then((response) => response.json())
+  //           .then((data) => {
+  //             console.log("API Response:", data);
+  //             alert("Itinerary created successfully!");
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error calling API:", error);
+  //             alert("Failed to create itinerary. Please try again.");
+  //           });
+  //       },
+  //       (error) => {
+  //         console.error("Error fetching location:", error);
+  //         alert("Failed to get location. Please enable location access.");
+  //       }
+  //     );
+  //   } else {
+  //     alert("Please enable location to proceed.");
+  //   }
+  // };
+const handleCreate = async () => {
+  if (!startDate || !endDate || !budget) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+
+  if (days <= 0) {
+    alert("End date must be later than start date.");
+    return;
+  }
+
+  let latitude = 0;
+  let longitude = 0;
+
+  if (isLocationOn && navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+
+        const payload = {
+          location: [latitude, longitude],
+          budget: parseInt(budget),
+          categories: ["Beach", "Cultural"],
+          days: days,
+        };
+
+        fetch("http://127.0.0.1:5000/recommend", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("API Response:", data);
+
+   
+            localStorage.setItem("itinerary", JSON.stringify(data));
+
+            alert("Itinerary created successfully and saved locally!");
           })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("API Response:", data);
-              alert("Itinerary created successfully!");
-            })
-            .catch((error) => {
-              console.error("Error calling API:", error);
-              alert("Failed to create itinerary. Please try again.");
-            });
-        },
-        (error) => {
-          console.error("Error fetching location:", error);
-          alert("Failed to get location. Please enable location access.");
-        }
-      );
-    } else {
-      alert("Please enable location to proceed.");
-    }
-  };
+          .catch((error) => {
+            console.error("Error calling API:", error);
+            alert("Failed to create itinerary. Please try again.");
+          });
+      },
+      (error) => {
+        console.error("Error fetching location:", error);
+        alert("Failed to get location. Please enable location access.");
+      }
+    );
+  } else {
+    alert("Please enable location to proceed.");
+  }
+};
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);

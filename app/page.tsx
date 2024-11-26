@@ -8,7 +8,8 @@ export default function Home() {
   return (
     <div>
       {/* <Datepicker /> */}
-      <ItineraryPage />
+      {/* <ItineraryPage /> */}
+      <ItineraryPage_02/>
     </div>
   );
 }
