@@ -14,7 +14,8 @@
     "next": "15.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "three": "^0.170.0"
+    "three": "^0.170.0",
+    "travel-assistant-front": "file:"
   },
   "devDependencies": {
     "@types/node": "^20",
