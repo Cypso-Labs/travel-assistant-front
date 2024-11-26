@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div>
       {/* <Datepicker /> */}
-      <ItineraryPage_02 />
+      <ItineraryPage />
     </div>
   );
 }
