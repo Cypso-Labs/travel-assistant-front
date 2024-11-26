@@ -4,15 +4,18 @@
 import VR from "../../public/images/icons/VR_Icon.png";
 import header_image from "../../public/images/hedar_Img.png";
 import Map from "../../public/images/Map_IMG.png";
+import Popup from "./Modals/saveItineraryModal";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import VR360Image from "./Modals/vrModal";
+import axios from "axios";
 
 export default function ItineraryPage_02() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
   const [itineraryData, setItineraryData] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     const savedData = localStorage.getItem("itinerary");
@@ -33,6 +36,11 @@ export default function ItineraryPage_02() {
     }
   }, []);
 
+  const user = JSON.parse(localStorage.getItem('UserData'));
+
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
+
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
@@ -48,6 +56,27 @@ export default function ItineraryPage_02() {
     alert("Itinerary data cleared!");
   };
 
+  const handleSaveItinerary = async () => {
+    const token = user.access_token
+    
+    openPopup();
+
+    // try {
+    //   const response = await axios.put('http://localhost:5000/api/users/1', data, {
+    //     headers: {
+    //       'Authorization': `Bearer ${token}`,
+    //     }
+    //   });
+
+    //   if (response.status === 200) {
+    //     console.log(response.data)
+    //   }
+    // } catch (error) {
+    //   const { response } = error;
+    //   console.log(response.data)
+    // }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="relative bg-gray-900 text-white py-4">
@@ -60,7 +89,7 @@ export default function ItineraryPage_02() {
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         </div>
 
- 
+
         <div className="fixed top-0 left-0 w-full bg-gray-900 text-white z-50 shadow-md">
           <div className="container mx-auto flex justify-between items-center px-4 py-4">
             <div className="flex items-center space-x-4">
@@ -130,9 +159,8 @@ export default function ItineraryPage_02() {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 z-50`}
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 z-50`}
       >
         {/* Sidebar content */}
       </div>
@@ -196,7 +224,7 @@ export default function ItineraryPage_02() {
                 </p>
               </div>
               <div className="relative mt-4 sm:mt-6 flex justify-end w-full">
-                <button className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
+                <button onClick={handleSaveItinerary} className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
                   SAVE
                 </button>
               </div>
@@ -211,7 +239,7 @@ export default function ItineraryPage_02() {
         )}
       </main>
 
- 
+
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={clearLocalStorage}
@@ -220,7 +248,7 @@ export default function ItineraryPage_02() {
           Clear Data
         </button>
       </div>
- 
+      <Popup isOpen={isPopupOpen} onClose={closePopup} />
     </div>
   );
 }
