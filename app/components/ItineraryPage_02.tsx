@@ -1,0 +1,226 @@
+"use client";
+
+// import React from "react";
+import VR from "../../public/images/icons/VR_Icon.png";
+import header_image from "../../public/images/hedar_Img.png";
+import Map from "../../public/images/Map_IMG.png";
+import Image from "next/image";
+import React, { useState, useEffect } from "react";
+import VR360Image from "./Modals/vrModal";
+
+export default function ItineraryPage_02() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedImageURL, setSelectedImageURL] = useState("");
+  const [itineraryData, setItineraryData] = useState([]);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("itinerary");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+
+      const transformedData = parsedData.map((item) => ({
+        locations: item.sub_places.map((place, index) => ({
+          id: index + 1,
+          name: place.name,
+          description: `Lat: ${place.latitude}, Lon: ${place.longitude}`,
+          budget: `Approx Rs ${item.cost}`,
+          image: Map,
+        })),
+        totalBudget: item.cost,
+      }));
+      setItineraryData(transformedData);
+    }
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  const handleImageModal = (imageURL: string) => {
+    setSelectedImageURL(imageURL);
+    setOpenModal(true);
+  };
+
+  const clearLocalStorage = () => {
+    localStorage.removeItem("itinerary");
+    setItineraryData([]);
+    alert("Itinerary data cleared!");
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <header className="relative bg-gray-900 text-white py-4">
+        <div className="absolute inset-0">
+          <Image
+            src={header_image}
+            alt="Background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        </div>
+
+ 
+        <div className="fixed top-0 left-0 w-full bg-gray-900 text-white z-50 shadow-md">
+          <div className="container mx-auto flex justify-between items-center px-4 py-4">
+            <div className="flex items-center space-x-4">
+              <div className="bg-gray-500 rounded-full w-10 h-10"></div>
+              <h1 className="text-2xl font-bold hidden md:block">ITINERARY</h1>
+            </div>
+            <nav className="hidden md:flex space-x-6">
+              <a href="/" className="hover:text-gray-300 text-lg">
+                Home
+              </a>
+              <a href="/itinerary" className="hover:text-gray-300 text-lg">
+                Itinerary
+              </a>
+              <a href="/events" className="hover:text-gray-300 text-lg">
+                Events
+              </a>
+              <a href="/recipes" className="hover:text-gray-300 text-lg">
+                Recipes
+              </a>
+              <a href="/emergency" className="hover:text-gray-300 text-lg">
+                Emergency
+              </a>
+              <a href="/about" className="hover:text-gray-300 text-lg">
+                About Us
+              </a>
+            </nav>
+            <div className="flex space-x-4">
+              <button
+                onClick={toggleSidebar}
+                className="md:hidden bg-gray-800 p-2 rounded-full hover:bg-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6h16.5M3.75 12h16.5M3.75 18h16.5"
+                  />
+                </svg>
+              </button>
+              <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 z-50`}
+      >
+        {/* Sidebar content */}
+      </div>
+
+      <main className="container mx-auto mt-6 pb-10 px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+          Your Itinerary
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+          {itineraryData.map((item, index) => (
+            <div
+              key={index}
+              className="bg-white shadow rounded-lg p-4 flex flex-col relative"
+            >
+              <div className="w-full bg-gray-300 mb-4 rounded">
+                <Image
+                  src={Map}
+                  alt="Map"
+                  className="w-full h-full object-cover rounded"
+                />
+              </div>
+              <div className="mb-4">
+                {item.locations.map((loc) => (
+                  <div
+                    key={loc.id}
+                    className="flex items-center justify-between mb-2"
+                  >
+                    <label className="flex items-center text-gray-700 space-x-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-5 h-5 text-green-300"
+                      >
+                        <circle cx="12" cy="12" r="8" />
+                      </svg>
+                      <span>
+                        {loc.name}{" "}
+                        <span className="text-sm">({loc.description})</span>
+                      </span>
+                    </label>
+                    <span className="text-gray-500">
+                      <Image
+                        onClick={() => {
+                          handleImageModal(loc.image);
+                        }}
+                        src={VR}
+                        alt="Location Icon"
+                        className="w-5 h-5 cursor-pointer"
+                      />
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col items-center sm:items-start mt-4">
+                <p className="text-gray-700 font-semibold text-center sm:text-left">
+                  Total Budget
+                </p>
+                <p className="text-xl font-bold text-green-600 text-center sm:text-left">
+                  RS {item.totalBudget}
+                </p>
+              </div>
+              <div className="relative mt-4 sm:mt-6 flex justify-end w-full">
+                <button className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
+                  SAVE
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        {openModal && (
+          <VR360Image
+            imageURL={selectedImageURL}
+            onClose={() => setOpenModal(false)}
+          />
+        )}
+      </main>
+
+ 
+      <div className="fixed bottom-4 right-4 z-50">
+        <button
+          onClick={clearLocalStorage}
+          className="bg-red-500 text-white px-6 py-2 rounded shadow-md hover:bg-red-600 transition"
+        >
+          Clear Data
+        </button>
+      </div>
+ 
+    </div>
+  );
+}

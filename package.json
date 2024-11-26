@@ -13,8 +13,10 @@
     "axios": "^1.7.8",
     "flowbite-react": "^0.10.2",
     "next": "15.0.3",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.170.0",
+    "travel-assistant-front": "file:"
   },
   "devDependencies": {
     "@types/node": "^20",
