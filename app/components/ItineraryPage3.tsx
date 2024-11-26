@@ -8,6 +8,7 @@ import file_image from '../../public/images/icons/document.png'
 import VR from '../../public/images/icons/VR_Icon.png'
 import map from '../../public/images/Map_IMG.png'
 import Image from "next/image";
+import MapComponent from "./googleMap";
 
 export default function ItineraryPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -233,13 +234,14 @@ export default function ItineraryPage() {
           </div>
 
           {/* Map Section */}
-          <div className="w-full bg-gray-300 mb-4 rounded">
+          {/* <div className="w-full bg-gray-300 mb-4 rounded">
             <Image
               src={map}
               alt="Map"
               className="w-full h-60 object-cover rounded"
             />
-          </div>
+          </div> */}
+          <MapComponent />
 
           {/* Location and Budget Section */}
           <div className="flex flex-col lg:flex-row justify-between mb-4">
