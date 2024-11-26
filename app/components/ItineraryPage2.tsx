@@ -1,29 +1,32 @@
-"use client"; // Add this line
+"use client"; // Required for Next.js apps
 
 import React, { useState } from "react";
 import header_image from '../../public/images/hedar_Img.png'
+import delete_image from '../../public/images/icons/delete.png'
+import edit_image from '../../public/images/icons/edit.png'
+import file_image from '../../public/images/icons/document.png'
 import Image from "next/image";
 
 export default function ItineraryPage() {
-  const [location, setLocation] = useState("");
-  const [budget, setBudget] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [isLocationOn, setIsLocationOn] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // State variables
+  const [itinerary, setItinerary] = useState([
+    { id: 1, name: "Name 01", budget: "RS 10000", startDate: "2024/11/22", endDate: "2024/11/22" },
+    { id: 2, name: "Name 02", budget: "RS 12000", startDate: "2024/12/01", endDate: "2024/12/05" },
+    { id: 3, name: "Name 03", budget: "RS 15000", startDate: "2025/01/10", endDate: "2025/01/15" },
+  ]);
 
-  const handleCreate = () => {
-    console.log({ location, budget, startDate, endDate });
-    alert("Itinerary Created!");
+  // Handle remove itinerary
+  const handleRemove = (id: number) => {
+    setItinerary(itinerary.filter(item => item.id !== id));
   };
-
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
   return (
-    <body>
-      <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header Section */}
       <header className="relative bg-gray-900 text-white py-4">
           <div className="absolute inset-0">
             <Image src={header_image} alt="Background" className="w-full h-full object-cover" />
@@ -91,8 +94,8 @@ export default function ItineraryPage() {
           </div>
         </header>
 
-         {/* Sidebar */}
-         <div
+      {/* Sidebar */}
+      <div
           className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             } transition-transform duration-300 z-50`}
         >
@@ -128,143 +131,63 @@ export default function ItineraryPage() {
           </nav>
         </div>
 
-      <main className="container mx-auto mt-10 px-4 pb-10">
-       
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-semibold">My Itinerary</h1>
+      {/*back button*/}
+      <div className="bg-white p-6 rounded-lg shadow-lg border flex py-3 mt-6 ml-10 mr-10">
+        <button className=" bg-black text-white px-1 rounded hover:bg-red-600 transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 transform rotate-180">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+        <h2 className="text-xl font-bold absolute right-0 px-20">My Itinerary</h2>
+      </div>
+
+
+      {/* Itinerary Table Section */}
+      <section className="container mx-auto px-4 py-10">
+        <h2 className="text-2xl font-bold mb-6 text-left">My Itinerary</h2>
+        <div className="overflow-x-auto shadow rounded-lg">
+          <table className="min-w-full bg-white text-left border-collapse">
+            <thead className="bg-gray-100 border-b">
+              <tr>
+                <th className="px-6 py-3 text-sm font-medium text-gray-900"></th>
+                <th className="px-6 py-3 text-sm font-medium text-gray-900">Name</th>
+                <th className="px-6 py-3 text-sm font-medium text-gray-900">Budget</th>
+                <th className="px-6 py-3 text-sm font-medium text-gray-900">Start Date</th>
+                <th className="px-6 py-3 text-sm font-medium text-gray-900">End Date</th>
+                <th className="px-6 py-3 text-sm font-medium text-gray-900"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {itinerary.map(item => (
+                <tr key={item.id} className="border-b hover:bg-gray-50">
+                  {/* Edit Action */}
+                  <button className="text-blue-500 hover:text-blue-700">
+                    <Image src={file_image} alt="Icon" className="w-6 h-6"/>
+                    </button>
+                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.name}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.budget}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.startDate}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.endDate}</td>
+                  <td className="px-6 py-4 flex items-center space-x-4">
+                    {/* Edit Action */}
+                    <button className="text-blue-500 hover:text-blue-700">
+                    <Image src={edit_image} alt="Icon" className="w-6 h-6"/>
+                    </button>
+                    {/* Remove Action */}
+                    <button
+                      onClick={() => handleRemove(item.id)}
+                      className="text-red-500 hover:text-red-700">
+                      <Image src={delete_image} alt="Icon" className="w-6 h-6"/>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+      </section>
 
-       
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold">Make Your Own Itinerary Here</h2>
-        </div>
-
-        
-        <form className="bg-white shadow-md rounded-lg p-8 border-2 border-green-500">
-         
-          <div className="flex justify-between items-center mb-4">
-            <label className="text-sm font-bold text-red-500">
-              <span>❗ Make sure your location is on</span>
-            </label>
-            <div className="flex items-center space-x-2">
-              <label className="text-gray-700 font-bold">Location</label>
-              <div className="relative">
-                <span
-                  onClick={() => setIsLocationOn((prev) => !prev)}
-                  className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${
-                    isLocationOn ? "bg-green-500" : "bg-gray-300"
-                  }`}
-                >
-                  <div
-                    className={`w-4 h-4 rounded-full bg-white transform duration-200 ${
-                      isLocationOn ? "translate-x-4" : "translate-x-0"
-                    }`}
-                  ></div>
-                </span>
-              </div>
-            </div>
-          </div>
-
-         
-          <div className="flex flex-wrap md:flex-nowrap justify-between gap-4 mb-4">
-            <div className="w-full md:w-1/2">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="location"
-              >
-                Your Location *
-              </label>
-              <input
-                id="location"
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-4 py-2"
-                placeholder="Enter your location"
-              />
-            </div>
-            <div className="w-full md:w-1/2">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="budget"
-              >
-                Enter your budget (in RS) *
-              </label>
-              <input
-                id="budget"
-                type="number"
-                value={budget}
-                onChange={(e) => setBudget(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-4 py-2"
-                placeholder="Enter your budget"
-              />
-              <p className="text-sm text-gray-500">
-                Convert Global currency to rupees
-              </p>
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 font-bold mb-2">
-              Select a time period
-            </label>
-            <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
-                {/* Start Date */}
-                <div className="w-full">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="start-date"
-                  >
-                    Start Date *
-                  </label>
-                  <input
-                    id="start-date"
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2"
-                  />
-                </div>
-
-                {/* Separator */}
-                <span className="hidden md:block text-xl font-semibold text-gray-700">
-                  To
-                </span>
-                <span className="md:hidden text-center font-semibold text-gray-700">
-                  To
-                </span>
-
-                {/* End Date */}
-                <div className="w-full">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="end-date"
-                  >
-                    End Date *
-                  </label>
-                  <input
-                    id="end-date"
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2"
-                  />
-                </div>
-              </div>
-          </div>
-
-          <div className="text-center mt-6">
-            <button
-              type="button"
-              onClick={handleCreate}
-              className="bg-green-500 text-white font-bold py-2 px-6 rounded-md hover:bg-green-600"
-            >
-              CREATE
-            </button>
-          </div>
-        </form>
-      </main>
-
+      {/* Footer Section */}
       <footer className="bg-gray-900 text-white py-10">
           <div className="container mx-auto flex flex-col md:flex-row justify-between items-start px-6 lg:px-16 space-y-6 md:space-y-0">
             {/* Section 1 */}
@@ -342,6 +265,5 @@ export default function ItineraryPage() {
           </div>
         </footer>
     </div>
-    </body>    
   );
 }
