@@ -1,3 +1,30 @@
+// import React from "react";
+// import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+
+// const containerStyle = {
+//   width: "100%",
+//   height: "400px",
+// };
+
+// const center = {
+//   lat: 6.9271, // Example: Latitude of Colombo, Sri Lanka
+//   lng: 79.8612, // Example: Longitude of Colombo, Sri Lanka
+// };
+
+// const MapComponent = () => {
+//   return (
+//     <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+//       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+//         {/* Example Marker */}
+//         <Marker position={center} />
+//       </GoogleMap>
+//     </LoadScript>
+//   );
+// };
+
+// export default MapComponent;
+
+
 import React from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
@@ -7,16 +34,30 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 6.9271, // Example: Latitude of Colombo, Sri Lanka
-  lng: 79.8612, // Example: Longitude of Colombo, Sri Lanka
+  lat: 6.9271, // Centering map around Sri Lanka
+  lng: 79.8612,
 };
+
+// Array of popular locations with coordinates
+const locations = [
+  { name: "Nine Arches Bridge", latitude: 6.881, longitude: 81.046 },
+  { name: "Little Adam's Peak", latitude: 6.872, longitude: 81.049 },
+  { name: "Mirissa Beach", latitude: 5.949, longitude: 80.455 },
+  { name: "Temple of the Tooth", latitude: 7.294, longitude: 80.641 },
+  { name: "Yala National Park", latitude: 6.399, longitude: 81.521 },
+];
 
 const MapComponent = () => {
   return (
     <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
-        {/* Example Marker */}
-        <Marker position={center} />
+      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={8}>
+        {locations.map((location, index) => (
+          <Marker
+            key={index}
+            position={{ lat: location.latitude, lng: location.longitude }}
+            title={location.name} // Displays the location name on hover
+          />
+        ))}
       </GoogleMap>
     </LoadScript>
   );

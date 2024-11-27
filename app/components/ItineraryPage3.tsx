@@ -6,7 +6,6 @@ import delete_image from '../../public/images/icons/delete.png'
 import edit_image from '../../public/images/icons/edit.png'
 import file_image from '../../public/images/icons/document.png'
 import VR from '../../public/images/icons/VR_Icon.png'
-import map from '../../public/images/Map_IMG.png'
 import Image from "next/image";
 import MapComponent from "./googleMap";
 
@@ -234,13 +233,6 @@ export default function ItineraryPage() {
           </div>
 
           {/* Map Section */}
-          {/* <div className="w-full bg-gray-300 mb-4 rounded">
-            <Image
-              src={map}
-              alt="Map"
-              className="w-full h-60 object-cover rounded"
-            />
-          </div> */}
           <MapComponent />
 
           {/* Location and Budget Section */}
