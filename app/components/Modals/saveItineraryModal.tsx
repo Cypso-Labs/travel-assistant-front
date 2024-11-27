@@ -2,18 +2,20 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
 interface PopupProps {
-  isOpen: boolean;
   onClose: () => void;
+  onItemData: any;
+  onSuccess: () => void; 
 }
 
-const Popup: React.FC<PopupProps> = ({ isOpen, onClose }) => {
+const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
+  const [itinerary, setItinerary] = useState("");
 
-  const [itinerary, setItinerary] = useState('');
+  console.log(onItemData)
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const ItineraryData = JSON.parse(localStorage.getItem('itineraryData'));
-  const user = JSON.parse(localStorage.getItem('UserData'));
+  const ItineraryData = JSON.parse(localStorage.getItem("itineraryData") || "{}");
+  const user = JSON.parse(localStorage.getItem("UserData") || "{}");
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -22,16 +24,53 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose }) => {
       }
     };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    }
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [isOpen, onClose]);
+  }, [onClose]);
 
-  if (!isOpen) return null;
+
+  const handleSaveItineraryLocations = async (itinerary_id) => {
+
+    const locationsIDs = onItemData.locations.map(location => location.location_id);
+    console.log(locationsIDs);
+
+    const headers = {
+      'Authorization': `Bearer ${user.access_token}`,
+    };
+
+    const body = {
+      "distance_from_current_location": 100.0
+    }
+
+    try {
+      const promises = locationsIDs.map(location_id =>
+        axios.post(`http://localhost:5000/api/v1/iterneries/${itinerary_id}/locations/${location_id}/${user.user_id}`, body, { headers })
+          .then(response => {
+            if (response.status === 201) {
+              console.log(response.data);
+              onSuccess();
+            }
+          })
+          .catch(error => {
+            const { response } = error;
+            if (response) {
+              console.log(response.data);
+            } else {
+              console.error('Error without response:', error.message);
+            }
+          })
+      );
+
+      await Promise.all(promises);
+
+    } catch (error) {
+      console.error('Unexpected error:', error);
+    }
+  };
+
 
   const onItinerarySave = async () => {
 
@@ -55,8 +94,12 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose }) => {
         }
       });
 
-      if (response.status === 200) {
-        console.log(response.data)
+      if (response.status === 201) {
+        console.log(response.data.itinerary)
+
+        const itinerary_id = response.data.itinerary.id
+
+        handleSaveItineraryLocations(itinerary_id)
       }
     } catch (error) {
       const { response } = error;
@@ -70,7 +113,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div
         ref={modalRef}
-        className="bg-white p-6 rounded-lg shadow-lg w-[95%] sm:[90%] md:w-[60%] lg:w-[45%] flex flex-col"
+        className="bg-white p-6 rounded-lg shadow-lg w-[95%] sm:w-[90%] md:w-[60%] lg:w-[45%] flex flex-col"
       >
         <p className="text-lg mb-4">
           Please enter a name before saving to identify your{" "}
@@ -78,7 +121,8 @@ const Popup: React.FC<PopupProps> = ({ isOpen, onClose }) => {
         </p>
         <input
           type="text"
-          onChange={(e) => { (setItinerary(e.target.value)) }}
+          value={itinerary}
+          onChange={(e) => setItinerary(e.target.value)}
           placeholder="Enter itinerary name here"
           className="border border-gray-300 rounded px-4 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
