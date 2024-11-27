@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import header_image from "../../public/images/hedar_Img.png";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 export default function ItineraryPage() {
   const [location, setLocation] = useState("");
@@ -70,7 +71,11 @@ export default function ItineraryPage() {
   // };
   const handleCreate = async () => {
     if (!startDate || !endDate || !budget) {
-      alert("Please fill in all required fields.");
+      Swal.fire({
+        title: "Empty Fields",
+        text: "Please fill in all required fields.",
+        icon: "info"
+      });
       return;
     }
 
@@ -79,7 +84,11 @@ export default function ItineraryPage() {
     const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
     if (days <= 0) {
-      alert("End date must be later than start date.");
+      Swal.fire({
+        title: "Invalid Date!",
+        text: "End date must be later than start date.",
+        icon: "info"
+      });
       return;
     }
 
@@ -121,20 +130,36 @@ export default function ItineraryPage() {
 
               localStorage.setItem("itinerary", JSON.stringify(data));
 
-              alert("Itinerary created successfully and saved locally!");
+              Swal.fire({
+                title: "Success!",
+                text: "Itinerary created successfully and saved locally!",
+                icon: "success"
+              });
             })
             .catch((error) => {
               console.error("Error calling API:", error);
-              alert("Failed to create itinerary. Please try again.");
+              Swal.fire({
+                title: "Error!",
+                text: "Failed to create itinerary. Please try again.",
+                icon: "error"
+              });
             });
         },
         (error) => {
           console.error("Error fetching location:", error);
-          alert("Failed to get location. Please enable location access.");
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to get location. Please enable location access.",
+            icon: "error"
+          });
         }
       );
     } else {
-      alert("Please enable location to proceed.");
+      Swal.fire({
+        title: "Location Disabled!!",
+        text: "Please enable location to proceed.",
+        icon: "info"
+      });
     }
   };
 
