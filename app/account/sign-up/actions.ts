@@ -3,6 +3,7 @@
 import { signUpSchema } from "@/app/lib/schemas";
 import { parseWithZod } from "@conform-to/zod";
 import axios from "axios";
+import Swal from 'sweetalert2'
 
 export const registerUser = async (
     prevState: unknown,
@@ -27,8 +28,23 @@ export const registerUser = async (
             })
         .then((response) => {
             console.log(response);
+            if(response.status === 201){
+                Swal.fire({
+                    title: "Success!",
+                    text: "Successfully Registered",
+                    icon: "success"
+                });
+            }
         })
         .catch((error) => {
             console.log(error);
+            const { response } = error;
+            if (response.status === 400) {
+                Swal.fire({
+                    title: "Already Registered",
+                    text: "An account with this email is already registered",
+                    icon: "error"
+                });
+            }
         });
 };
