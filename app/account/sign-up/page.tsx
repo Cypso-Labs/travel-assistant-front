@@ -20,6 +20,7 @@ function SignUp() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
+  
   return (
     <div className="h-full flex items-center">
       <form

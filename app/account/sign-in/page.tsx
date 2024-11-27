@@ -1,48 +1,26 @@
-"use client"
+"use client";
 
 import { Checkbox, Label } from "flowbite-react";
 import Link from "next/link";
-import React from "react";
-import axios from "axios";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useActionState } from "react";
+import { logInUser } from "./action";
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { signInSchema } from "@/app/lib/schemas";
 
 function SignIn() {
+  const [lastResult, action] = useActionState(logInUser, undefined);
 
-  const router = useRouter();
+  const [form, fields] = useForm({
+    lastResult,
 
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  })
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: signInSchema });
+    },
 
-  const handleLoginData = (e) => {
-    const { name, value } = e.target;
-    setLoginData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
-
-  const handleLogin = async () => {
-
-    try {
-      const response = await axios.post('http://localhost:5000/api/v1/login', loginData);
-
-      if (response.status === 200) {
-        console.log(response.data)
-
-        localStorage.setItem('UserData', JSON.stringify(response.data))
-
-        setTimeout(()=>{
-          router.push('/account/profile-creation');
-        },1500)
-      }
-    } catch (error) {
-      const { response } = error;
-      console.log(response.data)
-    }
-  }
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  });
 
   return (
     <div className="h-full flex items-center">
@@ -55,7 +33,12 @@ function SignIn() {
           Welcome back! Please enter your details
         </p>
 
-        <form className="space-y-5 mt-12">
+        <form
+          className="space-y-5 mt-12"
+          id={form.id}
+          onSubmit={form.onSubmit}
+          action={action}
+        >
           <div>
             <label
               htmlFor="email"
@@ -64,15 +47,20 @@ function SignIn() {
               Email *
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
-              name="email"
-              value={loginData.email}
-              onChange={handleLoginData}
+              key={fields.email.key}
+              name={fields.email.name}
+              defaultValue={fields.email.initialValue}
               className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="Enter your email "
-              required
             />
+            <div
+              className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
+              role="alert"
+            >
+              {fields.email.errors}
+            </div>
           </div>
 
           <div>
@@ -85,13 +73,18 @@ function SignIn() {
             <input
               type="password"
               id="password"
-              name="password"
-              value={loginData.password}
-              onChange={handleLoginData}
+              key={fields.password.key}
+              name={fields.password.name}
+              defaultValue={fields.password.initialValue}
               className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="Create password"
-              required
             />
+            <div
+              className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
+              role="alert"
+            >
+              {fields.password.errors}
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -101,8 +94,7 @@ function SignIn() {
 
           <div className="flex justify-center">
             <button
-              onClick={handleLogin}
-              type="button"
+              type="submit"
               className="w-2/3 text-white bg-[#1366D9] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-[8px] text-[16px] px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Log in

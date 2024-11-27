@@ -8,7 +8,6 @@ import Swal from 'sweetalert2'
 export const registerUser = async (
     prevState: unknown,
     formData: FormData
-    // userDetails: Readonly<{ username: string; email: string; password: string }>
 ) => {
     const submission = parseWithZod(formData, {
         schema: signUpSchema,
