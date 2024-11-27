@@ -31,7 +31,7 @@ export default function ItineraryPage() {
 
     const fetchAllItineraries = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/itineraries', {
+        const response = await axios.get('http://localhost:5000/api/v1/itineraries', {
           headers: {
             Authorization: `Bearer ${user.access_token}`,
           },
@@ -56,7 +56,7 @@ export default function ItineraryPage() {
   const handleDeleteItinerary = async (id) => {
     try {
       // Send DELETE request to the backend
-      const response = await axios.delete(`http://localhost:8080/api/v1/itineraries/${id}`, {
+      const response = await axios.delete(`http://localhost:5000/api/v1/itineraries/${id}`, {
         headers: {
           Authorization: `Bearer ${user.access_token}`,
         },
@@ -225,7 +225,7 @@ export default function ItineraryPage() {
       <section className="container mx-auto px-4 py-10">
         <h2 className="text-2xl font-bold mb-6 text-left">My Itinerary</h2>
         <div className="overflow-x-auto shadow rounded-lg">
-          <table className="min-w-full bg-white text-left border-collapse">
+          <table className="min-w-[800px] w-full bg-white text-left border-collapse">
             <thead className="bg-gray-100 border-b">
               <tr>
                 <th className="px-6 py-3 text-sm font-medium text-gray-900"></th>
