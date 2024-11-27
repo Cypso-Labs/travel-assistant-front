@@ -16,27 +16,71 @@ export default function ItineraryPage_02() {
   const [selectedImageURL, setSelectedImageURL] = useState("");
   const [itineraryData, setItineraryData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [allLocations, setAllLocations] = useState([]);
+  const [itemData, setItemData] = useState([]);
+
+  const user = JSON.parse(localStorage.getItem('UserData'));
 
   useEffect(() => {
+
+    let locations = [];
+
+    const fetchAllLocations = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/v1/locations', {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          locations = response.data.locations;
+          setAllLocations(response.data.locations); // Store all locations in state
+        }
+      } catch (error) {
+        const { response } = error;
+        console.log(response.data);
+      }
+    };
+
     const savedData = localStorage.getItem("itinerary");
     if (savedData) {
       const parsedData = JSON.parse(savedData);
 
-      const transformedData = parsedData.map((item) => ({
-        locations: item.sub_places.map((place, index) => ({
-          id: index + 1,
-          name: place.name,
-          description: `Lat: ${place.latitude}, Lon: ${place.longitude}`,
-          budget: `Approx Rs ${item.cost}`,
-          image: Map,
-        })),
-        totalBudget: item.cost,
-      }));
-      setItineraryData(transformedData);
+      // Fetch all locations first
+      fetchAllLocations().then(() => {
+        const transformedData = parsedData.map((item) => ({
+          locations: item.sub_places.map((place, index) => {
+            // Find the matching location from the database
+            const matchedLocation = locations?.find(
+              (dbLocation) => dbLocation.name.toLowerCase() === place.name.toLowerCase()
+            );
+
+
+            // Return the complete object by merging predicted data with database data
+            return {
+              id: index + 1,
+              name: place.name,
+              description: matchedLocation?.description || `Lat: ${place.latitude}, Lon: ${place.longitude}`,
+              latitude: matchedLocation?.latitude || place.latitude,
+              longitude: matchedLocation?.longitude || place.longitude,
+              location_image: matchedLocation?.location_image || "Default_Image_URL", // Use a default if not found
+              budget: `Approx Rs ${item.cost}`,
+              type: matchedLocation?.type || "Unknown",
+              location_id: matchedLocation?.id || "Unknown",
+            };
+          }),
+          totalBudget: item.cost,
+        }));
+
+
+        setItineraryData(transformedData);
+      });
+
     }
   }, []);
 
-  const user = JSON.parse(localStorage.getItem('UserData'));
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
@@ -56,25 +100,34 @@ export default function ItineraryPage_02() {
     alert("Itinerary data cleared!");
   };
 
-  const handleSaveItinerary = async () => {
-    const token = user.access_token
-    
+  const handleSaveItinerary = async (item) => {
+    setItemData(item);
     openPopup();
+  }
 
-    // try {
-    //   const response = await axios.put('http://localhost:5000/api/users/1', data, {
-    //     headers: {
-    //       'Authorization': `Bearer ${token}`,
-    //     }
-    //   });
 
-    //   if (response.status === 200) {
-    //     console.log(response.data)
-    //   }
-    // } catch (error) {
-    //   const { response } = error;
-    //   console.log(response.data)
-    // }
+  const Alert = () => {
+    return (
+      <div id="alert-border-3" className="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800" role="alert">
+        <svg className="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+        </svg>
+        <div className="ms-3 text-sm font-medium">
+          A simple success alert with an <a href="#" className="font-semibold underline hover:no-underline">example link</a>. Give it a click if you like.
+        </div>
+        <button type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-border-3" aria-label="Close">
+          <span className="sr-only">Dismiss</span>
+          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+        </button>
+      </div>
+    );
+  }
+
+
+  const handleShowAlert = () => {
+    setShowAlert(true);
   }
 
   return (
@@ -89,6 +142,27 @@ export default function ItineraryPage_02() {
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         </div>
 
+        {showAlert && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] flex flex-col text-center">
+              <h2 className="text-xl font-semibold text-green-600">
+                Itinerary Created Successfully!
+              </h2>
+              <p className="text-gray-500 mt-2">
+                Your itinerary has been successfully created and saved.
+              </p>
+
+              <div className="mt-4">
+                <span
+                  className="text-green-600 font-bold"
+                  onClick={() => setShowAlert(false)}
+                >
+                  Close
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="fixed top-0 left-0 w-full bg-gray-900 text-white z-50 shadow-md">
           <div className="container mx-auto flex justify-between items-center px-4 py-4">
@@ -205,7 +279,7 @@ export default function ItineraryPage_02() {
                     <span className="text-gray-500">
                       <Image
                         onClick={() => {
-                          handleImageModal(loc.image);
+                          handleImageModal(loc.location_image);
                         }}
                         src={VR}
                         alt="Location Icon"
@@ -224,7 +298,7 @@ export default function ItineraryPage_02() {
                 </p>
               </div>
               <div className="relative mt-4 sm:mt-6 flex justify-end w-full">
-                <button onClick={handleSaveItinerary} className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
+                <button onClick={() => { handleSaveItinerary(item) }} className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
                   SAVE
                 </button>
               </div>
@@ -248,7 +322,14 @@ export default function ItineraryPage_02() {
           Clear Data
         </button>
       </div>
-      <Popup isOpen={isPopupOpen} onClose={closePopup} />
+      {isPopupOpen && (
+        <Popup
+          onClose={closePopup}
+          onItemData={itemData}
+          onSuccess={handleShowAlert}
+        />
+      )}
+
     </div>
   );
 }
