@@ -157,7 +157,7 @@ export default function HomePage() {
       </div>
 
       <div className=" bg-white text-gray-800 min-h-screen px-6 md:px-12 py-10 ">
-        <div className="absolute text-left mb-12">
+        <div className="absolute text-left mb-12 w-full lg:w-[45%]">
           <h2 className="text-lg font-bold text-green-500">About Us</h2>
           <h1 className="text-3xl md:text-5xl font-extrabold mb-4">
             Let’s know about us
@@ -171,7 +171,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
+          <div className="mt-64 lg:mt-64 xl:mt-40 2xl:mt-0">
             <h2 className="text-2xl font-bold mb-6">Main Features:</h2>
             <div className="space-y-6">
               <div className="flex items-start">
