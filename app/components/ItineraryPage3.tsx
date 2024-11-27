@@ -1,6 +1,6 @@
 "use client"; // Required for Next.js apps
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import header_image from '../../public/images/hedar_Img.png'
 import delete_image from '../../public/images/icons/delete.png'
 import edit_image from '../../public/images/icons/edit.png'
@@ -8,16 +8,16 @@ import file_image from '../../public/images/icons/document.png'
 import VR from '../../public/images/icons/VR_Icon.png'
 import map from '../../public/images/Map_IMG.png'
 import Image from "next/image";
+import axios from "axios";
 import MapComponent from "./googleMap";
 
 export default function ItineraryPage() {
+
+  const user = JSON.parse(localStorage.getItem('UserData') || '{}');
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // State variables
-  const [itinerary, setItinerary] = useState([
-    { id: 1, name: "Name 01", budget: "RS 10000", startDate: "2024/11/22", endDate: "2024/11/22" },
-    { id: 2, name: "Name 02", budget: "RS 12000", startDate: "2024/12/01", endDate: "2024/12/05" },
-    { id: 3, name: "Name 03", budget: "RS 15000", startDate: "2025/01/10", endDate: "2025/01/15" },
-  ]);
+  const [itinerary, setItinerary] = useState([]);
 
   const locations = [
     { id: 1, name: "Location 01", description: "Description", budget: "XXXX" },
@@ -25,6 +25,59 @@ export default function ItineraryPage() {
     { id: 3, name: "Location 03", description: "Description", budget: "XXXX" },
   ];
 
+
+  useEffect(() => {
+
+    let locations = [];
+
+    const fetchAllItineraries = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/v1/itineraries', {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          locations = response.data.itineraries;
+          console.log(response.data.itineraries);
+          setItinerary(response.data.itineraries); // Store all locations in state
+        }
+      } catch (error) {
+        const { response } = error;
+        console.log(response.data);
+      }
+    };
+
+
+    fetchAllItineraries()
+
+  }, []);
+
+  // Handle delete itinerary from the backend and update the frontend
+  const handleDeleteItinerary = async (id) => {
+    try {
+      // Send DELETE request to the backend
+      const response = await axios.delete(`http://localhost:8080/api/v1/itineraries/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log(response.data.message);
+
+        // Update the state to remove the deleted itinerary
+        setItinerary((prevItinerary) => prevItinerary.filter(item => item.id !== id));
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error('Error deleting itinerary:', error.response.data);
+      } else {
+        console.error('Error deleting itinerary:', error.message);
+      }
+    }
+  };
 
   // Handle remove itinerary
   const handleRemove = (id: number) => {
@@ -35,8 +88,8 @@ export default function ItineraryPage() {
   };
 
   const totalBudget = itinerary.reduce((acc, item) => {
-    // Extract numeric value from the budget string and sum it
-    const numericBudget = parseInt(item.budget.replace("RS ", ""), 10);
+    
+    const numericBudget = parseInt(item.total_budget);
     return acc + numericBudget;
   }, 0);
   
@@ -193,9 +246,9 @@ export default function ItineraryPage() {
                     <Image src={file_image} alt="Icon" className="w-6 h-6"/>
                     </button>
                   <td className="px-6 py-4 text-sm text-gray-700 ">{item.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.budget}</td>
-                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.startDate}</td>
-                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.endDate}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.total_budget}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.start_date}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700 ">{item.end_date}</td>
                   <td className="px-6 py-4 flex items-center space-x-4">
                     {/* Edit Action */}
                     <button className="text-blue-500 hover:text-blue-700">
@@ -203,7 +256,7 @@ export default function ItineraryPage() {
                     </button>
                     {/* Remove Action */}
                     <button
-                      onClick={() => handleRemove(item.id)}
+                      onClick={() => handleDeleteItinerary(item.id)}
                       className="text-red-500 hover:text-red-700">
                       <Image src={delete_image} alt="Icon" className="w-6 h-6"/>
                     </button>
@@ -234,7 +287,7 @@ export default function ItineraryPage() {
           </div>
 
           {/* Map Section */}
-          <MapComponent/>
+         <MapComponent/>
 
           {/* Location and Budget Section */}
           <div className="flex flex-col lg:flex-row justify-between mb-4">
@@ -371,7 +424,3 @@ export default function ItineraryPage() {
     </div>
   );
 }
-function setIsMainVisible(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
-
