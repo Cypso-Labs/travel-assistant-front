@@ -6,13 +6,13 @@ import delete_image from '../../public/images/icons/delete.png'
 import edit_image from '../../public/images/icons/edit.png'
 import file_image from '../../public/images/icons/document.png'
 import VR from '../../public/images/icons/VR_Icon.png'
-import map from '../../public/images/Map_IMG.png'
 import Image from "next/image";
 import axios from "axios";
+import MapComponent from "./googleMap";
 
 export default function ItineraryPage() {
 
-  const user = JSON.parse(localStorage.getItem('UserData'));
+  const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // State variables
@@ -31,7 +31,7 @@ export default function ItineraryPage() {
 
     const fetchAllItineraries = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/v1/itineraries', {
+        const response = await axios.get('http://localhost:8080/api/v1/itineraries', {
           headers: {
             Authorization: `Bearer ${user.access_token}`,
           },
@@ -51,6 +51,31 @@ export default function ItineraryPage() {
     fetchAllItineraries()
 
   }, []);
+
+  // Handle delete itinerary from the backend and update the frontend
+  const handleDeleteItinerary = async (id) => {
+    try {
+      // Send DELETE request to the backend
+      const response = await axios.delete(`http://localhost:8080/api/v1/itineraries/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log(response.data.message);
+
+        // Update the state to remove the deleted itinerary
+        setItinerary((prevItinerary) => prevItinerary.filter(item => item.id !== id));
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error('Error deleting itinerary:', error.response.data);
+      } else {
+        console.error('Error deleting itinerary:', error.message);
+      }
+    }
+  };
 
   // Handle remove itinerary
   const handleRemove = (id: number) => {
@@ -229,7 +254,7 @@ export default function ItineraryPage() {
                     </button>
                     {/* Remove Action */}
                     <button
-                      onClick={() => handleRemove(item.id)}
+                      onClick={() => handleDeleteItinerary(item.id)}
                       className="text-red-500 hover:text-red-700">
                       <Image src={delete_image} alt="Icon" className="w-6 h-6"/>
                     </button>
@@ -260,13 +285,7 @@ export default function ItineraryPage() {
           </div>
 
           {/* Map Section */}
-          <div className="w-full bg-gray-300 mb-4 rounded">
-            <Image
-              src={map}
-              alt="Map"
-              className="w-full h-60 object-cover rounded"
-            />
-          </div>
+         <MapComponent/>
 
           {/* Location and Budget Section */}
           <div className="flex flex-col lg:flex-row justify-between mb-4">
@@ -403,5 +422,3 @@ export default function ItineraryPage() {
     </div>
   );
 }
-
-
