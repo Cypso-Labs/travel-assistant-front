@@ -9,6 +9,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import VR360Image from "./Modals/vrModal";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function ItineraryPage_02() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -17,7 +18,6 @@ export default function ItineraryPage_02() {
   const [itineraryData, setItineraryData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [allLocations, setAllLocations] = useState([]);
   const [itemData, setItemData] = useState([]);
 
   const user = JSON.parse(localStorage.getItem('UserData'));
@@ -36,7 +36,6 @@ export default function ItineraryPage_02() {
 
         if (response.status === 200) {
           locations = response.data.locations;
-          setAllLocations(response.data.locations); // Store all locations in state
         }
       } catch (error) {
         const { response } = error;
@@ -97,7 +96,11 @@ export default function ItineraryPage_02() {
   const clearLocalStorage = () => {
     localStorage.removeItem("itinerary");
     setItineraryData([]);
-    alert("Itinerary data cleared!");
+    Swal.fire({
+      title: "Data Cleared",
+      text: "Itinerary data cleared!",
+      icon: "success"
+    });
   };
 
   const handleSaveItinerary = async (item) => {
