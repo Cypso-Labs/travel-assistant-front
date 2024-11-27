@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import header_image from "../../public/images/hedar_Img.png";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function ItineraryPage() {
   const [location, setLocation] = useState("");
@@ -12,63 +13,33 @@ export default function ItineraryPage() {
   const [endDate, setEndDate] = useState("");
   const [isLocationOn, setIsLocationOn] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [userPreferences, setUserPreferences] = useState(false);
 
-  //   if (!startDate || !endDate || !budget) {
-  //     alert("Please fill in all required fields.");
-  //     return;
-  //   }
+  useEffect(() => {
 
-  //   const start = new Date(startDate);
-  //   const end = new Date(endDate);
-  //   const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+    const user = JSON.parse(localStorage.getItem('UserData'));
 
-  //   if (days <= 0) {
-  //     alert("End date must be later than start date.");
-  //     return;
-  //   }
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${user.user_id}`, {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+          },
+        });
 
-  //   let latitude = 0;
-  //   let longitude = 0;
+        if (response.status === 200) {
+          setUserPreferences(response.data.preferences);
+          console.log(response.data.preferences);
+        }
+      } catch (error) {
+        const { response } = error;
+        console.log(response.data);
+      }
+    }
 
-  //   if (isLocationOn && navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         latitude = position.coords.latitude;
-  //         longitude = position.coords.longitude;
+    fetchUser();
+  }, []);
 
-  //         const payload = {
-  //           location: [latitude, longitude],
-  //           budget: parseInt(budget),
-  //           categories: ["Beach", "Cultural"],
-  //           days: days,
-  //         };
-
-  //         fetch("http://127.0.0.1:5000/recommend", {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(payload),
-  //         })
-  //           .then((response) => response.json())
-  //           .then((data) => {
-  //             console.log("API Response:", data);
-  //             alert("Itinerary created successfully!");
-  //           })
-  //           .catch((error) => {
-  //             console.error("Error calling API:", error);
-  //             alert("Failed to create itinerary. Please try again.");
-  //           });
-  //       },
-  //       (error) => {
-  //         console.error("Error fetching location:", error);
-  //         alert("Failed to get location. Please enable location access.");
-  //       }
-  //     );
-  //   } else {
-  //     alert("Please enable location to proceed.");
-  //   }
-  // };
   const handleCreate = async () => {
     if (!startDate || !endDate || !budget) {
       Swal.fire({
@@ -112,9 +83,11 @@ export default function ItineraryPage() {
           const payload = {
             location: [latitude, longitude],
             budget: parseInt(budget),
-            categories: ["Beach", "Cultural"],
+            categories: userPreferences || null,
             days: days,
           };
+
+          console.log(payload)
 
           fetch("http://127.0.0.1:5000/recommend", {
             method: "POST",
@@ -269,7 +242,7 @@ export default function ItineraryPage() {
                       }`}
                   >
                     <div
-                      className={`w-4 h-4 rounded-full bg-white transform duration-200 ${isLocationOn ? "translate-x-4" : "translate-x-0"
+                      className={`w-4 h-4 rounded-full bg-white transform duration-200 ${isLocationOn ? "translate-x-2" : "-translate-x-2"
                         }`}
                     ></div>
                   </span>
