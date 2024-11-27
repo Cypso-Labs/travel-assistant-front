@@ -76,9 +76,9 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
 
     const data = {
       "name": itinerary,
-      "total_budget": ItineraryData.budget,
-      "start_date": ItineraryData.startDate,
-      "end_date": ItineraryData.endDate,
+      "total_budget": ItineraryData.total_budget,
+      "start_date": ItineraryData.start_date,
+      "end_date": ItineraryData.end_date,
       "user_id": user.user_id
     }
 

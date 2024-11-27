@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import React, { useState } from "react";
 import header_image from "../../public/images/hedar_Img.png";
@@ -68,67 +68,75 @@ export default function ItineraryPage() {
   //     alert("Please enable location to proceed.");
   //   }
   // };
-const handleCreate = async () => {
-  if (!startDate || !endDate || !budget) {
-    alert("Please fill in all required fields.");
-    return;
-  }
+  const handleCreate = async () => {
+    if (!startDate || !endDate || !budget) {
+      alert("Please fill in all required fields.");
+      return;
+    }
 
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
-  if (days <= 0) {
-    alert("End date must be later than start date.");
-    return;
-  }
+    if (days <= 0) {
+      alert("End date must be later than start date.");
+      return;
+    }
 
-  let latitude = 0;
-  let longitude = 0;
+    let latitude = 0;
+    let longitude = 0;
 
-  if (isLocationOn && navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
+    if (isLocationOn && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          latitude = position.coords.latitude;
+          longitude = position.coords.longitude;
 
-        const payload = {
-          location: [latitude, longitude],
-          budget: parseInt(budget),
-          categories: ["Beach", "Cultural"],
-          days: days,
-        };
+          const itinerary_data = {
+            "total_budget": budget,
+            "start_date": startDate,
+            "end_date": endDate
+          }
 
-        fetch("http://127.0.0.1:5000/recommend", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("API Response:", data);
+          localStorage.setItem('itineraryData', JSON.stringify(itinerary_data))
 
-   
-            localStorage.setItem("itinerary", JSON.stringify(data));
+          const payload = {
+            location: [latitude, longitude],
+            budget: parseInt(budget),
+            categories: ["Beach", "Cultural"],
+            days: days,
+          };
 
-            alert("Itinerary created successfully and saved locally!");
+          fetch("http://127.0.0.1:5000/recommend", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
           })
-          .catch((error) => {
-            console.error("Error calling API:", error);
-            alert("Failed to create itinerary. Please try again.");
-          });
-      },
-      (error) => {
-        console.error("Error fetching location:", error);
-        alert("Failed to get location. Please enable location access.");
-      }
-    );
-  } else {
-    alert("Please enable location to proceed.");
-  }
-};
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("API Response:", data);
+
+
+              localStorage.setItem("itinerary", JSON.stringify(data));
+
+              alert("Itinerary created successfully and saved locally!");
+            })
+            .catch((error) => {
+              console.error("Error calling API:", error);
+              alert("Failed to create itinerary. Please try again.");
+            });
+        },
+        (error) => {
+          console.error("Error fetching location:", error);
+          alert("Failed to get location. Please enable location access.");
+        }
+      );
+    } else {
+      alert("Please enable location to proceed.");
+    }
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -232,14 +240,12 @@ const handleCreate = async () => {
                 <div className="relative">
                   <span
                     onClick={() => setIsLocationOn((prev) => !prev)}
-                    className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${
-                      isLocationOn ? "bg-green-500" : "bg-gray-300"
-                    }`}
+                    className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${isLocationOn ? "bg-green-500" : "bg-gray-300"
+                      }`}
                   >
                     <div
-                      className={`w-4 h-4 rounded-full bg-white transform duration-200 ${
-                        isLocationOn ? "translate-x-4" : "translate-x-0"
-                      }`}
+                      className={`w-4 h-4 rounded-full bg-white transform duration-200 ${isLocationOn ? "translate-x-4" : "translate-x-0"
+                        }`}
                     ></div>
                   </span>
                 </div>
@@ -339,7 +345,7 @@ const handleCreate = async () => {
           </form>
         </main>
 
-    
+
       </div>
     </body>
   );
