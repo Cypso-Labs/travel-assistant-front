@@ -13,6 +13,7 @@ import Chickn from "../../public/images/Image.png";
 import Map from "../../public/images/MapImage.png";
 import Image from "next/image";
 import Link from "next/link";
+import MapComponent from "./googleMap";
 
 
 
@@ -512,9 +513,7 @@ export default function HomePage() {
             beauty of each destination.
           </p>
         </div>
-        <div className="mt-8 relative bg-white shadow rounded-lg overflow-hidden">
-          <Image src={Map} alt="Landmarks Map" className="w-full h-auto" />
-        </div>
+        <MapComponent/>
       </section>
 
       <footer className="bg-gray-900 text-white py-10">

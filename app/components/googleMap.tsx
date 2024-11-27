@@ -3,7 +3,7 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 const containerStyle = {
   width: "100%",
-  height: "400px",
+  height: "500px",
 };
 
 const center = {
@@ -36,4 +36,7 @@ const MapComponent = () => {
   );
 };
 
-export default MapComponent;
+
+export default MapComponent
+
+

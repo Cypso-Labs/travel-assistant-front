@@ -6,7 +6,6 @@ import delete_image from '../../public/images/icons/delete.png'
 import edit_image from '../../public/images/icons/edit.png'
 import file_image from '../../public/images/icons/document.png'
 import VR from '../../public/images/icons/VR_Icon.png'
-import map from '../../public/images/Map_IMG.png'
 import Image from "next/image";
 import axios from "axios";
 import MapComponent from "./googleMap";
