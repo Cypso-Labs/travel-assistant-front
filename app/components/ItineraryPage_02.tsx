@@ -10,18 +10,21 @@ import React, { useState, useEffect } from "react";
 import VR360Image from "./Modals/vrModal";
 import axios from "axios";
 import Swal from "sweetalert2";
+import MapComponent from "./googleMapItineraryAll";
 
 export default function ItineraryPage_02() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
   const [itineraryData, setItineraryData] = useState([]);
+  const [location, setLocations] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [itemData, setItemData] = useState([]);
+  
 
-  const user = JSON.parse(localStorage.getItem('UserData'));
 
+   const user = JSON.parse(localStorage.getItem('UserData') || '{}');
   useEffect(() => {
 
     let locations = [];
@@ -36,6 +39,7 @@ export default function ItineraryPage_02() {
 
         if (response.status === 200) {
           locations = response.data.locations;
+          console.log(locations)
         }
       } catch (error) {
         const { response } = error;
@@ -47,6 +51,8 @@ export default function ItineraryPage_02() {
     if (savedData) {
       const parsedData = JSON.parse(savedData);
 
+      setLocations(parsedData)
+      console.log(parsedData)
       // Fetch all locations first
       fetchAllLocations().then(() => {
         const transformedData = parsedData.map((item) => ({
@@ -252,13 +258,7 @@ export default function ItineraryPage_02() {
               key={index}
               className="bg-white shadow rounded-lg p-4 flex flex-col relative"
             >
-              <div className="w-full bg-gray-300 mb-4 rounded">
-                <Image
-                  src={Map}
-                  alt="Map"
-                  className="w-full h-full object-cover rounded"
-                />
-              </div>
+              <MapComponent locations={location[index].sub_places} />
               <div className="mb-4">
                 {item.locations.map((loc) => (
                   <div

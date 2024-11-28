@@ -31,7 +31,7 @@ export default function ItineraryPage() {
 
     const fetchAllItineraries = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/v1/itineraries', {
+        const response = await axios.get(`http://localhost:5000/api/v1/itinerary/${user.user_id}`, {
           headers: {
             Authorization: `Bearer ${user.access_token}`,
           },
@@ -44,7 +44,10 @@ export default function ItineraryPage() {
         }
       } catch (error) {
         const { response } = error;
-        console.log(response.data);
+        console.log(response);
+        if (response.status === 404) {
+          setItinerary(null);
+        }
       }
     };
 
@@ -285,7 +288,7 @@ export default function ItineraryPage() {
 
 
       {/* Itinerary Table Section */}
-      <section className="container mx-auto px-4 py-10">
+      {itinerary ? <section className="container mx-auto px-4 py-10">
         <h2 className="text-2xl font-bold mb-6 text-left">My Itinerary</h2>
         <div className="overflow-x-auto shadow rounded-lg">
           <table className="min-w-[800px] w-full bg-white text-left border-collapse">
@@ -324,6 +327,9 @@ export default function ItineraryPage() {
           </table>
         </div>
       </section>
+        :
+        <p className="text-2xl font-semibold text-gray-700 text-center mt-5">No Saved Itineraries</p>
+      }
 
       <main className="container mx-auto mt-6 pb-10 px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">Preview</h2>
