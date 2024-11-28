@@ -35,8 +35,10 @@ export const registerUser = async (
                     icon: "success"
                 });
 
+                localStorage.setItem('UserData', JSON.stringify(response.data))
+
                 setTimeout(() => {
-                    redirect('/account/sign-in');
+                    redirect('/account/profile-creation');
                 }, 1000)
             }
 

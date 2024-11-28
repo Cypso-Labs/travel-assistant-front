@@ -5,6 +5,7 @@ import header_image from "../../public/images/hedar_Img.png";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function ItineraryPage() {
   const [location, setLocation] = useState("");
@@ -14,6 +15,8 @@ export default function ItineraryPage() {
   const [isLocationOn, setIsLocationOn] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [userPreferences, setUserPreferences] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("UserData"));
@@ -109,6 +112,11 @@ export default function ItineraryPage() {
                 text: "Itinerary created successfully and saved locally!",
                 icon: "success",
               });
+
+              setTimeout(() => {
+                router.push('/itinerarySave')
+              }, 1500);
+
             })
             .catch((error) => {
               console.error("Error calling API:", error);
@@ -144,6 +152,7 @@ export default function ItineraryPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto mt-10 px-4 pb-10">
+        <div className="pt-24"></div>
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold">Make Your Own Itinerary Here</h2>
         </div>
@@ -160,14 +169,12 @@ export default function ItineraryPage() {
               <div className="relative">
                 <span
                   onClick={() => setIsLocationOn((prev) => !prev)}
-                  className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${
-                    isLocationOn ? "bg-green-500" : "bg-gray-300"
-                  }`}
+                  className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${isLocationOn ? "bg-green-500" : "bg-gray-300"
+                    }`}
                 >
                   <div
-                    className={`w-4 h-4 rounded-full bg-white transform duration-200 ${
-                      isLocationOn ? "translate-x-2" : "-translate-x-2"
-                    }`}
+                    className={`w-4 h-4 rounded-full bg-white transform duration-200 ${isLocationOn ? "translate-x-2" : "-translate-x-2"
+                      }`}
                   ></div>
                 </span>
               </div>

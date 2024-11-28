@@ -4,16 +4,44 @@ import Image from "next/image";
 import React, { useState } from "react";
 import header_image from "../../public/images/homePage.png";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
+  // Function to safely get user data from localStorage
+  const getUserData = () => {
+    try {
+      const data = localStorage.getItem("UserData");
+      return data ? JSON.parse(data) : null;
+    } catch (err) {
+      console.error("Error parsing user data:", err);
+      return null;
+    }
+  };
+
+  const user = getUserData(); // Get user data once
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("UserData"); // Clear user data from localStorage
+    router.push("/account/sign-in"); // Redirect to login page
+  };
+
+  const handleItineraryClick = (e) => {
+    if (!user) {
+      e.preventDefault();
+      router.push("/account/sign-in");
+    }
+  };
+
   return (
-    <header className="fixed  left-1/2 transform -translate-x-1/2 w-[96vw] h-16 bg-black text-white shadow-lg z-50 mt-5 rounded-lg py-3">
+    <header className="fixed left-1/2 transform -translate-x-1/2 w-[96vw] h-16 bg-black text-white shadow-lg z-50 mt-5 rounded-lg py-3">
       <div className="absolute inset-0">
         <Image
           src={header_image}
@@ -35,10 +63,20 @@ const Header = () => {
           <a href="/" className="hover:text-gray-300 text-lg">
             Home
           </a>
-          <Link className="hover:text-gray-300 text-lg" href="/itinerarySave">
+          <Link
+            href="/itineraryCreate"
+            className="hover:text-gray-300 text-lg"
+            onClick={handleItineraryClick}
+          >
             Itinerary
           </Link>
-          {/* <a href="/itinerary" className="hover:text-gray-300 text-lg">Itinerary</a> */}
+          <Link
+            href="/itineraryView"
+            className="hover:text-gray-300 text-lg"
+            onClick={handleItineraryClick}
+          >
+            View Itineraries
+          </Link>
           <a href="/events" className="hover:text-gray-300 text-lg">
             Events
           </a>
@@ -54,7 +92,7 @@ const Header = () => {
         </nav>
 
         {/* Icons for mobile and desktop */}
-        <div className="flex space-x-4">
+        <div className="flex items-center space-x-4">
           {/* Menu Icon */}
           <button
             onClick={toggleSidebar}
@@ -76,23 +114,35 @@ const Header = () => {
             </svg>
           </button>
 
-          {/* Notification Icon */}
-          <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
-              />
-            </svg>
-          </button>
+          {/* Profile Icon */}
+          <div className="relative flex justify-between items-center">
+            <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
+                />
+              </svg>
+            </button>
+
+            {/* Logout Button - visible only when user is logged in */}
+            {user && (
+              <button
+                onClick={handleLogout}
+                className="ml-4 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 text-sm"
+              >
+                Logout
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </header>

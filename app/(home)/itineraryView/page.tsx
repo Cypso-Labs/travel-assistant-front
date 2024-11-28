@@ -1,11 +1,11 @@
 "use client"; // Required for Next.js apps
 
 import React, { useEffect, useState } from "react";
-import header_image from '../../public/images/hedar_Img.png'
-import delete_image from '../../public/images/icons/delete.png'
-import edit_image from '../../public/images/icons/edit.png'
-import file_image from '../../public/images/icons/document.png'
-import VR from '../../public/images/icons/VR_Icon.png'
+import header_image from '../../../public/images/hedar_Img.png'
+import delete_image from '../../../public/images/icons/delete.png'
+import edit_image from '../../../public/images/icons/edit.png'
+import file_image from '../../../public/images/icons/document.png'
+import VR from '../../../public/images/icons/VR_Icon.png'
 import Image from "next/image";
 import axios from "axios";
 import MapComponent from "../../components/googleMapItinerary";
@@ -208,7 +208,7 @@ export default function ItineraryPage() {
           <a href="/about" className="block hover:text-gray-300">About Us</a>
         </nav>
       </div>
-
+      <div className="pt-24"></div>
       {/*back button*/}
       <div className="bg-white p-6 rounded-lg shadow-lg border flex py-3 mt-6 ml-10 mr-10">
         <button className=" bg-black text-white px-1 rounded hover:bg-red-600 transition duration-200">

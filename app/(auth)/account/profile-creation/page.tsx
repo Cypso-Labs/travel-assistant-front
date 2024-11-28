@@ -1,35 +1,37 @@
-"use client";
+"use client"
 
 import Image from "next/image";
-import React, { useActionState, useEffect, useState } from "react";
-import icon from "../../../public/images/icons/empty-image.png";
+import React, { useEffect, useState } from "react";
+import icon from "../../../../public/images/icons/empty-image.png";
 import ToggleButton from "@/app/components/toggle-button";
-// import { Calender } from "../../../../public/SVG";
+import Swal from 'sweetalert2';
 import axios from "axios";
-import { profileCreationSchema } from "@/app/lib/schemas";
-import { parseWithZod } from "@conform-to/zod";
-import { useForm } from "@conform-to/react";
+import { useRouter } from "next/navigation";
 
 function ProfileCreationPage() {
+
   // useEffect(() => {
   //   const jwtToken = localStorage.getItem('jwtToken');
   // }, []);
 
-  const user = JSON.parse(localStorage.getItem("UserData"));
+  const user = JSON.parse(localStorage.getItem('UserData'));
 
-  // const [userData, setUserData] = useState({
-  //   first_name: "",
-  //   last_name: "",
-  //   birth_of_date: "",
-  //   contact_number: "",
-  //   country_of_orgin: "",
-  //   postal_zip: "",
-  //   city: "",
-  // });
+  const [userData, setUserData] = useState({
+    first_name: "",
+    last_name: "",
+    birth_of_date: "",
+    contact_number: "",
+    country_of_orgin: "",
+    postal_zip: "",
+    city: "",
+  });
 
   const [profileImage, setProfileImage] = useState(null);
   const [fileToUpload, setFileToUpload] = useState(null);
   const [userPreferences, setUserPreferences] = useState([]);
+  const [imageLink, setImageLink] = useState(null);
+
+  const router = useRouter();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -45,6 +47,7 @@ function ProfileCreationPage() {
     }
   };
 
+
   const updateUserData = (e) => {
     const { name, value } = e.target;
     setUserData((prevState) => ({
@@ -54,7 +57,7 @@ function ProfileCreationPage() {
   };
 
   const handlePreferenceToggle = (preference) => {
-    console.log(preference);
+    console.log(preference)
     setUserPreferences((prevPreferences) => {
       const isPreferenceAdded = prevPreferences.includes(preference);
 
@@ -67,79 +70,101 @@ function ProfileCreationPage() {
   };
 
   const handleSendUserData = async (data) => {
-    const token = user.access_token;
+
+    const token = user.registration_token
 
     try {
-      const response = await axios.put(
-        "http://localhost:5000/api/users/1",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.put(`http://localhost:5000/api/users/${user.user_id}`, data, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
         }
-      );
+      });
 
       if (response.status === 200) {
-        console.log(response.data);
+        console.log(response.data)
       }
     } catch (error) {
       const { response } = error;
-      console.log(response.data);
+      console.log(response.data)
     }
-  };
+  }
 
-  const handleUserData = async (formData: FormData) => {
-    // e.preventDefault();
+
+  const handleUserData = async (e) => {
+    e.preventDefault();
+
+    // Check for empty user inputs
+    const missingFields = Object.keys(userData).filter(
+      (key) => !userData[key].trim()
+    );
+
+    if (missingFields.length > 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Incomplete Information',
+        text: `Please fill in the following fields: ${missingFields.join(', ')}`,
+      });
+      return;
+    }
+
+    // Check if image is uploaded
+    if (!fileToUpload && !imageLink) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Image Missing',
+        text: 'Please upload your profile image before submitting.',
+      });
+      return;
+    }
+
+    // Proceed with form submission
     let finalData = {
       ...userData,
       preferences: userPreferences,
     };
-    console.log("User Data to Submit:", finalData);
 
     const data = new FormData();
-    data.append("image", fileToUpload);
+    if (fileToUpload) {
+      data.append('image', fileToUpload);
+    }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/v1/upload_image",
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post('http://localhost:5000/api/v1/upload_image', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       if (response.status === 200) {
         const imageURL = response.data.image_url;
+        setImageLink(imageURL);
+
         const updatedData = {
           ...finalData,
           profile_image: imageURL,
         };
 
-        handleSendUserData(updatedData);
-      }
+        await handleSendUserData(updatedData);
+        Swal.fire({
+          icon: 'success',
+          title: 'Profile Created',
+          text: 'Your profile has been successfully created.',
+        });
 
-      console.log(response.data);
+        setTimeout(() => {
+          router.push('/');
+        }, 1500)
+
+      }
     } catch (error) {
       const { response } = error;
-      console.log(response.data);
+      Swal.fire({
+        icon: 'error',
+        title: 'Submission Failed',
+        text: response?.data?.message || 'An error occurred. Please try again later.',
+      });
     }
   };
-
-  const [lastResult, action] = useActionState(handleUserData, undefined);
-
-  const [form, fields] = useForm({
-    lastResult,
-
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema: profileCreationSchema });
-    },
-
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-  });
 
   return (
     <div className="h-[1024px] overflow-y-auto py-32">
@@ -148,12 +173,7 @@ function ProfileCreationPage() {
           Let&apos;s create your profile
         </h1>
 
-        <form
-          className="space-y-7 mb-5"
-          id={form.id}
-          onSubmit={form.onSubmit}
-          action={action}
-        >
+        <form className="space-y-7 mb-5">
           <div className="flex justify-center">
             <label
               htmlFor="dropzone-file"
@@ -161,22 +181,18 @@ function ProfileCreationPage() {
             >
               <div>
                 {profileImage ? (
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    className="rounded-full h-[285px] w-[285px]"
-                  />
+                  <img src={profileImage} alt="Profile" className="rounded-full h-[285px] w-[285px]" />
                 ) : (
                   <Image src={icon} alt="Empty image icon" />
                 )}
+
               </div>
               <input
                 accept="image/*"
                 onChange={handleImageChange}
                 id="dropzone-file"
                 type="file"
-                className="hidden"
-              />
+                className="hidden" />
             </label>
           </div>
 
@@ -190,18 +206,13 @@ function ProfileCreationPage() {
             <input
               type="text"
               id="firstName"
-              key={fields.firstName.key}
-              name={fields.firstName.name}
-              defaultValue={fields.firstName.initialValue}
+              name="first_name"
+              value={userData.first_name}
+              onChange={updateUserData}
               className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="Enter your name"
+              required
             />
-            <div
-              className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {fields.firstName.errors}
-            </div>
           </div>
 
           <div>
@@ -214,18 +225,13 @@ function ProfileCreationPage() {
             <input
               type="text"
               id="lastName"
-              key={fields.lastName.key}
-              name={fields.lastName.name}
-              defaultValue={fields.lastName.initialValue}
+              name="last_name"
+              value={userData.last_name}
+              onChange={updateUserData}
               className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="Enter your name"
+              required
             />
-            <div
-              className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {fields.lastName.errors}
-            </div>
           </div>
 
           <div>
@@ -239,18 +245,16 @@ function ProfileCreationPage() {
             <div className="relative">
               <input
                 type="date"
-                key={fields.birthOfDate.key}
-                name={fields.birthOfDate.name}
-                defaultValue={fields.birthOfDate.initialValue}
+                name="birth_of_date"
+                value={userData.birth_of_date}
+                onChange={updateUserData}
                 className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                 placeholder="Select date"
               />
-              <div
-                className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                {fields.birthOfDate.errors}
-              </div>
+
+              {/* <div className="absolute inset-y-3 start-[345px] text-[#C8C8C8] flex items-center hover:cursor-pointer hover:text-black">
+              <Calender />
+            </div> */}
             </div>
           </div>
 
@@ -264,18 +268,13 @@ function ProfileCreationPage() {
             <input
               type="tel"
               id="contact-number"
-              key={fields.contactNumber.key}
-              name={fields.contactNumber.name}
-              defaultValue={fields.contactNumber.initialValue}
+              name="contact_number"
+              value={userData.contact_number}
+              onChange={updateUserData}
               className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="Enter your contact number "
+              required
             />
-            <div
-              className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {fields.contactNumber.errors}
-            </div>
           </div>
 
           <div>
@@ -288,18 +287,13 @@ function ProfileCreationPage() {
             <input
               type="text"
               id="country"
-              key={fields.countryOfOrgin.key}
-              name={fields.countryOfOrgin.name}
-              defaultValue={fields.countryOfOrgin.initialValue}
+              name="country_of_orgin"
+              value={userData.country_of_orgin}
+              onChange={updateUserData}
               className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="Enter your contact number "
+              required
             />
-            <div
-              className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              {fields.countryOfOrgin.errors}
-            </div>
           </div>
 
           <div className="flex gap-7">
@@ -313,18 +307,13 @@ function ProfileCreationPage() {
               <input
                 type="text"
                 id="address"
-                key={fields.address.key}
-                name={fields.address.name}
-                defaultValue={fields.address.initialValue}
+                name="city"
+                value={userData.city}
+                onChange={updateUserData}
                 className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                 placeholder="Enter your address"
+                required
               />
-              <div
-                className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                {fields.address.errors}
-              </div>
             </div>
 
             <div>
@@ -337,81 +326,41 @@ function ProfileCreationPage() {
               <input
                 type="text"
                 id="postal-zip"
-                key={fields.postalZip.key}
-                name={fields.postalZip.name}
-                defaultValue={fields.postalZip.initialValue}
+                name="postal_zip"
+                value={userData.postal_zip}
+                onChange={updateUserData}
                 className="border border-[#D0D5DD] text-gray-900 text-[16px] rounded-[8px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                 placeholder="Enter your postal code"
-              />
-              <div
-                className="ps-2 text-sm text-red-800 rounded-lg dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                {fields.postalZip.errors}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-7">
-            <h1 className="text-[20px] font-[600] mb-5">
-              Tell us what you love.......
-            </h1>
-
-            <div className="flex flex-wrap">
-              <ToggleButton
-                onClick={() => {
-                  handlePreferenceToggle("Adventure");
-                }}
-                name="Adventure"
-              />
-              <ToggleButton
-                onClick={() => {
-                  handlePreferenceToggle("Natural");
-                }}
-                name="Natural"
-              />
-              <ToggleButton
-                onClick={() => {
-                  handlePreferenceToggle("Religious");
-                }}
-                name="Religious"
-              />
-              <ToggleButton
-                onClick={() => {
-                  handlePreferenceToggle("Mountain");
-                }}
-                name="Mountain"
-              />
-              <ToggleButton
-                onClick={() => {
-                  handlePreferenceToggle("Wildlife");
-                }}
-                name="Wildlife"
-              />
-              <ToggleButton
-                onClick={() => {
-                  handlePreferenceToggle("History");
-                }}
-                name="History"
-              />
-              <ToggleButton
-                onClick={() => {
-                  handlePreferenceToggle("Beach");
-                }}
-                name="Beach"
+                required
               />
             </div>
-          </div>
-
-          <div className="flex justify-end mt-20 mb-5">
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-[600] rounded-lg text-[16px] px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-              Create Profile
-            </button>
           </div>
         </form>
+
+        <div className="mt-7">
+          <h1 className="text-[20px] font-[600] mb-5">
+            Tell us what you love.......
+          </h1>
+
+          <div className="flex flex-wrap">
+            <ToggleButton onClick={() => { handlePreferenceToggle("Adventure") }} name="Adventure" />
+            <ToggleButton onClick={() => { handlePreferenceToggle("Natural") }} name="Natural" />
+            <ToggleButton onClick={() => { handlePreferenceToggle("Religious") }} name="Religious" />
+            <ToggleButton onClick={() => { handlePreferenceToggle("Mountain") }} name="Mountain" />
+            <ToggleButton onClick={() => { handlePreferenceToggle("Wildlife") }} name="Wildlife" />
+            <ToggleButton onClick={() => { handlePreferenceToggle("History") }} name="History" />
+            <ToggleButton onClick={() => { handlePreferenceToggle("Beach") }} name="Beach" />
+          </div>
+        </div>
+
+        <div className="flex justify-end mt-20 mb-5">
+          <button
+            onClick={handleUserData}
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-[600] rounded-lg text-[16px] px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            Create Profile
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import React, { useState, useEffect } from "react";
 import VR360Image from "../../components/Modals/vrModal";
 import axios from "axios";
 import Swal from "sweetalert2";
+import MapComponent from "../../components/googleMapItineraryAll";
 
 export default function ItineraryPage_02() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,8 +20,9 @@ export default function ItineraryPage_02() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [itemData, setItemData] = useState([]);
+  const [location, setLocations] = useState([]);
 
-  const user = JSON.parse(localStorage.getItem('UserData'));
+  const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
   useEffect(() => {
 
@@ -46,6 +48,8 @@ export default function ItineraryPage_02() {
     const savedData = localStorage.getItem("itinerary");
     if (savedData) {
       const parsedData = JSON.parse(savedData);
+
+      setLocations(parsedData)
 
       // Fetch all locations first
       fetchAllLocations().then(() => {
@@ -143,7 +147,30 @@ export default function ItineraryPage_02() {
         {/* Sidebar content */}
       </div>
 
+      {showAlert && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] flex flex-col text-center">
+            <h2 className="text-xl font-semibold text-green-600">
+              Itinerary Created Successfully!
+            </h2>
+            <p className="text-gray-500 mt-2">
+              Your itinerary has been successfully created and saved.
+            </p>
+
+            <div className="mt-4">
+              <span
+                className="text-green-600 font-bold"
+                onClick={() => setShowAlert(false)}
+              >
+                Close
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="container mx-auto mt-6 pb-10 px-4 sm:px-6 lg:px-8">
+        <div className="pt-24"></div>
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">
           Your Itinerary
         </h2>
@@ -153,13 +180,7 @@ export default function ItineraryPage_02() {
               key={index}
               className="bg-white shadow rounded-lg p-4 flex flex-col relative"
             >
-              <div className="w-full bg-gray-300 mb-4 rounded">
-                <Image
-                  src={Map}
-                  alt="Map"
-                  className="w-full h-full object-cover rounded"
-                />
-              </div>
+              <MapComponent locations={location[index].sub_places} />
               <div className="mb-4">
                 {item.locations.map((loc) => (
                   <div

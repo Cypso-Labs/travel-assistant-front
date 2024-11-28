@@ -40,7 +40,7 @@ export const logInUser = async (
             localStorage.setItem('UserData', JSON.stringify(response.data))
 
             setTimeout(() => {
-                redirect('/account/profile-creation');
+                redirect('/');
             }, 1000)
         })
         .catch((error) => {
