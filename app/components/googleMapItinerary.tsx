@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-  DirectionsRenderer,
-} from "@react-google-maps/api";
+import { GoogleMap, Marker, DirectionsRenderer, useLoadScript } from "@react-google-maps/api";
 
 const containerStyle = {
   width: "100%",
@@ -19,9 +14,12 @@ const defaultCenter = {
 const MapComponent = ({ locations }) => {
   const [directions, setDirections] = useState(null); // State to store route data
   const [error, setError] = useState(null); // State to handle errors
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+  });
 
   useEffect(() => {
-    if (locations.length > 0) {
+    if (isLoaded && locations.length > 0) {
       const directionsService = new google.maps.DirectionsService();
 
       // Create waypoints from all locations except the last one
@@ -55,31 +53,33 @@ const MapComponent = ({ locations }) => {
     } else {
       setError("At least one location is required to calculate directions.");
     }
-  }, [locations]);
+  }, [locations, isLoaded]); 
+
+  if (!isLoaded) {
+    return <div>Loading...</div>; 
+  }
 
   return (
-    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={defaultCenter}
-        zoom={8}
-      >
-        {/* Render markers for all locations */}
-        {locations.map((location, index) => (
-          <Marker
-            key={index}
-            position={{ lat: location.latitude, lng: location.longitude }}
-            title={location.name || `Location ${index + 1}`}
-          />
-        ))}
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={defaultCenter}
+      zoom={8}
+    >
+      {/* Render markers for all locations */}
+      {locations.map((location, index) => (
+        <Marker
+          key={index}
+          position={{ lat: location.latitude, lng: location.longitude }}
+          title={location.name || `Location ${index + 1}`}
+        />
+      ))}
 
-        {/* Render the calculated directions */}
-        {directions && <DirectionsRenderer directions={directions} />}
-      </GoogleMap>
-
+      {/* Render the calculated directions */}
+      {directions && <DirectionsRenderer directions={directions} />}
+      
       {/* Show error message if any */}
       {error && <p style={{ color: "red" }}>{error}</p>}
-    </LoadScript>
+    </GoogleMap>
   );
 };
 

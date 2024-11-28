@@ -1,5 +1,5 @@
 import React from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
 const containerStyle = {
   width: "100%",
@@ -7,26 +7,30 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 6.9271, // Centering map around Sri Lanka
+  lat: 6.9271, 
   lng: 79.8612,
 };
 
 const MapComponent = ({ locations }) => {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+  });
+
+  if (!isLoaded) {
+    return <div>Loading...</div>; 
+  }
+
   return (
-    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={8}>
-        {locations.map((location, index) => (
-          <Marker
-            key={index}
-            position={{ lat: location.latitude, lng: location.longitude }}
-            title={location.name} // Displays the location name on hover
-          />
-        ))}
-      </GoogleMap>
-    </LoadScript>
+    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={8}>
+      {locations.map((location, index) => (
+        <Marker
+          key={index}
+          position={{ lat: location.latitude, lng: location.longitude }}
+          title={location.name} 
+        />
+      ))}
+    </GoogleMap>
   );
 };
 
 export default MapComponent;
-
-

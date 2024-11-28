@@ -21,6 +21,7 @@ export default function ItineraryPage_02() {
   const [showAlert, setShowAlert] = useState(false);
   const [itemData, setItemData] = useState([]);
   const [location, setLocations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
@@ -50,6 +51,7 @@ export default function ItineraryPage_02() {
       const parsedData = JSON.parse(savedData);
 
       setLocations(parsedData)
+      setIsLoading(false);
 
       // Fetch all locations first
       fetchAllLocations().then(() => {
@@ -138,7 +140,8 @@ export default function ItineraryPage_02() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    (!isLoading && 
+      <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -180,7 +183,7 @@ export default function ItineraryPage_02() {
               key={index}
               className="bg-white shadow rounded-lg p-4 flex flex-col relative"
             >
-              <MapComponent locations={location[index].sub_places} />
+              {location[index]?.sub_places && <MapComponent locations={location[index].sub_places} />}
               <div className="mb-4">
                 {item.locations.map((loc) => (
                   <div
@@ -255,6 +258,6 @@ export default function ItineraryPage_02() {
         />
       )}
 
-    </div>
+    </div>)
   );
 }
