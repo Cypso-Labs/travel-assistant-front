@@ -8,21 +8,16 @@ import file_image from '../../public/images/icons/document.png'
 import VR from '../../public/images/icons/VR_Icon.png'
 import Image from "next/image";
 import axios from "axios";
-import MapComponent from "./googleMap";
+import MapComponent from "./googleMapItinerary";
+
 
 export default function ItineraryPage() {
 
   const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // State variables
   const [itinerary, setItinerary] = useState([]);
-
-  const locations = [
-    { id: 1, name: "Location 01", description: "Description", budget: "XXXX" },
-    { id: 2, name: "Location 02", description: "Description", budget: "XXXX" },
-    { id: 3, name: "Location 03", description: "Description", budget: "XXXX" },
-  ];
+  const [selectedLocations, setSelectedLocations] = useState([]);
 
 
   useEffect(() => {
@@ -51,6 +46,39 @@ export default function ItineraryPage() {
     fetchAllItineraries()
 
   }, []);
+
+
+  const fetchLocationsForItinerary = async (id) => {
+    // Get user data from localStorage
+    const user = JSON.parse(localStorage.getItem('UserData') || '{}');
+  
+    // If user data exists and contains user_id
+    if (user && user.user_id) {
+      try {
+        // Send GET request with itinerary id and user id
+        const response = await axios.get(
+          `http://localhost:5000/api/v1/itinerary_location/${id}/${user.user_id}`, 
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`, // Include the token in headers
+            },
+          }
+        );
+  
+        console.log(response);
+  
+        // Check if the response status is 200 (OK)
+        if (response.status === 200) {
+          setSelectedLocations(response.data.locations); // Assuming API returns an array of locations
+        }
+      } catch (error) {
+        console.error('Error fetching locations:', error.response?.data || error.message);
+      }
+    } else {
+      console.error('User data not found or missing user_id');
+    }
+  };
+  
 
   // Handle delete itinerary from the backend and update the frontend
   const handleDeleteItinerary = async (id) => {
@@ -85,13 +113,13 @@ export default function ItineraryPage() {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  const totalBudget = itinerary.reduce((acc, item) => {
+  // const totalBudget = itinerary.reduce((acc, item) => {
     
-    const numericBudget = parseInt(item.total_budget);
-    return acc + numericBudget;
-  }, 0);
+  //   const numericBudget = parseInt(item.total_budget);
+  //   return acc + numericBudget;
+  // }, 0);
   
-  console.log(`Total Budget: RS ${totalBudget}`);
+  // console.log(`Total Budget: RS ${totalBudget}`);
   
   const handleImageClick = () => {
     console.log("Image clicked!");
@@ -238,7 +266,7 @@ export default function ItineraryPage() {
             </thead>
             <tbody>
               {itinerary.map(item => (
-                <tr key={item.id} className="border-b hover:bg-gray-50">
+                <tr key={item.id} className="border-b hover:bg-gray-50" onClick={() => fetchLocationsForItinerary(item.id)}>
                   {/* Edit Action */}
                   <button className="text-blue-500 hover:text-blue-700">
                     <Image src={file_image} alt="Icon" className="w-6 h-6"/>
@@ -271,27 +299,15 @@ export default function ItineraryPage() {
 
         {/* Card Section */}
         <div className="bg-white shadow-md rounded-lg p-6 w-full">
-          {/* Edit and Remove Buttons */}
-          <div className="flex justify-end pb-2">
-            <button className="text-blue-500 hover:text-blue-700">
-              <Image src={edit_image} alt="Edit Icon" className="w-6 h-6" />
-            </button>
-            <button
-              onClick={() => removeMainSection()}
-              className="text-red-500 hover:text-red-700 ml-2"
-            >
-              <Image src={delete_image} alt="Delete Icon" className="w-6 h-6" />
-            </button>
-          </div>
 
           {/* Map Section */}
-         <MapComponent/>
+         <MapComponent locations={selectedLocations}/>
 
           {/* Location and Budget Section */}
           <div className="flex flex-col lg:flex-row justify-between mb-4">
             {/* Locations List */}
             <div className="mb-6 lg:w-2/3">
-              {locations.map((loc) => (
+              {selectedLocations.map((loc) => (
                 <div
                   key={loc.id}
                   className="flex items-center justify-between mb-3 px-2 py-1 bg-gray-50 rounded hover:bg-gray-100 transition"
@@ -328,14 +344,13 @@ export default function ItineraryPage() {
                 </div>
               ))}
             </div>
-
             {/* Budget Section */}
             <div className="flex flex-col items-center sm:items-start lg:w-1/3 mt-4 lg:mt-0 pt-4">
               <p className="text-gray-700 font-semibold text-center sm:text-left">
                 Total Budget
               </p>
               <p className="text-xl font-bold text-green-600 text-center sm:text-left">
-                RS {totalBudget}
+                RS {}
               </p>
             </div>
           </div>
