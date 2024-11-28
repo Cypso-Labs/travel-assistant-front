@@ -10,6 +10,7 @@ import Image from "next/image";
 import axios from "axios";
 import MapComponent from "./googleMapItinerary";
 import VR360Image from "./Modals/vrModal";
+import Swal from "sweetalert2";
 
 
 export default function ItineraryPage() {
@@ -21,7 +22,7 @@ export default function ItineraryPage() {
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
-  const [selectedItinerary,setSelectedItinerary] = useState(null);
+  const [selectedItinerary, setSelectedItinerary] = useState(null);
 
 
   useEffect(() => {
@@ -89,32 +90,55 @@ export default function ItineraryPage() {
     setOpenModal(true);
   };
 
-  // Handle delete itinerary from the backend and update the frontend
+
   const handleDeleteItinerary = async (id) => {
     try {
-      // Send DELETE request to the backend
-      const response = await axios.delete(`http://localhost:5000/api/v1/itineraries/${id}`, {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
+      // Display confirmation alert using SweetAlert
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "This action will permanently delete the itinerary.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
       });
 
-      console.log(response)
+      // Check if the user confirmed the action
+      if (result.isConfirmed) {
+        // Send DELETE request to the backend
+        const response = await axios.delete(`http://localhost:5000/api/v1/itineraries/${id}`, {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+          },
+        });
 
-      if (response.status === 200) {
-        console.log(response.data.message);
+        console.log(response);
 
-        // Update the state to remove the deleted itinerary
-        setItinerary((prevItinerary) => prevItinerary.filter(item => item.id !== id));
+        if (response.status === 200) {
+          // Display success message
+          Swal.fire('Deleted!', response.data.message || 'Itinerary has been deleted.', 'success');
+
+          // Update the state to remove the deleted itinerary
+          setItinerary((prevItinerary) => prevItinerary.filter(item => item.id !== id));
+        }
       }
     } catch (error) {
       if (error.response) {
         console.error('Error deleting itinerary:', error.response.data);
+
+        // Display error message
+        Swal.fire('Error!', error.response.data.message || 'Failed to delete itinerary.', 'error');
       } else {
         console.error('Error deleting itinerary:', error.message);
+
+        // Display error message
+        Swal.fire('Error!', 'Something went wrong. Please try again later.', 'error');
       }
     }
   };
+
 
   // Handle remove itinerary
   const handleRemove = (id: number) => {
@@ -371,8 +395,8 @@ export default function ItineraryPage() {
             </div>
           </div>
         </div>
-        :
-        <p className="text-2xl font-semibold text-gray-500 text-center">Select An Itinerary to preview</p>
+          :
+          <p className="text-2xl font-semibold text-gray-500 text-center">Select An Itinerary to preview</p>
         }
       </main>
 
