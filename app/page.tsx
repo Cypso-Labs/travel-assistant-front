@@ -8,7 +8,7 @@ import ItineraryPage3 from "./components/ItineraryPage3";
 export default function Home() {
   return (
     <div>
-      <HomePage />
+      <ItineraryPage3 />
     </div>
   );
 }
