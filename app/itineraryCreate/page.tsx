@@ -16,16 +16,18 @@ export default function ItineraryPage() {
   const [userPreferences, setUserPreferences] = useState(false);
 
   useEffect(() => {
-
-    const user = JSON.parse(localStorage.getItem('UserData'));
+    const user = JSON.parse(localStorage.getItem("UserData"));
 
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${user.user_id}`, {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:5000/api/users/${user.user_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           setUserPreferences(response.data.preferences);
@@ -35,7 +37,7 @@ export default function ItineraryPage() {
         const { response } = error;
         console.log(response.data);
       }
-    }
+    };
 
     fetchUser();
   }, []);
@@ -45,7 +47,7 @@ export default function ItineraryPage() {
       Swal.fire({
         title: "Empty Fields",
         text: "Please fill in all required fields.",
-        icon: "info"
+        icon: "info",
       });
       return;
     }
@@ -58,7 +60,7 @@ export default function ItineraryPage() {
       Swal.fire({
         title: "Invalid Date!",
         text: "End date must be later than start date.",
-        icon: "info"
+        icon: "info",
       });
       return;
     }
@@ -73,12 +75,12 @@ export default function ItineraryPage() {
           longitude = position.coords.longitude;
 
           const itinerary_data = {
-            "total_budget": budget,
-            "start_date": startDate,
-            "end_date": endDate
-          }
+            total_budget: budget,
+            start_date: startDate,
+            end_date: endDate,
+          };
 
-          localStorage.setItem('itineraryData', JSON.stringify(itinerary_data))
+          localStorage.setItem("itineraryData", JSON.stringify(itinerary_data));
 
           const payload = {
             location: [latitude, longitude],
@@ -87,7 +89,7 @@ export default function ItineraryPage() {
             days: days,
           };
 
-          console.log(payload)
+          console.log(payload);
 
           fetch("http://127.0.0.1:5000/recommend", {
             method: "POST",
@@ -100,13 +102,12 @@ export default function ItineraryPage() {
             .then((data) => {
               console.log("API Response:", data);
 
-
               localStorage.setItem("itinerary", JSON.stringify(data));
 
               Swal.fire({
                 title: "Success!",
                 text: "Itinerary created successfully and saved locally!",
-                icon: "success"
+                icon: "success",
               });
             })
             .catch((error) => {
@@ -114,7 +115,7 @@ export default function ItineraryPage() {
               Swal.fire({
                 title: "Error!",
                 text: "Failed to create itinerary. Please try again.",
-                icon: "error"
+                icon: "error",
               });
             });
         },
@@ -123,7 +124,7 @@ export default function ItineraryPage() {
           Swal.fire({
             title: "Error!",
             text: "Failed to get location. Please enable location access.",
-            icon: "error"
+            icon: "error",
           });
         }
       );
@@ -131,7 +132,7 @@ export default function ItineraryPage() {
       Swal.fire({
         title: "Location Disabled!!",
         text: "Please enable location to proceed.",
-        icon: "info"
+        icon: "info",
       });
     }
   };
@@ -141,133 +142,130 @@ export default function ItineraryPage() {
   };
 
   return (
-      <div className="min-h-screen bg-gray-50">
-     
+    <div className="min-h-screen bg-gray-50">
+      <main className="container mx-auto mt-10 px-4 pb-10">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-bold">Make Your Own Itinerary Here</h2>
+        </div>
 
-        <main className="container mx-auto mt-10 px-4 pb-10">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold">Make Your Own Itinerary Here</h2>
-          </div>
-
-          <form className="bg-white shadow-md rounded-lg p-8 border-2 border-green-500">
-            <div className="flex justify-between items-center mb-4">
-              {!isLocationOn && (
-                <label className="text-sm font-bold text-red-500">
-                  <span>❗ Make sure your location is on</span>
-                </label>
-              )}
-              <div className="flex items-center space-x-2">
-                <label className="text-gray-700 font-bold">Location</label>
-                <div className="relative">
-                  <span
-                    onClick={() => setIsLocationOn((prev) => !prev)}
-                    className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${isLocationOn ? "bg-green-500" : "bg-gray-300"
-                      }`}
-                  >
-                    <div
-                      className={`w-4 h-4 rounded-full bg-white transform duration-200 ${isLocationOn ? "translate-x-2" : "-translate-x-2"
-                        }`}
-                    ></div>
-                  </span>
-                </div>
+        <form className="bg-white shadow-md rounded-lg p-8 border-2 border-green-500">
+          <div className="flex justify-between items-center mb-4">
+            {!isLocationOn && (
+              <label className="text-sm font-bold text-red-500">
+                <span>❗ Make sure your location is on</span>
+              </label>
+            )}
+            <div className="flex items-center space-x-2">
+              <label className="text-gray-700 font-bold">Location</label>
+              <div className="relative">
+                <span
+                  onClick={() => setIsLocationOn((prev) => !prev)}
+                  className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${
+                    isLocationOn ? "bg-green-500" : "bg-gray-300"
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full bg-white transform duration-200 ${
+                      isLocationOn ? "translate-x-2" : "-translate-x-2"
+                    }`}
+                  ></div>
+                </span>
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-wrap md:flex-nowrap justify-between gap-4 mb-4">
-              {!isLocationOn ? (
-                <div className="w-full md:w-1/2">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="location"
-                  >
-                    Your Location *
-                  </label>
-                  <input
-                    id="location"
-                    type="text"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2"
-                    placeholder="Enter your location"
-                  />
-                </div>
-              ) : null}
-
+          <div className="flex flex-wrap md:flex-nowrap justify-between gap-4 mb-4">
+            {!isLocationOn ? (
               <div className="w-full md:w-1/2">
                 <label
                   className="block text-gray-700 font-bold mb-2"
-                  htmlFor="budget"
+                  htmlFor="location"
                 >
-                  Enter your budget (in RS) *
+                  Your Location *
                 </label>
                 <input
-                  id="budget"
-                  type="number"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
+                  id="location"
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
                   className="w-full border border-gray-300 rounded-md px-4 py-2"
-                  placeholder="Enter your budget"
+                  placeholder="Enter your location"
+                />
+              </div>
+            ) : null}
+
+            <div className="w-full md:w-1/2">
+              <label
+                className="block text-gray-700 font-bold mb-2"
+                htmlFor="budget"
+              >
+                Enter your budget (in RS) *
+              </label>
+              <input
+                id="budget"
+                type="number"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-4 py-2"
+                placeholder="Enter your budget"
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2">
+              Select a time period
+            </label>
+            <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
+              <div className="w-full">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="start-date"
+                >
+                  Start Date *
+                </label>
+                <input
+                  id="start-date"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md px-4 py-2"
+                />
+              </div>
+
+              <span className="hidden md:block text-xl font-semibold text-gray-700">
+                To
+              </span>
+
+              <div className="w-full">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="end-date"
+                >
+                  End Date *
+                </label>
+                <input
+                  id="end-date"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md px-4 py-2"
                 />
               </div>
             </div>
+          </div>
 
-            <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2">
-                Select a time period
-              </label>
-              <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
-                <div className="w-full">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="start-date"
-                  >
-                    Start Date *
-                  </label>
-                  <input
-                    id="start-date"
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2"
-                  />
-                </div>
-
-                <span className="hidden md:block text-xl font-semibold text-gray-700">
-                  To
-                </span>
-
-                <div className="w-full">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="end-date"
-                  >
-                    End Date *
-                  </label>
-                  <input
-                    id="end-date"
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-center">
-              <button
-                onClick={handleCreate}
-                type="button"
-                className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
-              >
-                Create Itinerary
-              </button>
-            </div>
-          </form>
-        </main>
-
-
-      </div>
-
+          <div className="flex justify-center">
+            <button
+              onClick={handleCreate}
+              type="button"
+              className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600"
+            >
+              Create Itinerary
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
   );
 }

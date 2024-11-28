@@ -16,8 +16,6 @@ import Link from "next/link";
 import MapComponent from "./components/googleMap";
 
 
-
-
 export default function HomePage() {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -29,73 +27,6 @@ export default function HomePage() {
   return (
     <div>
       <div className="min-h-screen bg-gray-900 text-white ">
-      <header className="fixed  left-1/2 transform -translate-x-1/2 w-[96vw] h-16 bg-black text-white shadow-lg z-50 mt-5 rounded-lg py-3">
-          <div className="absolute inset-0">
-            <Image src={header_image} alt="Background" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-          </div>
-
-          <div className="relative container mx-auto flex justify-between items-center px-4 z-10">
-            {/* Logo */}
-            <div className="flex items-center space-x-4">
-              <div className="bg-gray-500 rounded-full w-10 h-10"></div>
-              <h1 className="text-2xl font-bold hidden md:block">ITINERARY</h1>
-            </div>
-
-            {/* Navigation for larger screens */}
-            <nav className="hidden md:flex space-x-6">
-              <a href="/" className="hover:text-gray-300 text-lg">Home</a>
-              <a href="/itinerary" className="hover:text-gray-300 text-lg">Itinerary</a>
-              <a href="/events" className="hover:text-gray-300 text-lg">Events</a>
-              <a href="/recipes" className="hover:text-gray-300 text-lg">Recipes</a>
-              <a href="/emergency" className="hover:text-gray-300 text-lg">Emergency</a>
-              <a href="/about" className="hover:text-gray-300 text-lg">About Us</a>
-            </nav>
-
-            {/* Icons for mobile and desktop */}
-            <div className="flex space-x-4">
-              {/* Menu Icon */}
-              <button
-                onClick={toggleSidebar}
-                className="md:hidden bg-gray-800 p-2 rounded-full hover:bg-gray-700"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6h16.5M3.75 12h16.5M3.75 18h16.5"
-                  />
-                </svg>
-              </button>
-
-              {/* Notification Icon */}
-              <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </header>
-
          {/* Sidebar */}
          <div
           className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -515,78 +446,6 @@ export default function HomePage() {
         </div>
         <MapComponent/>
       </section>
-
-      <footer className="bg-gray-900 text-white py-10">
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-start px-6 lg:px-16 space-y-6 md:space-y-0">
-          <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
-            <div className="bg-gray-500 rounded-full w-10 h-10 mx-auto md:mx-0"></div>
-            <h2 className="text-2xl font-bold">Make Your Own</h2>
-            <h3 className="text-green-500 text-xl font-bold">Itinerary</h3>
-            <button className="bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition-all duration-300">
-              Click Here
-            </button>
-          </div>
-          <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
-            <h3 className="text-xl font-bold">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="/"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/about"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/itinerary"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  Itinerary
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/events"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  Events
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/recipes"
-                  className="hover:text-green-500 transition-all duration-200"
-                >
-                  Recipe
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div className="w-full md:w-1/3 text-center md:text-left space-y-4">
-            <div>
-              <h3 className="font-bold">More Inquiry</h3>
-              <p className="text-gray-300">+xxxx xxx xxxx</p>
-            </div>
-            <div>
-              <h3 className="font-bold">Send Mail</h3>
-              <p className="text-gray-300">info@example.com</p>
-            </div>
-            <div>
-              <h3 className="font-bold">Address</h3>
-              <p className="text-gray-300">Address Line Here</p>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

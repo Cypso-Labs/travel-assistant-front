@@ -1,0 +1,102 @@
+"use client";
+
+import Image from "next/image";
+import React, { useState } from "react";
+import header_image from "../../public/images/homePage.png";
+import Link from "next/link";
+
+const Header = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  return (
+    <header className="fixed  left-1/2 transform -translate-x-1/2 w-[96vw] h-16 bg-black text-white shadow-lg z-50 mt-5 rounded-lg py-3">
+      <div className="absolute inset-0">
+        <Image
+          src={header_image}
+          alt="Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      </div>
+
+      <div className="relative container mx-auto flex justify-between items-center px-4 z-10">
+        {/* Logo */}
+        <div className="flex items-center space-x-4">
+          <div className="bg-gray-500 rounded-full w-10 h-10"></div>
+          <h1 className="text-2xl font-bold hidden md:block">ITINERARY</h1>
+        </div>
+
+        {/* Navigation for larger screens */}
+        <nav className="hidden md:flex space-x-6">
+          <a href="/" className="hover:text-gray-300 text-lg">
+            Home
+          </a>
+          <Link className="hover:text-gray-300 text-lg" href="/itinerarySave">
+            Itinerary
+          </Link>
+          {/* <a href="/itinerary" className="hover:text-gray-300 text-lg">Itinerary</a> */}
+          <a href="/events" className="hover:text-gray-300 text-lg">
+            Events
+          </a>
+          <a href="/recipes" className="hover:text-gray-300 text-lg">
+            Recipes
+          </a>
+          <a href="/emergency" className="hover:text-gray-300 text-lg">
+            Emergency
+          </a>
+          <a href="/about" className="hover:text-gray-300 text-lg">
+            About Us
+          </a>
+        </nav>
+
+        {/* Icons for mobile and desktop */}
+        <div className="flex space-x-4">
+          {/* Menu Icon */}
+          <button
+            onClick={toggleSidebar}
+            className="md:hidden bg-gray-800 p-2 rounded-full hover:bg-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6h16.5M3.75 12h16.5M3.75 18h16.5"
+              />
+            </svg>
+          </button>
+
+          {/* Notification Icon */}
+          <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
