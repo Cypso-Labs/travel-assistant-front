@@ -1,13 +1,13 @@
 "use client";
 
 // import React from "react";
-import VR from "../../public/images/icons/VR_Icon.png";
-import header_image from "../../public/images/hedar_Img.png";
-import Map from "../../public/images/Map_IMG.png";
-import Popup from "./Modals/saveItineraryModal";
+import VR from "../../../public/images/icons/VR_Icon.png";
+import header_image from "../../../public/images/hedar_Img.png";
+import Map from "../../../public/images/Map_IMG.png";
+import Popup from "../../components/Modals/saveItineraryModal";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import VR360Image from "./Modals/vrModal";
+import VR360Image from "../../components/Modals/vrModal";
 import axios from "axios";
 import Swal from "sweetalert2";
 

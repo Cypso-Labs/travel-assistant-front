@@ -8,8 +8,8 @@ import file_image from '../../public/images/icons/document.png'
 import VR from '../../public/images/icons/VR_Icon.png'
 import Image from "next/image";
 import axios from "axios";
-import MapComponent from "../components/googleMapItinerary";
-import VR360Image from "../components/Modals/vrModal";
+import MapComponent from "../../components/googleMapItinerary";
+import VR360Image from "../../components/Modals/vrModal";
 import Swal from "sweetalert2";
 
 

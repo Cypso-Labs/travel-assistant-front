@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 // import localFont from "next/font/local";
 import "./globals.css";
-import { Rubik } from "next/font/google";
-import Header from "./components/Header";
-import Footer from "./components/Footer"; // Use your custom Footer component
+import { Rubik } from "next/font/google"; 
+// Use your custom Footer component
 
 const rubik = Rubik({
   subsets: ["latin"], // Ensures subset optimization
@@ -24,9 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={rubik.variable}>
       <body suppressHydrationWarning className="bg-white text-gray-900">
-        <Header />
+        {/* <Header /> */}
         <main className="min-h-screen">{children}</main>
-        <Footer />
+        {/* <Footer /> */}
       </body>
     </html>
   );

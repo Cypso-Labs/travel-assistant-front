@@ -1,5 +1,5 @@
 import Image from "next/image";
-import sideImage from "../../public/images/sun-rise.png";
+import sideImage from "../../../public/images/sun-rise.png";
 
 export default function SignUpLayout({
   children,
