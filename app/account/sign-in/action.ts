@@ -3,15 +3,14 @@
 import { signInSchema } from "@/app/lib/schemas";
 import { parseWithZod } from "@conform-to/zod";
 import axios from "axios";
-import router from "next/router";
 import Swal from "sweetalert2";
-// import { useRouter } from "next/router";
+import { redirect } from 'next/navigation'
+
 
 export const logInUser = async (
     prevState: unknown,
     formData: FormData
 ) => {
-    // const router = useRouter();
 
     const submission = parseWithZod(formData, {
         schema: signInSchema,
@@ -41,8 +40,8 @@ export const logInUser = async (
             localStorage.setItem('UserData', JSON.stringify(response.data))
 
             setTimeout(() => {
-                router.push('/account/profile-creation');
-            }, 1500)
+                redirect('/account/profile-creation');
+            }, 1000)
         })
         .catch((error) => {
 
