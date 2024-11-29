@@ -22,16 +22,47 @@ interface Location {
   type: string;
 }
 
+// Define a type for the structure of a sub_place
+interface SubPlace {
+  latitude: number;
+  longitude: number;
+  name: string;
+}
+
+// Define a type for the structure of each item in parsedData
+interface TripItem {
+  categories: string[];
+  cost: number;
+  sub_places: SubPlace[];
+  trip_name: string;
+}
+
+interface ItineraryData {
+  locations: {
+    id: number;
+    name: string;
+    description: string;
+    latitude: number;
+    longitude: number;
+    location_image: string;
+    budget: string;
+    type: string;
+    location_id: string;
+  }[];
+  totalBudget: number;
+}
+
+
+
+
 export default function ItineraryPage_02() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
-  const [itineraryData, setItineraryData] = useState([]);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [itineraryData, setItineraryData] = useState<ItineraryData[]>([]);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [itemData, setItemData] = useState([]);
-  const [location, setLocations] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [location, setLocations] = useState<TripItem[]>([]); const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const user = JSON.parse(localStorage.getItem('UserData') || '{}');
@@ -74,19 +105,21 @@ export default function ItineraryPage_02() {
 
     const savedData = localStorage.getItem("itinerary");
     if (savedData) {
-      const parsedData = JSON.parse(savedData);
+      const parsedData: TripItem[] = JSON.parse(savedData);
 
       setLocations(parsedData)
       setIsLoading(false);
 
       // Fetch all locations first
       fetchAllLocations().then(() => {
+        
         const transformedData = parsedData.map((item) => ({
           locations: item.sub_places.map((place, index) => {
             // Find the matching location from the database
             const matchedLocation = locations?.find(
               (dbLocation) => dbLocation.name.toLowerCase() === place.name.toLowerCase()
             );
+
 
 
             // Return the complete object by merging predicted data with database data
@@ -144,13 +177,7 @@ export default function ItineraryPage_02() {
   return (
     (!isLoading &&
       <div className="min-h-screen bg-gray-50 pt-6">
-        {/* Sidebar */}
-        <div
-          className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 z-50`}
-        >
-          {/* Sidebar content */}
-        </div>
+
 
         {showAlert && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
