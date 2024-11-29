@@ -354,7 +354,7 @@ export default function ItineraryPage() {
                           }}
                           src={VR}
                           alt="VR Icon"
-                          className="w-5 h-5 cursor-pointer"
+                          className="min-w-5 min-h-5 cursor-pointer"
                         />
                       </button>
                     </div>

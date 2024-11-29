@@ -229,7 +229,7 @@ export default function ItineraryPage_02() {
                           }}
                           src={VR}
                           alt="Location Icon"
-                          className="w-5 h-5 cursor-pointer"
+                          className="min-w-5 min-h-5 cursor-pointer"
                         />
                       </span>
                     </div>

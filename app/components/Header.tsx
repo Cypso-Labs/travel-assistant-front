@@ -160,9 +160,8 @@ const Header = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 z-50`}
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 z-50`}
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
           <h2 className="text-xl font-bold">Menu</h2>
@@ -190,13 +189,20 @@ const Header = () => {
           <a href="/" className="block hover:text-gray-300">
             Home
           </a>
-         <Link
-              href="/itineraryCreate"
-              className="block hover:text-gray-300"
-              onClick={handleItineraryClick}
-            >
-              Itinerary
-            </Link>
+          <Link
+            href="/itineraryCreate"
+            className="block hover:text-gray-300"
+            onClick={handleItineraryClick}
+          >
+            Itinerary
+          </Link>
+          <Link
+            href="/itineraryView"
+            className="block hover:text-gray-300"
+            onClick={handleItineraryClick}
+          >
+            View Itineraries
+          </Link>
           <a href="/events" className="block hover:text-gray-300">
             Events
           </a>
