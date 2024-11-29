@@ -1,7 +1,6 @@
 "use client"; // Add this line
 
 import React, { useState } from "react";
-import header_image from "../../public/images/homePage.png";
 import header_image1 from "../../public/images/1.png";
 import header_image2 from "../../public/images/2.png";
 import header_image3 from "../../public/images/3.png";
@@ -10,7 +9,6 @@ import Event_Image1 from "../../public/images/event01.png";
 import Event_Image2 from "../../public/images/event02.png";
 import Event_Image3 from "../../public/images/event03.png";
 import Chickn from "../../public/images/Image.png";
-import Map from "../../public/images/MapImage.png";
 import Image from "next/image";
 import Link from "next/link";
 import MapComponent from "../components/googleMap";

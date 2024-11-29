@@ -49,6 +49,7 @@ export default function ItineraryPage() {
         console.log(response);
         if (response.status === 404) {
           setItinerary(null);
+          setIsLoading(false);
         }
       }
     };
@@ -127,6 +128,9 @@ export default function ItineraryPage() {
 
           // Update the state to remove the deleted itinerary
           setItinerary((prevItinerary) => prevItinerary.filter(item => item.id !== id));
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         }
       }
     } catch (error) {

@@ -71,7 +71,7 @@ function ProfileCreationPage() {
 
   const handleSendUserData = async (data) => {
 
-    const token = user.registration_token
+    const token = user.access_token
 
     try {
       const response = await axios.put(`http://localhost:5000/api/users/${user.user_id}`, data, {
