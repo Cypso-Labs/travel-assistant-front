@@ -11,11 +11,17 @@ import { useRouter } from "next/navigation";
 
 function ProfileCreationPage() {
 
-  // useEffect(() => {
-  //   const jwtToken = localStorage.getItem('jwtToken');
-  // }, []);
+  const [user, setUser] = useState(null); 
 
-  const user = JSON.parse(localStorage.getItem('UserData') || '{}');
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("UserData");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
+    }
+  }, []);
+ 
 
   const [userData, setUserData] = useState({
     first_name: "",
