@@ -60,7 +60,6 @@ export default function ItineraryPage_02() {
             }
           });
         }
-        console.log(response.data);
       }
     };
 

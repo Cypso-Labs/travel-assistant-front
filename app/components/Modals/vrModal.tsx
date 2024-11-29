@@ -13,7 +13,6 @@ const VR360Image = ({ onClose, imageURL }) => {
   useEffect(() => {
     const url = imageURL;
 
-    console.log('Image URL:', url);
 
     const width = window.innerWidth;
     const height = window.innerHeight;

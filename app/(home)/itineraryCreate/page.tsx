@@ -40,11 +40,9 @@ export default function ItineraryPage() {
 
         if (response.status === 200) {
           setUserPreferences(response.data.preferences);
-          console.log(response.data.preferences);
         }
       } catch (error) {
         const { response } = error;
-        console.log(response.data);
         if (response.status === 401 || response.status === 422) {
           setTokenError(true);
           Swal.fire({
@@ -139,7 +137,6 @@ export default function ItineraryPage() {
       days: days,
     };
 
-    console.log(payload);
 
     if (tokenError) {
       Swal.fire({
@@ -168,7 +165,6 @@ export default function ItineraryPage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("API Response:", data);
 
         localStorage.setItem("itinerary", JSON.stringify(data));
 

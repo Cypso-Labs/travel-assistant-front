@@ -46,13 +46,11 @@ export default function ItineraryPage() {
 
         if (response.status === 200) {
           locations = response.data.itineraries;
-          console.log(response.data.itineraries);
           setItinerary(response.data.itineraries);
           setIsLoading(false);
         }
       } catch (error) {
         const { response } = error;
-        console.log(response);
         if (response.status === 404) {
           setItinerary(null);
           setIsLoading(false);
@@ -99,10 +97,8 @@ export default function ItineraryPage() {
           }
         );
 
-        console.log(response);
 
         if (response.status === 200) {
-          console.log(response.data.locations)
           setSelectedLocations(response.data.locations); 
         }
       } catch (error) {
@@ -142,7 +138,6 @@ export default function ItineraryPage() {
           },
         });
 
-        console.log(response);
 
         if (response.status === 200) {
           // Display success message
@@ -179,13 +174,6 @@ export default function ItineraryPage() {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  // const totalBudget = itinerary.reduce((acc, item) => {
-
-  //   const numericBudget = parseInt(item.total_budget);
-  //   return acc + numericBudget;
-  // }, 0);
-
-  // console.log(`Total Budget: RS ${totalBudget}`);
 
   const handleImageClick = () => {
     console.log("Image clicked!");

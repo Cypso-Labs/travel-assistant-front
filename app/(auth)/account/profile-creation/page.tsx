@@ -57,7 +57,6 @@ function ProfileCreationPage() {
   };
 
   const handlePreferenceToggle = (preference) => {
-    console.log(preference)
     setUserPreferences((prevPreferences) => {
       const isPreferenceAdded = prevPreferences.includes(preference);
 
@@ -81,11 +80,9 @@ function ProfileCreationPage() {
       });
 
       if (response.status === 200) {
-        console.log(response.data)
       }
     } catch (error) {
       const { response } = error;
-      console.log(response.data)
     }
   }
 

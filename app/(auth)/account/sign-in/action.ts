@@ -28,7 +28,6 @@ export const logInUser = async (
                 password: formData.get('password')
             })
         .then((response) => {
-            console.log(response);
 
             if (response.status === 200) {
                 Swal.fire({
@@ -54,6 +53,5 @@ export const logInUser = async (
                     icon: "error"
                 });
             }
-            console.log(error);
         });
 };

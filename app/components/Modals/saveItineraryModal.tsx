@@ -10,7 +10,6 @@ interface PopupProps {
 const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
   const [itinerary, setItinerary] = useState("");
 
-  console.log(onItemData)
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +34,6 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
   const handleSaveItineraryLocations = async (itinerary_id) => {
 
     const locationsIDs = onItemData.locations.map(location => location.location_id);
-    console.log(locationsIDs);
 
     const headers = {
       'Authorization': `Bearer ${user.access_token}`,
@@ -50,14 +48,12 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
         axios.post(`http://localhost:5000/api/v1/iterneries/${itinerary_id}/locations/${location_id}/${user.user_id}`, body, { headers })
           .then(response => {
             if (response.status === 201) {
-              console.log(response.data);
               onSuccess();
             }
           })
           .catch(error => {
             const { response } = error;
             if (response) {
-              console.log(response.data);
             } else {
               console.error('Error without response:', error.message);
             }
@@ -84,9 +80,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
 
     try {
 
-      console.log(data);
 
-      console.log(user.access_token)
 
       const response = await axios.post('http://localhost:5000/api/v1/itineraries', data, {
         headers: {
@@ -95,7 +89,6 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
       });
 
       if (response.status === 201) {
-        console.log(response.data.itinerary)
 
         const itinerary_id = response.data.itinerary.id
 
@@ -103,7 +96,6 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
       }
     } catch (error) {
       const { response } = error;
-      console.log(response.data)
     }
 
     onClose();

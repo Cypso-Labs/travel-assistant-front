@@ -27,7 +27,6 @@ export const registerUser = async (
                 password: formData.get('password')
             })
         .then((response) => {
-            console.log(response);
             if (response.status === 201) {
                 Swal.fire({
                     title: "Success!",
@@ -44,7 +43,6 @@ export const registerUser = async (
 
         })
         .catch((error) => {
-            console.log(error);
             const { response } = error;
             if (response.status === 400) {
                 Swal.fire({
