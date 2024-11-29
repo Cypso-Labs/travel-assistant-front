@@ -2,10 +2,10 @@ name: Build and Test Next.js site
 
 on:
   pull_request:
-    branches: ["TA_01"]
+    branches: ["TA_02"]
 
   push:
-    branches: ["TA_01"]
+    branches: ["TA_02"]
 
   workflow_dispatch:
 
