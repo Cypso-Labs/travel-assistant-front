@@ -41,9 +41,10 @@ export default function ItineraryPage() {
   const [selectedLocations, setSelectedLocations] = useState<Location[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
-  const [selectedItinerary, setSelectedItinerary] = useState(null);
+  // const [selectedItinerary, setSelectedItinerary] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const [selectedItinerary, setSelectedItinerary] = useState<Itinerary | null>(null);
 
   const handleNavigate = () => {
     router.push("/itineraryCreate"); // Navigate to the itineraryCreate Page
@@ -74,7 +75,7 @@ export default function ItineraryPage() {
           setItinerary(null);
           setIsLoading(false);
         }
-        if (response.status === 401 || response.status === 422) {
+        if (err.response && (err.response.status === 401 || err.response.status === 422)) {
           Swal.fire({
             title: "Token Error",
             text: "Please login to continue.",
@@ -98,11 +99,16 @@ export default function ItineraryPage() {
   }, []);
 
 
-  const fetchLocationsForItinerary = async (item: Itinerary | React.SetStateAction<null>) => {
+  const fetchLocationsForItinerary = async (item: Itinerary | null) => {
+    if (!item) {
+      console.error('Invalid itinerary item');
+      return;
+    }
+  
     // Get user data from localStorage
     const user = JSON.parse(localStorage.getItem('UserData') || '{}');
     setSelectedItinerary(item);
-
+  
     // If user data exists and contains user_id
     if (user && user.user_id) {
       try {
@@ -115,8 +121,7 @@ export default function ItineraryPage() {
             },
           }
         );
-
-
+  
         if (response.status === 200) {
           setSelectedLocations(response.data.locations);
         }
@@ -128,65 +133,49 @@ export default function ItineraryPage() {
       console.error('User data not found or missing user_id');
     }
   };
-
+  
   const handleImageModal = (imageURL: string) => {
     setSelectedImageURL(imageURL);
     setOpenModal(true);
   };
 
+  const handleDeleteItinerary = async (id: number) => {
+    if (!user) {
+      console.error("User not found");
+      return;
+    }
 
-  const handleDeleteItinerary = async (id) => {
     try {
-      // Display confirmation alert using SweetAlert
       const result = await Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "This action will permanently delete the itinerary.",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel',
+        confirmButtonText: "Yes, delete it!",
       });
 
-      // Check if the user confirmed the action
       if (result.isConfirmed) {
-        // Send DELETE request to the backend
-        const response = await axios.delete(`http://localhost:5000/api/v1/itineraries/${id}`, {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-          },
-        });
-
+        const response = await axios.delete(
+          `http://localhost:5000/api/v1/itineraries/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
-          // Display success message
-          Swal.fire('Deleted!', response.data.message || 'Itinerary has been deleted.', 'success');
-
-          // Update the state to remove the deleted itinerary
-          setItinerary((prevItinerary) => prevItinerary.filter(item => item.id !== id));
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          Swal.fire("Deleted!", "Itinerary deleted successfully.", "success");
+          setItinerary((prev) => prev?.filter((item) => item.id !== id) || []);
         }
       }
     } catch (error) {
-      const axiosError = error as AxiosError;
-
-      if (axiosError.response) {
-        console.error('Error deleting itinerary:', axiosError.response.data);
-
-        // Display error message
-        Swal.fire('Error!', axiosError.response.data.message || 'Failed to delete itinerary.', 'error');
-      } else {
-        console.error('Error deleting itinerary:', axiosError.message);
-
-        // Display error message
-        Swal.fire('Error!', 'Something went wrong. Please try again later.', 'error');
-      }
+      console.error("Error deleting itinerary:", error);
+      Swal.fire("Error!", "Failed to delete itinerary.", "error");
     }
   };
-
+  
+  
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);

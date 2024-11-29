@@ -37,9 +37,8 @@ const Header = () => {
     router.push("/account/sign-in"); // Redirect to login page
   };
 
-  const handleItineraryClick = (e) => {
+  const handleItineraryClick = () => {
     if (!user) {
-      e.preventDefault();
       router.push("/account/sign-in");
     }
   };

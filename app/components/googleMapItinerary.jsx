@@ -8,15 +8,15 @@ const containerStyle = {
 };
 
 const defaultCenter = {
-  lat: 6.9271, 
+  lat: 6.9271,
   lng: 79.8612,
 };
 
 const MapComponent = ({ locations }) => {
-  const [directions, setDirections] = useState(null); 
-  const [currentLocation, setCurrentLocation] = useState(defaultCenter); 
+  const [directions, setDirections] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(defaultCenter);
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   });
 
   useEffect(() => {

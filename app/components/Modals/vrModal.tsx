@@ -1,13 +1,13 @@
 'use client'; // Ensures the component runs on the client
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import close_icon from '../../../public/images/icons/close_icon.png';
 import Image from 'next/image';
 
-const VR360Image = ({ onClose, imageURL }) => {
+const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: string }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const VR360Image = ({ onClose, imageURL }) => {
         width: '100vw',
         height: '100vh',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        zIndex: 1000, 
+        zIndex: 1000,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

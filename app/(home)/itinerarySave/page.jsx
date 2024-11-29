@@ -10,66 +10,24 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import MapComponent from "../../components/googleMapItineraryAll";
 import { useRouter } from "next/navigation";
-import { AxiosError } from "axios";
-
-interface Location {
-  description: string;
-  id: number;
-  latitude: number;
-  location_image: string;
-  longitude: number;
-  name: string;
-  type: string;
-}
-
-// Define a type for the structure of a sub_place
-interface SubPlace {
-  latitude: number;
-  longitude: number;
-  name: string;
-}
-
-// Define a type for the structure of each item in parsedData
-interface TripItem {
-  categories: string[];
-  cost: number;
-  sub_places: SubPlace[];
-  trip_name: string;
-}
-
-interface ItineraryData {
-  locations: {
-    id: number;
-    name: string;
-    description: string;
-    latitude: number;
-    longitude: number;
-    location_image: string;
-    budget: string;
-    type: string;
-    location_id: string;
-  }[];
-  totalBudget: number;
-}
-
-
 
 
 export default function ItineraryPage_02() {
   const [openModal, setOpenModal] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
-  const [itineraryData, setItineraryData] = useState<ItineraryData[]>([]);
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [itineraryData, setItineraryData] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [itemData, setItemData] = useState([]);
-  const [location, setLocations] = useState<TripItem[]>([]); const [isLoading, setIsLoading] = useState(true);
+  const [location, setLocations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
   useEffect(() => {
 
-    let locations: Location[] = [];
+    let locations = [];
 
     const fetchAllLocations = async () => {
       try {
@@ -83,8 +41,8 @@ export default function ItineraryPage_02() {
           locations = response.data.locations;
         }
       } catch (error) {
-        const err = error as AxiosError;
-        if (err.response && (err.response.status === 401 || err.response.status === 422)) {
+        const { response } = error;
+        if (response.status === 401 || response.status === 422) {
           Swal.fire({
             title: "Token Error",
             text: "Please login to continue.",
@@ -105,21 +63,19 @@ export default function ItineraryPage_02() {
 
     const savedData = localStorage.getItem("itinerary");
     if (savedData) {
-      const parsedData: TripItem[] = JSON.parse(savedData);
+      const parsedData = JSON.parse(savedData);
 
       setLocations(parsedData)
       setIsLoading(false);
 
       // Fetch all locations first
       fetchAllLocations().then(() => {
-        
         const transformedData = parsedData.map((item) => ({
           locations: item.sub_places.map((place, index) => {
             // Find the matching location from the database
             const matchedLocation = locations?.find(
               (dbLocation) => dbLocation.name.toLowerCase() === place.name.toLowerCase()
             );
-
 
 
             // Return the complete object by merging predicted data with database data
@@ -149,7 +105,7 @@ export default function ItineraryPage_02() {
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
 
-  const handleImageModal = (imageURL: string) => {
+  const handleImageModal = (imageURL) => {
     setSelectedImageURL(imageURL);
     setOpenModal(true);
   };
