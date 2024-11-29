@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import header_image from "../../public/images/homePage.png";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const [user, setUser] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
 
@@ -14,7 +15,6 @@ const Header = () => {
     setIsSidebarOpen((prev) => !prev);
   };
 
-  // Function to safely get user data from localStorage
   const getUserData = () => {
     try {
       const data = localStorage.getItem("UserData");
@@ -25,7 +25,12 @@ const Header = () => {
     }
   };
 
-  const user = getUserData(); // Get user data once
+
+  useEffect(() => {
+    const storedUser = getUserData();
+    setUser(storedUser);
+  }, []);
+
 
   // Logout function
   const handleLogout = () => {
@@ -134,7 +139,7 @@ const Header = () => {
             </button>
 
             {/* Logout Button - visible only when user is logged in */}
-            {user && (
+            {typeof window !== "undefined" && user && (
               <button
                 onClick={handleLogout}
                 className="ml-4 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 text-sm"

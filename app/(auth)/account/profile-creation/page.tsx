@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import icon from "../../../../public/images/icons/empty-image.png";
 import ToggleButton from "@/app/components/toggle-button";
 import Swal from 'sweetalert2';
@@ -14,7 +14,7 @@ function ProfileCreationPage() {
   //   const jwtToken = localStorage.getItem('jwtToken');
   // }, []);
 
-  const user = JSON.parse(localStorage.getItem('UserData'));
+  const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
   const [userData, setUserData] = useState({
     first_name: "",

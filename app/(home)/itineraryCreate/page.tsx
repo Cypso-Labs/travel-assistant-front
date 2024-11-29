@@ -19,7 +19,7 @@ export default function ItineraryPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("UserData"));
+    const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
     const fetchUser = async () => {
       try {
