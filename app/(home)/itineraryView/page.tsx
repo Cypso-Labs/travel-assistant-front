@@ -11,6 +11,7 @@ import axios from "axios";
 import MapComponent from "../../components/googleMapItinerary";
 import VR360Image from "../../components/Modals/vrModal";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 
 export default function ItineraryPage() {
@@ -24,7 +25,7 @@ export default function ItineraryPage() {
   const [selectedImageURL, setSelectedImageURL] = useState("");
   const [selectedItinerary, setSelectedItinerary] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  const router = useRouter();
 
   useEffect(() => {
 
@@ -50,6 +51,22 @@ export default function ItineraryPage() {
         if (response.status === 404) {
           setItinerary(null);
           setIsLoading(false);
+        }
+        if (response.status === 401) {
+          Swal.fire({
+            title: "Token Expired",
+            text: "Please login to continue.",
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonText: "Go to Login",
+            customClass: {
+              confirmButton: "swal-login-button"
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              router.push("/account/sign-in");
+            }
+          });
         }
       }
     };
@@ -216,8 +233,8 @@ export default function ItineraryPage() {
           </nav>
         </div>
         <div className="pt-24"></div>
-         {/*back button*/}
-         <div className="bg-white p-6 rounded-lg shadow-lg border flex items-center justify-between py-3 mt-6 mx-10">
+        {/*back button*/}
+        <div className="bg-white p-6 rounded-lg shadow-lg border flex items-center justify-between py-3 mt-6 mx-10">
           <button className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200">
             <svg
               xmlns="http://www.w3.org/2000/svg"

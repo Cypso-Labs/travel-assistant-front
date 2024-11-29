@@ -8,7 +8,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function ItineraryPage() {
-  const [location, setLocation] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [latitude, setLatitude] = useState("");
   const [budget, setBudget] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -39,6 +40,22 @@ export default function ItineraryPage() {
       } catch (error) {
         const { response } = error;
         console.log(response.data);
+        if (response.status === 401) {
+          Swal.fire({
+            title: "Token Expired",
+            text: "Please login to continue.",
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonText: "Go to Login",
+            customClass: {
+              confirmButton: "swal-login-button"
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              router.push("/account/sign-in");
+            }
+          });
+        }
       }
     };
 
@@ -68,80 +85,87 @@ export default function ItineraryPage() {
       return;
     }
 
-    let latitude = 0;
-    let longitude = 0;
+    let latitudeValue = latitude;
+    let longitudeValue = longitude;
 
     if (isLocationOn && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          latitude = position.coords.latitude;
-          longitude = position.coords.longitude;
-
-          const itinerary_data = {
-            total_budget: budget,
-            start_date: startDate,
-            end_date: endDate,
-          };
-
-          localStorage.setItem("itineraryData", JSON.stringify(itinerary_data));
-
-          const payload = {
-            location: [latitude, longitude],
-            budget: parseInt(budget),
-            categories: userPreferences || null,
-            days: days,
-          };
-
-          console.log(payload);
-
-          fetch("http://127.0.0.1:5000/recommend", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("API Response:", data);
-
-              localStorage.setItem("itinerary", JSON.stringify(data));
-
-              Swal.fire({
-                title: "Success!",
-                text: "Itinerary created successfully and saved locally!",
-                icon: "success",
-              });
-
-              setTimeout(() => {
-                router.push("/itinerarySave");
-              }, 1500);
-            })
-            .catch((error) => {
-              console.error("Error calling API:", error);
-              Swal.fire({
-                title: "Error!",
-                text: "Failed to create itinerary. Please try again.",
-                icon: "error",
-              });
+      await new Promise((resolve) => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            latitudeValue = position.coords.latitude;
+            longitudeValue = position.coords.longitude;
+            resolve();
+          },
+          (error) => {
+            console.error("Error fetching location:", error);
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to get location. Using manual input instead.",
+              icon: "warning",
             });
-        },
-        (error) => {
-          console.error("Error fetching location:", error);
-          Swal.fire({
-            title: "Error!",
-            text: "Failed to get location. Please enable location access.",
-            icon: "error",
-          });
-        }
-      );
-    } else {
-      Swal.fire({
-        title: "Location Disabled!!",
-        text: "Please enable location to proceed.",
-        icon: "info",
+            resolve();
+          }
+        );
       });
     }
+
+    if (!latitudeValue || !longitudeValue) {
+      Swal.fire({
+        title: "Location Required",
+        text: "Please provide valid latitude and longitude values.",
+        icon: "error",
+      });
+      return;
+    }
+
+    const itinerary_data = {
+      total_budget: budget,
+      start_date: startDate,
+      end_date: endDate,
+    };
+
+    localStorage.setItem("itineraryData", JSON.stringify(itinerary_data));
+
+    const payload = {
+      location: [parseFloat(latitudeValue), parseFloat(longitudeValue)],
+      budget: parseInt(budget),
+      categories: userPreferences || null,
+      days: days,
+    };
+
+    console.log(payload);
+
+    fetch("http://127.0.0.1:5000/recommend", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("API Response:", data);
+
+        localStorage.setItem("itinerary", JSON.stringify(data));
+
+        Swal.fire({
+          title: "Success!",
+          text: "Itinerary created successfully and saved locally!",
+          icon: "success",
+        });
+
+        setTimeout(() => {
+          router.push('/itinerarySave');
+        }, 1500);
+      })
+      .catch((error) => {
+        console.error("Error calling API:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to create itinerary. Please try again.",
+          icon: "error",
+        });
+      });
   };
 
   const toggleSidebar = () => {
@@ -187,14 +211,12 @@ export default function ItineraryPage() {
               <div className="relative">
                 <span
                   onClick={() => setIsLocationOn((prev) => !prev)}
-                  className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${
-                    isLocationOn ? "bg-green-500" : "bg-gray-300"
-                  }`}
+                  className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${isLocationOn ? "bg-green-500" : "bg-gray-300"
+                    }`}
                 >
                   <div
-                    className={`w-4 h-4 rounded-full bg-white transform duration-200 ${
-                      isLocationOn ? "translate-x-2" : "-translate-x-2"
-                    }`}
+                    className={`w-4 h-4 rounded-full bg-white transform duration-200 ${isLocationOn ? "translate-x-2" : "-translate-x-2"
+                      }`}
                   ></div>
                 </span>
               </div>
@@ -203,21 +225,39 @@ export default function ItineraryPage() {
 
           <div className="flex flex-wrap md:flex-nowrap justify-between gap-4 mb-4">
             {!isLocationOn ? (
-              <div className="w-full md:w-1/2">
-                <label
-                  className="block text-gray-700 font-bold mb-2"
-                  htmlFor="location"
-                >
-                  Your Location *
-                </label>
-                <input
-                  id="location"
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-4 py-2"
-                  placeholder="Enter your location"
-                />
+              <div className="w-full md:w-1/2 flex justify-between items-center space-x-2">
+                <div className="w-full md:w-1/2">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="latitude"
+                  >
+                    Your Location Latitude *
+                  </label>
+                  <input
+                    id="latitude"
+                    type="text"
+                    value={latitude}
+                    onChange={(e) => setLatitude(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md px-4 py-2"
+                    placeholder="Enter location latitude"
+                  />
+                </div>
+                <div className="w-full md:w-1/2">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="longitude"
+                  >
+                    Your Location Longitude*
+                  </label>
+                  <input
+                    id="longitude"
+                    type="text"
+                    value={longitude}
+                    onChange={(e) => setLongitude(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md px-4 py-2"
+                    placeholder="Enter location longitude"
+                  />
+                </div>
               </div>
             ) : null}
 
