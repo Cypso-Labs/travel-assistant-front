@@ -167,9 +167,9 @@ function ProfileCreationPage() {
   };
 
   return (
-    <div className="h-[1024px] overflow-y-auto py-32">
-      <div className="max-w-md w-full mx-auto px-10 py-24 rounded-[10px] bg-white">
-        <h1 className="text-[31px] font-[600]  mb-12">
+    <div className="min-h-screen p-6">
+      <div className="max-w-md w-full mx-auto px-10 py-5 rounded-[10px] bg-white">
+        <h1 className="text-[25px] sm:text-[31px] font-[600]  mb-12">
           Let&apos;s create your profile
         </h1>
 
@@ -177,11 +177,11 @@ function ProfileCreationPage() {
           <div className="flex justify-center">
             <label
               htmlFor="dropzone-file"
-              className="flex items-center justify-center rounded-full h-[285px] w-[285px] cursor-pointer hover:bg-[#b8b6b6] bg-[#D9D9D9] dark:hover:bg-gray-800 dark:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500"
+              className="flex items-center justify-center rounded-full w-[200px] sm:h-[285px] h-[200px] sm:w-[285px] cursor-pointer hover:bg-[#b8b6b6] bg-[#D9D9D9] dark:hover:bg-gray-800 dark:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500"
             >
               <div>
                 {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="rounded-full h-[285px] w-[285px]" />
+                  <img src={profileImage} alt="Profile" className="rounded-full w-[200px] sm:h-[285px] h-[200px] sm:w-[285px]" />
                 ) : (
                   <Image src={icon} alt="Empty image icon" />
                 )}
