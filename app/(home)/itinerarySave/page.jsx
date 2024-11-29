@@ -23,9 +23,10 @@ export default function ItineraryPage_02() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
   useEffect(() => {
+
+    const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
     let locations = [];
 
@@ -99,7 +100,7 @@ export default function ItineraryPage_02() {
       });
 
     }
-  }, [router, user.access_token]);
+  }, [router]);
 
 
   const openPopup = () => setIsPopupOpen(true);

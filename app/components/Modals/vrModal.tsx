@@ -13,6 +13,7 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
   useEffect(() => {
     const url = imageURL;
 
+    const container = containerRef.current;
 
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -25,12 +26,12 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
     renderer.setSize(width, height);
     renderer.xr.enabled = true;
 
-    if (containerRef.current) {
-      containerRef.current.appendChild(renderer.domElement);
+    if (container) {
+      container.appendChild(renderer.domElement);
     }
 
-    if (VRButton && containerRef.current) {
-      containerRef.current.appendChild(VRButton.createButton(renderer));
+    if (VRButton && container) {
+      container.appendChild(VRButton.createButton(renderer));
     }
 
     // Add texture loading with error handling
