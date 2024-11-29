@@ -52,7 +52,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="fixed left-1/2 transform -translate-x-1/2 w-[96vw] h-16 bg-black text-white shadow-lg z-50 mt-5 rounded-lg py-3">
+      <header className="fixed left-1/2 transform -translate-x-1/2 w-[96vw] h-16 bg-black text-white shadow-lg z-50 mt-5 rounded-lg py-3 mx-auto">
         <div className="absolute inset-0">
           <Image
             src={header_image}

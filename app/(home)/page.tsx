@@ -44,13 +44,13 @@ export default function HomePage() {
         </section>
       </div>
 
-      <div className=" bg-white text-gray-800 min-h-screen px-6 md:px-12 py-10 ">
-        <div className="absolute text-left mb-12 w-full lg:w-[45%]">
+      <div className="bg-white text-gray-800 min-h-screen px-6 md:px-12 py-10 ">
+        <div className="relative lg:absolute text-left mb-12 w-full lg:w-[45%]">
           <h2 className="text-lg font-bold text-green-500">About Us</h2>
-          <h1 className="text-3xl md:text-5xl font-extrabold mb-4">
+          <h1 className="text-xl sm:text-3xl md:text-5xl font-extrabold mb-4">
             Let’s know about us
           </h1>
-          <p className="text-lg max-w-3xl">
+          <p className="text-sm sm:text-base md:text-lg max-w-3xl">
             Welcome to your ultimate travel companion for exploring Sri Lanka!
             Our app is designed to make your trip planning smooth, enjoyable,
             and culturally enriching. With a range of exciting features, we
@@ -59,7 +59,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="mt-64 lg:mt-64 xl:mt-40 2xl:mt-0">
+          <div className="mt-10 lg:mt-64 xl:mt-40 2xl:mt-0">
             <h2 className="text-2xl font-bold mb-6">Main Features:</h2>
             <div className="space-y-6">
               <div className="flex items-start">
@@ -201,7 +201,7 @@ export default function HomePage() {
       </div>
 
       <section className="p-8 text-left">
-        <h1 className="text-5xl font-bold mb-5">
+        <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-5">
           Essential Tools for Travelers
         </h1>
         <p className="text-lg text-gray-600 mb-8">
@@ -256,7 +256,7 @@ export default function HomePage() {
 
       <div className="p-8">
         <div className="text-left mb-12">
-          <h1 className="text-6xl font-bold mb-4">Flavors of Sri Lanka</h1>
+          <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">Flavors of Sri Lanka</h1>
           <p className="text-lg text-gray-600">
             Sri Lankan cuisine is a vibrant blend of bold spices, fresh
             ingredients, and diverse cultural influences, creating unforgettable
@@ -394,7 +394,7 @@ export default function HomePage() {
 
       <section className="bg-gray-100 min-h-screen p-8">
         <div className="text-left mb-12">
-          <h1 className="text-6xl font-bold mb-4">Popular Landmarks</h1>
+          <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">Popular Landmarks</h1>
           <p className="text-lg text-gray-600">
             Explore Sri Lanka's iconic landmarks, from ancient temples to
             breathtaking natural wonders, and uncover the rich history and
