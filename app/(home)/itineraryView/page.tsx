@@ -101,9 +101,9 @@ export default function ItineraryPage() {
 
         console.log(response);
 
-        // Check if the response status is 200 (OK)
         if (response.status === 200) {
-          setSelectedLocations(response.data.locations); // Assuming API returns an array of locations
+          console.log(response.data.locations)
+          setSelectedLocations(response.data.locations); 
         }
       } catch (error) {
         console.error('Error fetching locations:', error.response?.data || error.message);
