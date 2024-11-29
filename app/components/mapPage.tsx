@@ -7,7 +7,7 @@ export default function Home() {
       <header className="text-center">
         <h1 className="text-3xl font-bold mb-2">Popular Landmarks</h1>
         <p className="text-gray-600">
-          Explore Sri Lanka's iconic landmarks, from ancient temples to
+          Explore Sri Lanka&apos;s iconic landmarks, from ancient temples to
           breathtaking natural wonders, and uncover the rich history and beauty
           of each destination.
         </p>

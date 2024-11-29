@@ -83,6 +83,7 @@ function ProfileCreationPage() {
       }
     } catch (error) {
       const { response } = error;
+      console.log(response.data);
     }
   }
 

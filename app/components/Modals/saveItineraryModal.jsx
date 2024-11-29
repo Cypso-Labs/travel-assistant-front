@@ -1,24 +1,20 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
-interface PopupProps {
-  onClose: () => void;
-  onItemData: any;
-  onSuccess: () => void; 
-}
 
-const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
+
+const Popup = ({ onClose, onItemData, onSuccess }) => {
   const [itinerary, setItinerary] = useState("");
 
 
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef < HTMLDivElement > (null);
 
   const ItineraryData = JSON.parse(localStorage.getItem("itineraryData") || "{}");
   const user = JSON.parse(localStorage.getItem("UserData") || "{}");
 
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    const handleOutsideClick = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
         onClose();
       }
     };
@@ -96,6 +92,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
       }
     } catch (error) {
       const { response } = error;
+      console.log(response.data);
     }
 
     onClose();
