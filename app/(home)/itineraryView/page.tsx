@@ -27,6 +27,11 @@ export default function ItineraryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  const handleNavigate = () => {
+    router.push("/itineraryCreate"); // Navigate to the itineraryCreate Page
+  };
+
+
   useEffect(() => {
 
     let locations = [];
@@ -234,24 +239,27 @@ export default function ItineraryPage() {
         </div>
         <div className="pt-24"></div>
         {/*back button*/}
-        <div className="bg-white p-6 rounded-lg shadow-lg border flex items-center justify-between py-3 mt-6 mx-10">
-          <button className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="w-4 h-4 transform rotate-180"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5 12h14M12 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-          <h2 className="text-xl font-bold">My Itinerary</h2>
-        </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg border flex items-center justify-between py-3 mt-6 mx-auto w-full">
+      <button
+        className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200"
+        onClick={handleNavigate} // Add onClick to navigate to itineraryCreate
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          className="w-4 h-4 transform rotate-180"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5 12h14M12 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+      <h2 className="text-xl font-bold">My Itinerary</h2>
+    </div>
 
 
         {/* Itinerary Table Section */}

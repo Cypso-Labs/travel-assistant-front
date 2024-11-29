@@ -1,8 +1,15 @@
 "use client";
 
+import Link from 'next/link';
 import React from 'react'
+import { useRouter } from "next/navigation";
 
 const Footer = () => {
+  const router = useRouter();
+
+  const handleNavigate = () => {
+    router.push("/itineraryCreate"); // Navigate to the itineraryCreate Page
+  };
   return (
     <footer className="bg-gray-900 text-white py-10">
     <div className="container mx-auto flex flex-col md:flex-row justify-between items-start px-6 lg:px-16 space-y-6 md:space-y-0">
@@ -33,14 +40,13 @@ const Footer = () => {
               About Us
             </a>
           </li>
-          <li>
-            <a
-              href="/itinerary"
-              className="hover:text-green-500 transition-all duration-200"
-            >
-              Itinerary
-            </a>
-          </li>
+          <Link
+            href="/itineraryCreate"
+            className="hover:text-green-500 transition-all duration-200"
+            onClick={handleNavigate}
+          >
+            Itinerary
+          </Link>
           <li>
             <a
               href="/events"
