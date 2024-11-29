@@ -1,17 +1,16 @@
 name: Deploy Next.js site to Pages
 
 on:
-  # Runs on pull requests targeting the development branch
+  # Runs on pull requests targeting the TA_01 branch
   pull_request:
-    branches: ["development"]
+    branches: ["TA_01"]
 
-  # Runs on pushes to the development branch
+  # Runs on pushes to the TA_01 branch
   push:
-    branches: ["development"]
+    branches: ["TA_01"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
