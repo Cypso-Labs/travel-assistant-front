@@ -19,7 +19,7 @@ export default function ItineraryPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('UserData') || '{}');
+    const user = JSON.parse(localStorage.getItem("UserData") || "{}");
 
     const fetchUser = async () => {
       try {
@@ -114,9 +114,8 @@ export default function ItineraryPage() {
               });
 
               setTimeout(() => {
-                router.push('/itinerarySave')
+                router.push("/itinerarySave");
               }, 1500);
-
             })
             .catch((error) => {
               console.error("Error calling API:", error);
@@ -150,8 +149,27 @@ export default function ItineraryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50  pt-24">
       <main className="container mx-auto mt-10 px-4 pb-10">
+        <div className="bg-white p-6 rounded-lg shadow-lg border flex items-center justify-between py-3 mt-6 mx-auto w-full">
+          <button className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-4 h-4 transform rotate-180"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 12h14M12 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+          <h2 className="text-xl font-bold">My Itinerary</h2>
+        </div>
+
         <div className="pt-24"></div>
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold">Make Your Own Itinerary Here</h2>
@@ -169,12 +187,14 @@ export default function ItineraryPage() {
               <div className="relative">
                 <span
                   onClick={() => setIsLocationOn((prev) => !prev)}
-                  className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${isLocationOn ? "bg-green-500" : "bg-gray-300"
-                    }`}
+                  className={`flex items-center justify-center cursor-pointer w-10 h-6 rounded-full ${
+                    isLocationOn ? "bg-green-500" : "bg-gray-300"
+                  }`}
                 >
                   <div
-                    className={`w-4 h-4 rounded-full bg-white transform duration-200 ${isLocationOn ? "translate-x-2" : "-translate-x-2"
-                      }`}
+                    className={`w-4 h-4 rounded-full bg-white transform duration-200 ${
+                      isLocationOn ? "translate-x-2" : "-translate-x-2"
+                    }`}
                   ></div>
                 </span>
               </div>
