@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import icon from "../../../../public/images/icons/empty-image.png";
 import ToggleButton from "@/app/components/toggle-button";
 import Swal from 'sweetalert2';
