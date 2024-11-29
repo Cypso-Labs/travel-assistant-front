@@ -23,7 +23,7 @@ const Popup = ({ onClose, onItemData, onSuccess }) => {
   }, []);
 
 
-  const modalRef = useRef < HTMLDivElement > (null);
+  const modalRef = useRef(null);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
