@@ -82,8 +82,8 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
       window.removeEventListener('resize', handleResize);
       // Clean up
       renderer.dispose();
-      if (containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (container) {
+        container.removeChild(renderer.domElement);
       }
     };
   }, [imageURL]);

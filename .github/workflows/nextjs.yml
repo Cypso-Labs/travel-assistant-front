@@ -55,7 +55,6 @@ jobs:
 
       - name: Build Next.js project
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-        continue-on-error: true 
 
       - name: Test build output
         run: ls -l .next
