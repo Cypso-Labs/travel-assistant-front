@@ -25,20 +25,20 @@ const Footer = () => {
         <h3 className="text-xl font-bold">Quick Links</h3>
         <ul className="space-y-2">
           <li>
-            <a
+            <Link
               href="/"
               className="hover:text-green-500 transition-all duration-200"
             >
               Home
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/about"
               className="hover:text-green-500 transition-all duration-200"
             >
               About Us
-            </a>
+            </Link>
           </li>
           <Link
             href="/itineraryCreate"
@@ -48,20 +48,20 @@ const Footer = () => {
             Itinerary
           </Link>
           <li>
-            <a
+            <Link
               href="/events"
               className="hover:text-green-500 transition-all duration-200"
             >
               Events
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               href="/recipes"
               className="hover:text-green-500 transition-all duration-200"
             >
               Recipe
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

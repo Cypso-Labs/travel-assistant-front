@@ -11,6 +11,7 @@ import VR360Image from "../../components/Modals/vrModal";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
+import Link from "next/link";
 
 interface Itinerary {
   id: number;
@@ -96,7 +97,7 @@ export default function ItineraryPage() {
 
     fetchAllItineraries()
 
-  }, []);
+  }, [router, user.access_token, user.user_id]);
 
 
   const fetchLocationsForItinerary = async (item: Itinerary | null) => {
@@ -218,12 +219,12 @@ export default function ItineraryPage() {
             </button>
           </div>
           <nav className="p-4 space-y-4">
-            <a href="/" className="block hover:text-gray-300">Home</a>
-            <a href="/itinerary" className="block hover:text-gray-300">Itinerary</a>
-            <a href="/events" className="block hover:text-gray-300">Events</a>
-            <a href="/recipes" className="block hover:text-gray-300">Recipes</a>
-            <a href="/emergency" className="block hover:text-gray-300">Emergency</a>
-            <a href="/about" className="block hover:text-gray-300">About Us</a>
+            <Link href="/" className="block hover:text-gray-300">Home</Link>
+            <Link href="/itinerary" className="block hover:text-gray-300">Itinerary</Link>
+            <Link href="/events" className="block hover:text-gray-300">Events</Link>
+            <Link href="/recipes" className="block hover:text-gray-300">Recipes</Link>
+            <Link href="/emergency" className="block hover:text-gray-300">Emergency</Link>
+            <Link href="/about" className="block hover:text-gray-300">About Us</Link>
           </nav>
         </div>
         <div className="pt-24"></div>

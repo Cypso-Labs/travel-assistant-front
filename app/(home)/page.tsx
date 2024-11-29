@@ -287,12 +287,12 @@ export default function HomePage() {
                 tender chicken, embodying the vibrant flavors of Sri Lankan
                 cuisine.
               </p>
-              <a
+              <Link
                 href="#"
                 className="text-green-600 font-semibold hover:underline"
               >
                 Learn More....
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -316,12 +316,12 @@ export default function HomePage() {
                 tender chicken, embodying the vibrant flavors of Sri Lankan
                 cuisine.
               </p>
-              <a
+              <Link
                 href="#"
                 className="text-green-600 font-semibold hover:underline"
               >
                 Learn More....
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -345,12 +345,12 @@ export default function HomePage() {
                 tender chicken, embodying the vibrant flavors of Sri Lankan
                 cuisine.
               </p>
-              <a
+              <Link
                 href="#"
                 className="text-green-600 font-semibold hover:underline"
               >
                 Learn More....
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -373,22 +373,22 @@ export default function HomePage() {
                 tender chicken, embodying the vibrant flavors of Sri Lankan
                 cuisine.
               </p>
-              <a
+              <Link
                 href="#"
                 className="text-green-600 font-semibold hover:underline"
               >
                 Learn More....
-              </a>
+              </Link>
             </div>
           </div>
         </div>
         <div className="text-right mt-8">
-          <a
+          <Link
             href="#"
             className="text-lg font-semibold text-green-600 hover:underline"
           >
             More Recipes →
-          </a>
+          </Link>
         </div>
       </div>
 

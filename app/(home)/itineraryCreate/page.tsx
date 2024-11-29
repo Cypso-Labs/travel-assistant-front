@@ -62,7 +62,7 @@ export default function ItineraryPage() {
     };
 
     fetchUser();
-  }, []);
+  }, [router]);
 
   const handleCreate = async () => {
     if (!startDate || !endDate || !budget) {

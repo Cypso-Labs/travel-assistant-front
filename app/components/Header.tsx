@@ -70,9 +70,9 @@ const Header = () => {
 
           {/* Navigation for larger screens */}
           <nav className="hidden lg:flex space-x-6">
-            <a href="/" className="hover:text-gray-300 text-lg">
+            <Link href="/" className="hover:text-gray-300 text-lg">
               Home
-            </a>
+            </Link>
             <Link
               href="/itineraryCreate"
               className="hover:text-gray-300 text-lg"
@@ -87,18 +87,18 @@ const Header = () => {
             >
               View Itineraries
             </Link>
-            <a href="/events" className="hover:text-gray-300 text-lg">
+            <Link href="/events" className="hover:text-gray-300 text-lg">
               Events
-            </a>
-            <a href="/recipes" className="hover:text-gray-300 text-lg">
+            </Link>
+            <Link href="/recipes" className="hover:text-gray-300 text-lg">
               Recipes
-            </a>
-            <a href="/emergency" className="hover:text-gray-300 text-lg">
+            </Link>
+            <Link href="/emergency" className="hover:text-gray-300 text-lg">
               Emergency
-            </a>
-            <a href="/about" className="hover:text-gray-300 text-lg">
+            </Link>
+            <Link href="/about" className="hover:text-gray-300 text-lg">
               About Us
-            </a>
+            </Link>
           </nav>
 
           {/* Icons for mobile and desktop */}
@@ -185,9 +185,9 @@ const Header = () => {
           </button>
         </div>
         <nav className="p-4 space-y-4">
-          <a href="/" className="block hover:text-gray-300">
+          <Link href="/" className="block hover:text-gray-300">
             Home
-          </a>
+          </Link>
           <Link
             href="/itineraryCreate"
             className="block hover:text-gray-300"
@@ -202,18 +202,18 @@ const Header = () => {
           >
             View Itineraries
           </Link>
-          <a href="/events" className="block hover:text-gray-300">
+          <Link href="/events" className="block hover:text-gray-300">
             Events
-          </a>
-          <a href="/recipes" className="block hover:text-gray-300">
+          </Link>
+          <Link href="/recipes" className="block hover:text-gray-300">
             Recipes
-          </a>
-          <a href="/emergency" className="block hover:text-gray-300">
+          </Link>
+          <Link href="/emergency" className="block hover:text-gray-300">
             Emergency
-          </a>
-          <a href="/about" className="block hover:text-gray-300">
+          </Link>
+          <Link href="/about" className="block hover:text-gray-300">
             About Us
-          </a>
+          </Link>
         </nav>
       </div>
     </>

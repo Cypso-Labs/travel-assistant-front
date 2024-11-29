@@ -99,7 +99,7 @@ export default function ItineraryPage_02() {
       });
 
     }
-  }, []);
+  }, [router, user.access_token]);
 
 
   const openPopup = () => setIsPopupOpen(true);

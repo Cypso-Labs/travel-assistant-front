@@ -85,7 +85,7 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
         containerRef.current.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [imageURL]);
 
   return (
     <div

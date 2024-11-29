@@ -24,7 +24,7 @@ const Popup = ({ onClose, onItemData, onSuccess }) => {
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [onClose]);
+  }, [modalRef, onClose]);
 
 
   const handleSaveItineraryLocations = async (itinerary_id) => {
