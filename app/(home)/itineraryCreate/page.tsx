@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import header_image from "../../public/images/hedar_Img.png";
-import Image from "next/image";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 export default function ItineraryPage() {
   const [longitude, setLongitude] = useState("");
@@ -14,7 +13,6 @@ export default function ItineraryPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLocationOn, setIsLocationOn] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [userPreferences, setUserPreferences] = useState(false);
   const [tokenError, setTokenError] = useState(false);
 
@@ -42,8 +40,8 @@ export default function ItineraryPage() {
           setUserPreferences(response.data.preferences);
         }
       } catch (error) {
-        const { response } = error;
-        if (response.status === 401 || response.status === 422) {
+        const err = error as AxiosError;
+        if (err.response && (err.response.status === 401 || err.response.status === 422)) {
           setTokenError(true);
           Swal.fire({
             title: "Token Error",
@@ -78,7 +76,17 @@ export default function ItineraryPage() {
 
     const start = new Date(startDate);
     const end = new Date(endDate);
-    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+    
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      Swal.fire({
+        title: "Invalid Dates",
+        text: "Please provide valid start and end dates.",
+        icon: "error",
+      });
+      return;
+    }
+    
+    const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 
     if (days <= 0) {
       Swal.fire({
@@ -93,11 +101,11 @@ export default function ItineraryPage() {
     let longitudeValue = longitude;
 
     if (isLocationOn && navigator.geolocation) {
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            latitudeValue = position.coords.latitude;
-            longitudeValue = position.coords.longitude;
+            latitudeValue = (position.coords.latitude).toString();
+            longitudeValue = position.coords.longitude.toString();
             resolve();
           },
           (error) => {
@@ -188,35 +196,31 @@ export default function ItineraryPage() {
       });
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50  pt-24">
       <main className="container mx-auto mt-10 px-4 pb-10">
 
-      <div className="bg-white p-6 rounded-lg shadow-lg border flex items-center justify-between py-3 mt-6 mx-auto w-full">
-      <button
-        className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200"
-        onClick={handleNavigate} // Add onClick to navigate to homepage
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          className="w-4 h-4 transform rotate-180"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M5 12h14M12 5l7 7-7 7"
-          />
-        </svg>
-      </button>
-      <h2 className="text-xl font-bold">My Itinerary</h2>
-    </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg border flex items-center justify-between py-3 mt-6 mx-auto w-full">
+          <button
+            className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200"
+            onClick={handleNavigate} // Add onClick to navigate to homepage
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-4 h-4 transform rotate-180"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 12h14M12 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+          <h2 className="text-xl font-bold">My Itinerary</h2>
+        </div>
 
         <div className="pt-24"></div>
         <div className="text-center mb-8">

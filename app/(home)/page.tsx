@@ -1,6 +1,6 @@
 "use client"; // Add this line
 
-import React, { useState } from "react";
+import React from "react";
 import header_image1 from "../../public/images/1.png";
 import header_image2 from "../../public/images/2.png";
 import header_image3 from "../../public/images/3.png";
@@ -261,7 +261,7 @@ export default function HomePage() {
             Sri Lankan cuisine is a vibrant blend of bold spices, fresh
             ingredients, and diverse cultural influences, creating unforgettable
             flavors. From spicy curries to sweet desserts, each dish reflects
-            the island's rich heritage and unique cooking traditions. Explore
+            the island&apos;s rich heritage and unique cooking traditions. Explore
             beloved recipes that bring the authentic tastes of Sri Lanka to your
             kitchen!
           </p>
@@ -396,7 +396,7 @@ export default function HomePage() {
         <div className="text-left mb-12">
           <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">Popular Landmarks</h1>
           <p className="text-lg text-gray-600">
-            Explore Sri Lanka's iconic landmarks, from ancient temples to
+            Explore Sri Lanka&apos;s iconic landmarks, from ancient temples to
             breathtaking natural wonders, and uncover the rich history and
             beauty of each destination.
           </p>

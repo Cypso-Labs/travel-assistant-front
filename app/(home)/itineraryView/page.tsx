@@ -1,9 +1,7 @@
 "use client"; // Required for Next.js apps
 
 import React, { useEffect, useState } from "react";
-import header_image from '../../../public/images/hedar_Img.png'
 import delete_image from '../../../public/images/icons/delete.png'
-import edit_image from '../../../public/images/icons/edit.png'
 import file_image from '../../../public/images/icons/document.png'
 import VR from '../../../public/images/icons/VR_Icon.png'
 import Image from "next/image";
@@ -12,6 +10,26 @@ import MapComponent from "../../components/googleMapItinerary";
 import VR360Image from "../../components/Modals/vrModal";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
+
+interface Itinerary {
+  id: number;
+  name: string;
+  start_date: string;
+  end_date: string;
+  total_budget: number;
+}
+
+interface Location {
+  id: number;
+  name: string;
+  description: string;
+  distance_from_current_location: number;
+  latitude: number;
+  longitude: number;
+  location_image: string;
+  type: string;
+}
 
 
 export default function ItineraryPage() {
@@ -19,8 +37,8 @@ export default function ItineraryPage() {
   const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [itinerary, setItinerary] = useState([]);
-  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [itinerary, setItinerary] = useState<Itinerary[] | null>(null);
+  const [selectedLocations, setSelectedLocations] = useState<Location[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedImageURL, setSelectedImageURL] = useState("");
   const [selectedItinerary, setSelectedItinerary] = useState(null);
@@ -34,6 +52,7 @@ export default function ItineraryPage() {
 
   useEffect(() => {
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let locations = [];
 
     const fetchAllItineraries = async () => {
@@ -50,8 +69,8 @@ export default function ItineraryPage() {
           setIsLoading(false);
         }
       } catch (error) {
-        const { response } = error;
-        if (response.status === 404) {
+        const err = error as AxiosError;
+        if (err.response && (err.response.status === 404)) {
           setItinerary(null);
           setIsLoading(false);
         }
@@ -79,7 +98,7 @@ export default function ItineraryPage() {
   }, []);
 
 
-  const fetchLocationsForItinerary = async (item) => {
+  const fetchLocationsForItinerary = async (item: Itinerary | React.SetStateAction<null>) => {
     // Get user data from localStorage
     const user = JSON.parse(localStorage.getItem('UserData') || '{}');
     setSelectedItinerary(item);
@@ -99,10 +118,11 @@ export default function ItineraryPage() {
 
 
         if (response.status === 200) {
-          setSelectedLocations(response.data.locations); 
+          setSelectedLocations(response.data.locations);
         }
       } catch (error) {
-        console.error('Error fetching locations:', error.response?.data || error.message);
+        const err = error as Error;
+        console.error('Error fetching locations:', err.message);
       }
     } else {
       console.error('User data not found or missing user_id');
@@ -151,13 +171,15 @@ export default function ItineraryPage() {
         }
       }
     } catch (error) {
-      if (error.response) {
-        console.error('Error deleting itinerary:', error.response.data);
+      const axiosError = error as AxiosError;
+
+      if (axiosError.response) {
+        console.error('Error deleting itinerary:', axiosError.response.data);
 
         // Display error message
-        Swal.fire('Error!', error.response.data.message || 'Failed to delete itinerary.', 'error');
+        Swal.fire('Error!', axiosError.response.data.message || 'Failed to delete itinerary.', 'error');
       } else {
-        console.error('Error deleting itinerary:', error.message);
+        console.error('Error deleting itinerary:', axiosError.message);
 
         // Display error message
         Swal.fire('Error!', 'Something went wrong. Please try again later.', 'error');
@@ -166,10 +188,6 @@ export default function ItineraryPage() {
   };
 
 
-  // Handle remove itinerary
-  const handleRemove = (id: number) => {
-    setItinerary(itinerary.filter(item => item.id !== id));
-  };
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
@@ -178,12 +196,6 @@ export default function ItineraryPage() {
   const handleImageClick = () => {
     console.log("Image clicked!");
   };
-
-
-
-  function removeMainSection(): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     (!isLoading &&
@@ -228,26 +240,26 @@ export default function ItineraryPage() {
         <div className="pt-24"></div>
         {/*back button*/}
         <div className="bg-white p-6 rounded-lg shadow-lg border flex items-center justify-between py-3 mt-6 mx-auto w-full">
-      <button
-        className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200"
-        onClick={handleNavigate} // Add onClick to navigate to itineraryCreate
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          className="w-4 h-4 transform rotate-180"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M5 12h14M12 5l7 7-7 7"
-          />
-        </svg>
-      </button>
-      <h2 className="text-xl font-bold">My Itinerary</h2>
-    </div>
+          <button
+            className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200"
+            onClick={handleNavigate} // Add onClick to navigate to itineraryCreate
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-4 h-4 transform rotate-180"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 12h14M12 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+          <h2 className="text-xl font-bold">My Itinerary</h2>
+        </div>
 
 
         {/* Itinerary Table Section */}
