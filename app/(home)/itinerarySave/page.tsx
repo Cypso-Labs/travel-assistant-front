@@ -11,6 +11,7 @@ import VR360Image from "../../components/Modals/vrModal";
 import axios from "axios";
 import Swal from "sweetalert2";
 import MapComponent from "../../components/googleMapItineraryAll";
+import { useRouter } from "next/navigation";
 
 export default function ItineraryPage_02() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -22,6 +23,7 @@ export default function ItineraryPage_02() {
   const [itemData, setItemData] = useState([]);
   const [location, setLocations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   const user = JSON.parse(localStorage.getItem('UserData') || '{}');
 
@@ -42,6 +44,22 @@ export default function ItineraryPage_02() {
         }
       } catch (error) {
         const { response } = error;
+        if (response.status === 401 || response.status === 422) {
+          Swal.fire({
+            title: "Token Error",
+            text: "Please login to continue.",
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonText: "Go to Login",
+            customClass: {
+              confirmButton: "swal-login-button"
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              router.push("/account/sign-in");
+            }
+          });
+        }
         console.log(response.data);
       }
     };
@@ -140,124 +158,124 @@ export default function ItineraryPage_02() {
   }
 
   return (
-    (!isLoading && 
+    (!isLoading &&
       <div className="min-h-screen bg-gray-50 pt-6">
-      {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 z-50`}
-      >
-        {/* Sidebar content */}
-      </div>
+        {/* Sidebar */}
+        <div
+          className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 z-50`}
+        >
+          {/* Sidebar content */}
+        </div>
 
-      {showAlert && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] flex flex-col text-center">
-            <h2 className="text-xl font-semibold text-green-600">
-              Itinerary Created Successfully!
-            </h2>
-            <p className="text-gray-500 mt-2">
-              Your itinerary has been successfully created and saved.
-            </p>
+        {showAlert && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] flex flex-col text-center">
+              <h2 className="text-xl font-semibold text-green-600">
+                Itinerary Created Successfully!
+              </h2>
+              <p className="text-gray-500 mt-2">
+                Your itinerary has been successfully created and saved.
+              </p>
 
-            <div className="mt-4">
-              <span
-                className="text-green-600 font-bold"
-                onClick={() => setShowAlert(false)}
-              >
-                Close
-              </span>
+              <div className="mt-4">
+                <span
+                  className="text-green-600 font-bold"
+                  onClick={() => setShowAlert(false)}
+                >
+                  Close
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <main className="container mx-auto mt-6 pb-10 px-4 sm:px-6 lg:px-8">
-        <div className="pt-24"></div>
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-          Your Itinerary
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-          {itineraryData.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white shadow rounded-lg p-4 flex flex-col relative"
-            >
-              {location[index]?.sub_places && <MapComponent locations={location[index].sub_places} />}
-              <div className="mb-4">
-                {item.locations.map((loc) => (
-                  <div
-                    key={loc.id}
-                    className="flex items-center justify-between mb-2"
-                  >
-                    <label className="flex items-center text-gray-700 space-x-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-5 h-5 text-green-300"
-                      >
-                        <circle cx="12" cy="12" r="8" />
-                      </svg>
-                      <span>
-                        {loc.name}{" "}
-                        <span className="text-sm">({loc.description})</span>
+        <main className="container mx-auto mt-6 pb-10 px-4 sm:px-6 lg:px-8">
+          <div className="pt-24"></div>
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+            Your Itinerary
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+            {itineraryData.map((item, index) => (
+              <div
+                key={index}
+                className="bg-white shadow rounded-lg p-4 flex flex-col relative"
+              >
+                {location[index]?.sub_places && <MapComponent locations={location[index].sub_places} />}
+                <div className="mb-4">
+                  {item.locations.map((loc) => (
+                    <div
+                      key={loc.id}
+                      className="flex items-center justify-between mb-2"
+                    >
+                      <label className="flex items-center text-gray-700 space-x-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-5 h-5 text-green-300"
+                        >
+                          <circle cx="12" cy="12" r="8" />
+                        </svg>
+                        <span>
+                          {loc.name}{" "}
+                          <span className="text-sm">({loc.description})</span>
+                        </span>
+                      </label>
+                      <span className="text-gray-500">
+                        <Image
+                          onClick={() => {
+                            handleImageModal(loc.location_image);
+                          }}
+                          src={VR}
+                          alt="Location Icon"
+                          className="w-5 h-5 cursor-pointer"
+                        />
                       </span>
-                    </label>
-                    <span className="text-gray-500">
-                      <Image
-                        onClick={() => {
-                          handleImageModal(loc.location_image);
-                        }}
-                        src={VR}
-                        alt="Location Icon"
-                        className="w-5 h-5 cursor-pointer"
-                      />
-                    </span>
-                  </div>
-                ))}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-col items-center sm:items-start mt-4">
+                  <p className="text-gray-700 font-semibold text-center sm:text-left">
+                    Total Budget
+                  </p>
+                  <p className="text-xl font-bold text-green-600 text-center sm:text-left">
+                    RS {item.totalBudget}
+                  </p>
+                </div>
+                <div className="relative mt-4 sm:mt-6 flex justify-end w-full">
+                  <button onClick={() => { handleSaveItinerary(item) }} className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
+                    SAVE
+                  </button>
+                </div>
               </div>
-              <div className="flex flex-col items-center sm:items-start mt-4">
-                <p className="text-gray-700 font-semibold text-center sm:text-left">
-                  Total Budget
-                </p>
-                <p className="text-xl font-bold text-green-600 text-center sm:text-left">
-                  RS {item.totalBudget}
-                </p>
-              </div>
-              <div className="relative mt-4 sm:mt-6 flex justify-end w-full">
-                <button onClick={() => { handleSaveItinerary(item) }} className="bg-green-500 text-white py-2 px-4 w-40 rounded-md hover:bg-green-600 transition">
-                  SAVE
-                </button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          {openModal && (
+            <VR360Image
+              imageURL={selectedImageURL}
+              onClose={() => setOpenModal(false)}
+            />
+          )}
+        </main>
+
+
+        <div className="fixed bottom-4 right-4 z-50">
+          <button
+            onClick={clearLocalStorage}
+            className="bg-red-500 text-white px-6 py-2 rounded shadow-md hover:bg-red-600 transition"
+          >
+            Clear Data
+          </button>
         </div>
-        {openModal && (
-          <VR360Image
-            imageURL={selectedImageURL}
-            onClose={() => setOpenModal(false)}
+        {isPopupOpen && (
+          <Popup
+            onClose={closePopup}
+            onItemData={itemData}
+            onSuccess={handleShowAlert}
           />
         )}
-      </main>
 
-
-      <div className="fixed bottom-4 right-4 z-50">
-        <button
-          onClick={clearLocalStorage}
-          className="bg-red-500 text-white px-6 py-2 rounded shadow-md hover:bg-red-600 transition"
-        >
-          Clear Data
-        </button>
-      </div>
-      {isPopupOpen && (
-        <Popup
-          onClose={closePopup}
-          onItemData={itemData}
-          onSuccess={handleShowAlert}
-        />
-      )}
-
-    </div>)
+      </div>)
   );
 }

@@ -52,9 +52,9 @@ export default function ItineraryPage() {
           setItinerary(null);
           setIsLoading(false);
         }
-        if (response.status === 401) {
+        if (response.status === 401 || response.status === 422) {
           Swal.fire({
-            title: "Token Expired",
+            title: "Token Error",
             text: "Please login to continue.",
             icon: "warning",
             showCancelButton: false,

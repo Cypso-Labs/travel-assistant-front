@@ -16,6 +16,7 @@ export default function ItineraryPage() {
   const [isLocationOn, setIsLocationOn] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [userPreferences, setUserPreferences] = useState(false);
+  const [tokenError, setTokenError] = useState(false);
 
   const router = useRouter();
 
@@ -40,9 +41,10 @@ export default function ItineraryPage() {
       } catch (error) {
         const { response } = error;
         console.log(response.data);
-        if (response.status === 401) {
+        if (response.status === 401 || response.status === 422) {
+          setTokenError(true);
           Swal.fire({
-            title: "Token Expired",
+            title: "Token Error",
             text: "Please login to continue.",
             icon: "warning",
             showCancelButton: false,
@@ -134,6 +136,24 @@ export default function ItineraryPage() {
     };
 
     console.log(payload);
+
+    if (tokenError) {
+      Swal.fire({
+        title: "Token Error",
+        text: "Please login to continue.",
+        icon: "warning",
+        showCancelButton: false,
+        confirmButtonText: "Go to Login",
+        customClass: {
+          confirmButton: "swal-login-button"
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/account/sign-in");
+        }
+      });
+      return
+    }
 
     fetch("http://127.0.0.1:5000/recommend", {
       method: "POST",
