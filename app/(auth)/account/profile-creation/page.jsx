@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
+
 function ProfileCreationPage() {
 
   // useEffect(() => {
@@ -179,7 +180,7 @@ function ProfileCreationPage() {
             >
               <div>
                 {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="rounded-full w-[200px] sm:h-[285px] h-[200px] sm:w-[285px]" />
+                  <Image src={profileImage} alt="Profile" className="rounded-full w-[200px] sm:h-[285px] h-[200px] sm:w-[285px]" />
                 ) : (
                   <Image src={icon} alt="Empty image icon" />
                 )}

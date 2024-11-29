@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 export default function Home() {
@@ -15,7 +16,7 @@ export default function Home() {
 
       {/* Map Section */}
       <div className="mt-8 relative bg-white shadow rounded-lg overflow-hidden">
-        <img
+        <Image
           src="/landmarks-map.png"
           alt="Landmarks Map"
           className="w-full h-auto"
