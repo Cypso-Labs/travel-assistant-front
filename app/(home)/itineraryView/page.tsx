@@ -35,7 +35,17 @@ interface Location {
 
 export default function ItineraryPage() {
 
-  const user = JSON.parse(localStorage.getItem('UserData') || '{}');
+
+  const [user, setUser] = useState<{ [key: string]: unknown }>({});
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("UserData");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
+    }
+  }, []);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [itinerary, setItinerary] = useState<Itinerary[] | null>(null);
@@ -105,11 +115,11 @@ export default function ItineraryPage() {
       console.error('Invalid itinerary item');
       return;
     }
-  
+
     // Get user data from localStorage
     const user = JSON.parse(localStorage.getItem('UserData') || '{}');
     setSelectedItinerary(item);
-  
+
     // If user data exists and contains user_id
     if (user && user.user_id) {
       try {
@@ -122,7 +132,7 @@ export default function ItineraryPage() {
             },
           }
         );
-  
+
         if (response.status === 200) {
           setSelectedLocations(response.data.locations);
         }
@@ -134,7 +144,7 @@ export default function ItineraryPage() {
       console.error('User data not found or missing user_id');
     }
   };
-  
+
   const handleImageModal = (imageURL: string) => {
     setSelectedImageURL(imageURL);
     setOpenModal(true);
@@ -175,8 +185,8 @@ export default function ItineraryPage() {
       Swal.fire("Error!", "Failed to delete itinerary.", "error");
     }
   };
-  
-  
+
+
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);

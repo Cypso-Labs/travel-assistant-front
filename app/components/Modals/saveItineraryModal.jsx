@@ -6,11 +6,24 @@ import { useEffect, useRef, useState } from "react";
 const Popup = ({ onClose, onItemData, onSuccess }) => {
   const [itinerary, setItinerary] = useState("");
 
+  const [user, setUser] = useState(null);
+  const [ItineraryData, setItineraryData] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("UserData");
+      const data = localStorage.getItem("itineraryData");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
+      if (data) {
+        setItineraryData(JSON.parse(data));
+      }
+    }
+  }, []);
+
 
   const modalRef = useRef < HTMLDivElement > (null);
-
-  const ItineraryData = JSON.parse(localStorage.getItem("itineraryData") || "{}");
-  const user = JSON.parse(localStorage.getItem("UserData") || "{}");
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
