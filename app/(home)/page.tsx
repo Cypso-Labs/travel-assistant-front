@@ -15,52 +15,11 @@ import MapComponent from "../components/googleMap";
 
 
 export default function HomePage() {
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
-
+  
   return (
     <div>
       <div className="min-h-screen bg-gray-900 text-white ">
-         {/* Sidebar */}
-         <div
-          className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 z-50`}
-        >
-          <div className="flex justify-between items-center p-4 border-b border-gray-700">
-            <h2 className="text-xl font-bold">Menu</h2>
-            <button
-              onClick={toggleSidebar}
-              className="text-white hover:text-gray-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <nav className="p-4 space-y-4">
-            <a href="/" className="block hover:text-gray-300">Home</a>
-            <a href="/itinerary" className="block hover:text-gray-300">Itinerary</a>
-            <a href="/events" className="block hover:text-gray-300">Events</a>
-            <a href="/recipes" className="block hover:text-gray-300">Recipes</a>
-            <a href="/emergency" className="block hover:text-gray-300">Emergency</a>
-            <a href="/about" className="block hover:text-gray-300">About Us</a>
-          </nav>
-        </div>
+
 
 
         <section
