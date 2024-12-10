@@ -100,7 +100,11 @@ const Header = () => {
             <Link href="/emergency" className="hover:text-gray-300 text-lg">
               Emergency
             </Link>
-            <Link href="/about" className="hover:text-gray-300 text-lg">
+            <Link 
+              href="/about" 
+              className="hover:text-gray-300 text-lg"
+              onClick={handleItineraryClick}
+            >
               About Us
             </Link>
           </nav>
@@ -209,13 +213,21 @@ const Header = () => {
           <Link href="/events" className="block hover:text-gray-300">
             Events
           </Link>
-          <Link href="/recipes" className="block hover:text-gray-300">
+          <Link 
+            href="/recipes" 
+            className="block hover:text-gray-300"
+            onClick={handleItineraryClick}
+          >
             Recipes
           </Link>
           <Link href="/emergency" className="block hover:text-gray-300">
             Emergency
           </Link>
-          <Link href="/about" className="block hover:text-gray-300">
+          <Link
+            href="/about" 
+            className="block hover:text-gray-300"
+            onClick={handleItineraryClick}
+          >
             About Us
           </Link>
         </nav>
