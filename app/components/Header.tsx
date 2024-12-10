@@ -90,7 +90,11 @@ const Header = () => {
             <Link href="/events" className="hover:text-gray-300 text-lg">
               Events
             </Link>
-            <Link href="/recipes" className="hover:text-gray-300 text-lg">
+            <Link 
+              href="/recipes" 
+              className="hover:text-gray-300 text-lg"
+              onClick={handleItineraryClick}
+            >
               Recipes
             </Link>
             <Link href="/emergency" className="hover:text-gray-300 text-lg">
