@@ -96,7 +96,7 @@ const Header = () => {
             <Link href="/emergency" className="hover:text-gray-300 text-lg">
               Emergency
             </Link>
-            <Link href="/about" className="hover:text-gray-300 text-lg">
+            <Link href="/aboutUs" className="hover:text-gray-300 text-lg">
               About Us
             </Link>
           </nav>
