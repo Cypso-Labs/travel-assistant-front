@@ -1,17 +1,46 @@
+"use client"; // Required for Next.js apps
+
 import Header from "@/app/components/Header";
 import React from "react";
-
+import { useRouter } from "next/navigation";
 import Chicken_Image from "../../../public/images/Chicken.png";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
+
+  
+  const router = useRouter();
+
+  const handleNavigate = () => {
+    router.push("/recipesPage"); // Navigate to the itineraryCreate Page
+  };
+
+
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Main Container */}
-      <div className="container mx-auto py-16 px-6 pt-40">
+      <div className="container mx-auto py-16 px-6 pt-32">
+          <button
+            className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200"
+            onClick={handleNavigate} // Add onClick to navigate to itineraryCreate
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-4 h-4 transform rotate-180"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 12h14M12 5l7 7-7 7"
+              />
+            </svg>
+          </button>
         {/* Title */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-12">
+        <h1 className="text-4xl font-bold text-gray-800 mb-12 pt-5">
         My Recipe Box
         </h1>
 
