@@ -11,7 +11,7 @@ export default function Home() {
       {/* Main Container */}
       <div className="container mx-auto py-16 px-6 pt-40">
         {/* Title */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-12">
+        <h1 className="text-4xl font-bold text-gray-800 mb-12 ">
           Flavors of Sri Lanka
         </h1>
 
@@ -78,7 +78,7 @@ export default function Home() {
         {/* View More Section */}
         <div className="mt-12">
           <Link
-            href="#"
+            href="recipeFlavors"
             className="text-black-600 font-semibold hover:underline block"
           >
             View More →
@@ -89,17 +89,14 @@ export default function Home() {
           <span className="block w-full sm:w-[500px] md:w-[800px] lg:w-[1500px] h-[10px] bg-green-500"></span>
         </div>
       </div>
-
-
-
-
+            
 
 
       {/* Main Container */}
       <div className="container mx-auto py-16 px-6 ">
         {/* Title */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-12">
-          Flavors of Sri Lanka
+        <h1 className="text-4xl font-bold text-gray-800 mb-12 ">
+        My Recipe Box
         </h1>
 
         {/* Card Grid */}
@@ -165,7 +162,7 @@ export default function Home() {
         {/* View More Section */}
         <div className="mt-12">
           <Link
-            href="#"
+            href="recipeBox"
             className="text-black-600 font-semibold hover:underline block"
           >
             View More →
