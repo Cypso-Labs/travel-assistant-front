@@ -87,7 +87,7 @@ const Header = () => {
             >
               View Itineraries
             </Link>
-            <Link href="/events" className="hover:text-gray-300 text-lg">
+            <Link href="/eventPage" className="hover:text-gray-300 text-lg">
               Events
             </Link>
             <Link href="/recipes" className="hover:text-gray-300 text-lg">
