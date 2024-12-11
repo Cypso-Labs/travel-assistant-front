@@ -3,7 +3,7 @@
 import router from "next/router";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import image from '../../../public/images/Chicken.png'
+
 
 export default function RecipesPage() {
   const [recipe, setRecipe] = useState(null); 
