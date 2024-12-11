@@ -1,125 +1,96 @@
-import Header from "@/app/components/Header";
-import React from "react";
+"use client";
 
-import Torana_Image from "../../../public/images/ToranaIMG.png";
+import Header from "@/app/components/Header";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import axios, { AxiosResponse } from "axios";
 
 export default function Home() {
+  const [eventList, setEventlist] = useState(
+    Array<{
+      cover_image: string;
+      description: string;
+      end_date: Date;
+      id: number;
+      name: string;
+      start_date: Date;
+      type: string;
+    }>
+  );
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/v1/events")
+      .then(
+        (
+          response: AxiosResponse<{
+            code: number;
+            events: Array<{
+              cover_image: string;
+              description: string;
+              end_date: Date;
+              id: number;
+              name: string;
+              start_date: Date;
+              type: string;
+            }>;
+          }>
+        ) => {
+          console.log(response);
+          setEventlist(response.data.events);
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+  },[]);
+
   return (
     <div>
       <Header />
-      <main className="bg-white">
-        <section className="container mx-auto py-10  pt-40">
-          <h2 className="text-5xl font-bold mb-6 pb-20">Events nearby you</h2>
+      <main className="w-full bg-white">
+        <section className="w-full container mx-auto py-10  pt-40">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 pb-20">Events nearby you</h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-40">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 lg:gap-20 2xl:gap-32">
             {/* Card 1 */}
-            <div className="flex w-[380px] h-[350px] bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden items-start">
-              {/* Content Section */}
-              <div className="w-2/3 p-4">
-                <h3 className="text-lg font-bold text-gray-800 pb-8">
-                  Poson-Poya Thorana (Religion)
-                </h3>
-                <p className="mt-2 text-sm text-gray-600 pb-20">
-                  Poson-Poya Thorana features beautifully illuminated displays
-                  created during the Poson-Poya festival in Sri Lanka.
-                </p>
-                <a
-                  href="https://en.wikipedia.org/wiki/Poson"
-                  className="block mt-4 bg-green-500 text-white text-center py-2 px-4 rounded-md hover:bg-green-600"
+            {eventList.map((event, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex w-[280px] h-auto sm:w-[300px] md:w-[320px] lg:w-[350px] 2xl:w-[380px] bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden items-start mx-auto"
                 >
-                  Learn More...
-                </a>
-              </div>
+                  {/* Content Section */}
+                  <div className="w-2/3 p-4">
+                    <h3 className="text-lg font-bold text-gray-800 pb-8">
+                      {event.name}
+                    </h3>
 
-              {/* Image Section */}
-              <div className="w-1/3 h-full">
-                <Image
-                  src={Torana_Image}
-                  alt="Event Image"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+                    <p className="mt-2 text-sm text-gray-600 pb-20">
+                      {event.description}
+                    </p>
 
-            {/* Repeat for other cards */}
-            {/* Card 2 */}
-            <div className="flex w-[380px] h-[350px] bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden items-start">
-              <div className="w-2/3 p-4">
-                <h3 className="text-lg font-bold text-gray-800 pb-8">
-                  Poson-Poya Thorana (Religion)
-                </h3>
-                <p className="mt-2 text-sm text-gray-600 pb-20">
-                  Poson-Poya Thorana features beautifully illuminated displays
-                  created during the Poson-Poya festival in Sri Lanka.
-                </p>
-                <a
-                  href="https://en.wikipedia.org/wiki/Poson"
-                  className="block mt-4 bg-green-500 text-white text-center py-2 px-4 rounded-md hover:bg-green-600"
-                >
-                  Learn More...
-                </a>
-              </div>
-              <div className="w-1/3 h-full">
-                <Image
-                  src={Torana_Image}
-                  alt="Event Image"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+                    <a
+                      href={`eventPage/${event.id}`}
+                      className="block mt-4 bg-green-500 text-white text-center py-2 px-4 rounded-md hover:bg-green-600"
+                    >
+                      Learn More...
+                    </a>
+                  </div>
 
-            {/* Card 3 */}
-            <div className="flex w-[380px] h-[350px] bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden items-start">
-              <div className="w-2/3 p-4">
-                <h3 className="text-lg font-bold text-gray-800 pb-8">
-                  Poson-Poya Thorana (Religion)
-                </h3>
-                <p className="mt-2 text-sm text-gray-600 pb-20">
-                  Poson-Poya Thorana features beautifully illuminated displays
-                  created during the Poson-Poya festival in Sri Lanka.
-                </p>
-                <a
-                  href="https://en.wikipedia.org/wiki/Poson"
-                  className="block mt-4 bg-green-500 text-white text-center py-2 px-4 rounded-md hover:bg-green-600"
-                >
-                  Learn More...
-                </a>
-              </div>
-              <div className="w-1/3 h-full">
-                <Image
-                  src={Torana_Image}
-                  alt="Event Image"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* Card 4 */}
-            <div className="flex w-[380px] h-[350px] bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden items-start">
-              <div className="w-2/3 p-4">
-                <h3 className="text-lg font-bold text-gray-800 pb-8 ">
-                  Poson-Poya Thorana (Religion)
-                </h3>
-                <p className="mt-2 text-sm text-gray-600 pb-20">
-                  Poson-Poya Thorana features beautifully illuminated displays
-                  created during the Poson-Poya festival in Sri Lanka.
-                </p>
-                <a
-                  href="https://en.wikipedia.org/wiki/Poson"
-                  className="block mt-4 bg-green-500 text-white text-center py-2 px-4 rounded-md hover:bg-green-600"
-                >
-                  Learn More...
-                </a>
-              </div>
-              <div className="w-1/3 h-full">
-                <Image
-                  src={Torana_Image}
-                  alt="Event Image"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+                  {/* Image Section */}
+                  <div className="w-1/3 h-full">
+                    <Image
+                      src={event.cover_image}
+                      alt="Event Image"
+                      width={380}  // Set width here
+                      height={350}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       </main>

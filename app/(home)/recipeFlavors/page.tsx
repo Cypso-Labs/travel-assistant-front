@@ -1,13 +1,48 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Chicken_Image from "../../../public/images/Chicken.png";
 import Image from "next/image";
 import Link from "next/link";
+import axios, { AxiosError } from "axios";
+
+interface Recipe {
+  id: number;
+  name: string;
+  description: string;
+  cultural_background: string;
+  cover_image: string;
+  ingredients: string[];
+  instructions: string[];
+}
 
 
 export default function Home() {
+
+  const [allRecipes, setAllRecipes] = useState<Recipe[] | null>(null);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllRecipes = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/v1/recipes');
+        if (response.status === 200) {
+          console.log(response.data);
+          setAllRecipes(response.data.recipes);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        const err = error as AxiosError;
+        console.log(err);
+        setIsLoading(false);
+      }
+    }
+
+
+    fetchAllRecipes();
+
+  }, []);
 
   const router = useRouter();
 
@@ -17,9 +52,10 @@ export default function Home() {
 
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      {/* Main Container */}
-      <div className="container mx-auto py-16 px-6 pt-32">
+    (!isLoading &&
+      <div className="bg-gray-100 min-h-screen">
+        {/* Main Container */}
+        <div className="container mx-auto py-16 px-6 pt-32">
           <button
             className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200"
             onClick={handleNavigate} // Add onClick to navigate to recipesPage
@@ -43,255 +79,46 @@ export default function Home() {
 
 
 
-        
-        {/* Title */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-12 pt-5">
-          Flavors of Sri Lanka
-        </h1>
 
-        {/* Card Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Card 1 */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
+          {/* Title */}
+          <h1 className="text-4xl font-bold text-gray-800 mb-12 pt-5">
+            Flavors of Sri Lanka
+          </h1>
 
-           {/* Card 2 */}
-           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
+          {/* Card Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Card 1 */}
+            {allRecipes && allRecipes.length !== 0 ? (allRecipes?.map((recipe) =>
+            (<div key={recipe.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="relative h-48">
+                <Image
+                  src={recipe.cover_image} // Replace with your image
+                  alt={recipe.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <p className="text-gray-600 text-sm mb-4">
+                  {recipe.cultural_background}
+                </p>
+                <Link
+                  href={`recipes/${recipe.id}`}
+                  className="text-green-600 font-semibold hover:underline"
+                >
+                  Learn More....
+                </Link>
+              </div>
+            </div>)))
+              :
+              <div className="col-span-3 w-full flex justify-center items-center h-32">
+                <p className="font-poppins text-2xl font-semibold">No recipes found!</p>
+              </div>
+            }
 
-           {/* Card 3 */}
-           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
-
-
-           {/* Card 4 */}
-           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
-
-
-           {/* Card 5 */}
-           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
-
-
-           {/* Card 6 */}
-           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
-
-
-           {/* Card 7 */}
-           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
-
-
-           {/* Card 8 */}
-           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
-
-           {/* Card 9 */}
-           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="relative h-48">
-              <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
           </div>
         </div>
-        </div>
 
-    </div>
+      </div>)
   );
 }
