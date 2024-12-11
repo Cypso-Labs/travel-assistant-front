@@ -4,12 +4,20 @@ import router from "next/router";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-export default function RecipesPage() {
+// Define types for the recipe data
+interface Recipe {
+  name: string;
+  cover_image: string;
+  description: string;
+  cultural_background: string;
+  ingredients: string[];
+  instructions: string[];
+}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [recipe, setRecipe] = useState<any>(null); 
+export default function RecipesPage() {
+  const [recipe, setRecipe] = useState<Recipe | null>(null); // Specify Recipe type or null
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null); // Specify string or null for error
   const [isFavorited, setIsFavorited] = useState(false);
 
   const handleFavoriteClick = () => {
@@ -27,7 +35,7 @@ export default function RecipesPage() {
         setRecipe(data.recipe);
       } catch (err: unknown) {
         if (err instanceof Error) {
-          setError(err.message); 
+          setError(err.message);
         } else {
           setError("An unknown error occurred");
         }
@@ -52,7 +60,7 @@ export default function RecipesPage() {
   }
 
   if (!recipe) {
-    return <div>No recipe data available.</div>; 
+    return <div>No recipe data available.</div>;
   }
 
   return (
@@ -117,18 +125,19 @@ export default function RecipesPage() {
                 Ingredients
               </h3>
               <ul className="list-disc list-inside text-gray-600 mt-2">
-                {recipe.ingredients.map((ingredient: string | number | bigint | boolean | React.ReactElement<never, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined, index: React.Key | null | undefined) => (
+                {recipe.ingredients.map((ingredient, index) => (
                   <li key={index}>{ingredient}</li>
                 ))}
               </ul>
             </section>
 
+            {/* Instructions */}
             <section className="mb-6">
               <h3 className="text-lg font-semibold text-gray-700">
                 Instructions
               </h3>
               <ul className="list-disc list-inside text-gray-600 mt-2">
-                {recipe.instructions.map((instruction: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined, index: React.Key | null | undefined) => (
+                {recipe.instructions.map((instruction, index) => (
                   <li key={index}>{instruction}</li>
                 ))}
               </ul>
