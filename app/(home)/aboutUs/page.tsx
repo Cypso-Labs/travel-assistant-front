@@ -30,6 +30,117 @@ export default function AboutUs() {
     >
       <div
         style={{
+          width: "100px",
+          height: "100px",
+          position: "relative",
+          marginTop: "90px", 
+          marginRight: "300px", 
+          marginLeft: "750px",
+          marginBottom: "0", 
+        }}
+        className="image-container"
+      >
+        <div
+          style={{
+            width: "123.96%",
+            height: "116.89%",
+            backgroundPosition: "center",
+            backgroundImage:
+              "url(/assets/images/9eb92827-8cf9-4b65-a6fe-e5ace0afa12a.png)",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            position: "absolute",
+            top: "-12.23%",
+            left: "-3.56%",
+            overflow: "hidden",
+          }}
+        />
+        <div
+          style={{
+            width: "262px",
+            height: "483px",
+            position: "absolute",
+            top: "0",
+            left: "0",
+            zIndex: "4",
+          }}
+        >
+          <div
+            style={{
+              width: "262px",
+              height: "246px",
+              backgroundPosition: "center",
+              backgroundImage:
+                "url(/assets/images/2ae90ad8a77640b1c7b3e8c83b2c31e5c36cf997.png)",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              borderRadius: "10px",
+              position: "relative",
+              zIndex: "4",
+              margin: "0 0 0 0",
+            }}
+          />
+          <div
+            style={{
+              width: "223px",
+              height: "215px",
+              backgroundPosition: "center",
+              backgroundImage:
+                "url(/assets/images/fffec4ff-2208-4807-a346-a30efced972e.png)",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              borderRadius: "10px",
+              position: "relative",
+              zIndex: "2",
+              margin: "22px 0 0 39px",
+            }}
+          />
+        </div>
+        <div
+          style={{
+            width: "227px",
+            height: "464px",
+            position: "absolute",
+            top: "39px",
+            left: "278px",
+            zIndex: "3",
+          }}
+        >
+          <div
+            style={{
+              width: "227px",
+              height: "167px",
+              backgroundPosition: "center",
+              backgroundImage:
+                "url(/assets/images/8e1ebda3d00e4db16cd07bb88212abd646ebe630.png)",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              borderRadius: "10px",
+              position: "relative",
+              zIndex: "3",
+              margin: "0 0 0 0",
+            }}
+          />
+          <div
+            style={{
+              width: "226px",
+              height: "276px",
+              backgroundPosition: "center",
+              backgroundImage:
+                "url(/assets/images/2ae9471775c22030b5068b78f70b57dc981cdfb8.png)",
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              borderRadius: "10px",
+              position: "relative",
+              zIndex: "1",
+              margin: "21px 0 0 1px",
+            }}
+          />
+        </div>
+      </div>
+
+      <div
+        style={{
           width: "97.81%",
           height: "83.27%",
           fontSize: "0px",
@@ -43,7 +154,8 @@ export default function AboutUs() {
           style={{
             display: "block",
             height: "25px",
-            fontFamily: "'Rubik', 'Source Code Pro', var(--default-font-family)",
+            fontFamily:
+              "'Rubik', 'Source Code Pro', var(--default-font-family)",
             fontSize: "40px",
             fontWeight: "600",
             lineHeight: "45px",
@@ -114,7 +226,8 @@ export default function AboutUs() {
             width: "805px",
             height: "45px",
             alignItems: "flex-start",
-            fontFamily: "'Rubik', 'Source Code Pro', var(--default-font-family)",
+            fontFamily:
+              "'Rubik', 'Source Code Pro', var(--default-font-family)",
             fontSize: "12px",
             fontWeight: "600",
             lineHeight: "15.084px",
