@@ -1,9 +1,88 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Chicken_Image from "../../../public/images/Chicken.png";
 import Image from "next/image";
 import Link from "next/link";
+import axios, { AxiosError } from "axios";
+
+interface Recipe {
+  id: number;
+  name: string;
+  description: string;
+  cultural_background: string;
+  cover_image: string;
+  ingredients: string[];
+  instructions: string[];
+}
 
 export default function Home() {
+
+  const [user, setUser] = useState<{ [key: string]: unknown }>({});
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("UserData");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      } else {
+        setUserNotLogged(true);
+      }
+    }
+  }, []);
+
+  const [allRecipes, setAllRecipes] = useState<Recipe[] | null>(null);
+  const [userRecipes, setUserRecipes] = useState<Recipe[] | null>(null);
+  const [userNotLogged, setUserNotLogged] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllRecipes = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/v1/recipes');
+        if (response.status === 200) {
+          console.log(response.data);
+          setAllRecipes(response.data.recipes);
+        }
+      } catch (error) {
+        const err = error as AxiosError;
+        console.log(err);
+      }
+    }
+
+    const fetchUserRecipes = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/v1/users/${user.user_id}/recipes`, {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+          },
+        });
+        if (response.status === 200) {
+          const user_recipes = response.data.recipes;
+          console.log(user_recipes);
+          setUserRecipes(user_recipes);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        const err = error as AxiosError;
+        if (err.response && (err.response.status === 404)) {
+          setUserRecipes(null);
+          setIsLoading(false);
+        }
+        if (err.response && (err.response.status === 401 || err.response.status === 422)) {
+          setUserRecipes(null);
+          setUserNotLogged(true);
+          setIsLoading(false);
+          console.log('unable to load user recipes(unauthorized)')
+        }
+      }
+    };
+
+    fetchAllRecipes();
+    fetchUserRecipes();
+
+  }, [user.access_token, user.user_id]);
+
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Main Container */}
@@ -16,21 +95,19 @@ export default function Home() {
         {/* Card Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Card 1 */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          {allRecipes?.map((recipe) =>
+          (<div key={recipe.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="relative h-48">
               <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
+                src={recipe.cover_image} // Replace with your image
+                alt={recipe.name}
                 fill
                 className="object-cover"
               />
             </div>
             <div className="p-4">
               <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
+                {recipe.cultural_background}
               </p>
               <Link
                 href="#"
@@ -39,38 +116,8 @@ export default function Home() {
                 Learn More....
               </Link>
             </div>
-          </div>
+          </div>))}
 
-          {/* Duplicate Cards */}
-          {[...Array(2)].map((_, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
-            >
-              <div className="relative h-48">
-                <Image
-                  src={Chicken_Image} // Replace with your image
-                  alt="Sri Lankan Chicken Curry"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <p className="text-gray-600 text-sm mb-4">
-                  Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                  aromatic dish made with a blend of spices, coconut milk, and
-                  tender chicken, embodying the vibrant flavors of Sri Lankan
-                  cuisine.
-                </p>
-                <Link
-                  href="#"
-                  className="text-green-600 font-semibold hover:underline"
-                >
-                  Learn More....
-                </Link>
-              </div>
-            </div>
-          ))}
         </div>
 
         {/* View More Section */}
@@ -83,38 +130,37 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="container mx-auto pt-10">
-          <span className="block w-full sm:w-[500px] md:w-[800px] lg:w-[1500px] h-[10px] bg-green-500"></span>
-        </div>
+        {!userNotLogged &&
+          <div className="container mx-auto pt-10">
+            <span className="block w-full sm:w-[500px] md:w-[800px] lg:w-[1500px] h-[10px] bg-green-500"></span>
+          </div>}
       </div>
-            
+
 
 
       {/* Main Container */}
-      <div className="container mx-auto py-16 px-6 ">
+      {!userNotLogged && <div className="container mx-auto py-16 px-6 ">
         {/* Title */}
         <h1 className="text-4xl font-bold text-gray-800 mb-12 ">
-        My Recipe Box
+          My Recipe Box
         </h1>
 
         {/* Card Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Card 1 */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          {userRecipes?.map((recipe) =>
+          (<div key={recipe.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="relative h-48">
               <Image
-                src={Chicken_Image} // Replace with your image
-                alt="Sri Lankan Chicken Curry"
+                src={recipe.cover_image} // Replace with your image
+                alt={recipe.name}
                 fill
                 className="object-cover"
               />
             </div>
             <div className="p-4">
               <p className="text-gray-600 text-sm mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
+                {recipe.cultural_background}
               </p>
               <Link
                 href="#"
@@ -123,38 +169,8 @@ export default function Home() {
                 Learn More....
               </Link>
             </div>
-          </div>
+          </div>))}
 
-          {/* Duplicate Cards */}
-          {[...Array(2)].map((_, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
-            >
-              <div className="relative h-48">
-                <Image
-                  src={Chicken_Image} // Replace with your image
-                  alt="Sri Lankan Chicken Curry"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <p className="text-gray-600 text-sm mb-4">
-                  Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                  aromatic dish made with a blend of spices, coconut milk, and
-                  tender chicken, embodying the vibrant flavors of Sri Lankan
-                  cuisine.
-                </p>
-                <Link
-                  href="#"
-                  className="text-green-600 font-semibold hover:underline"
-                >
-                  Learn More....
-                </Link>
-              </div>
-            </div>
-          ))}
         </div>
 
         {/* View More Section */}
@@ -167,8 +183,8 @@ export default function Home() {
           </Link>
         </div>
 
-        
-      </div>
+
+      </div>}
 
     </div>
   );
