@@ -2,8 +2,6 @@
 
 import Header from "@/app/components/Header";
 import React, { useEffect, useState } from "react";
-
-import Torana_Image from "../../../public/images/ToranaIMG.png";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 
