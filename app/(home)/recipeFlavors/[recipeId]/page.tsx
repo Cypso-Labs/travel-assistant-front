@@ -1,8 +1,8 @@
 "use client";
 
-import router from "next/router";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 // Define types for the recipe data
 interface Recipe {
@@ -19,6 +19,8 @@ export default function RecipesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); // Specify string or null for error
   const [isFavorited, setIsFavorited] = useState(false);
+  const recipeId = usePathname().split("/").pop();
+  const router = useRouter();
 
   const handleFavoriteClick = () => {
     setIsFavorited(true);
@@ -27,7 +29,7 @@ export default function RecipesPage() {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/v1/recipes/1");
+        const response = await fetch(`http://localhost:5000/api/v1/recipes/${recipeId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch recipe data");
         }
@@ -48,7 +50,7 @@ export default function RecipesPage() {
   }, []);
 
   const handleNavigate = () => {
-    router.push("/");
+    router.push("/recipeFlavors");
   };
 
   if (isLoading) {
