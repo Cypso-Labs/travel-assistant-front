@@ -1,12 +1,19 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { usePathname } from 'next/navigation'
 
-const page = () => {
+
+const Page = () => {
+  const pathname = usePathname()
+
+  console.log(pathname)
   return (
     <div className="w-full h-full fixed top-0 left-0 pt-24">
       <div className="relative w-full h-full flex justify-center items-center">
         <div className="bg-black opacity-40 w-full h-full absolute left-0 top-0"></div>
-        <div className="relative w-1/2 aspect-[897/698] bg-white rounded-xl min-w-[960px]">
+        <div className="relative w-1/2 aspect-[897/698] bg-white rounded-xl min-w-[95%] min-h-[95%] max-h-[95%] overflow-y-auto">
           <div className="relative w-full h-[55%] flex-grow rounded-t-xl bg-black">
             <Image
               src="/images/2.png"
@@ -49,4 +56,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

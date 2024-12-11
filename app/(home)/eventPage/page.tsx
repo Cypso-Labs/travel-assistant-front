@@ -20,7 +20,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/events")
+      .get("http://localhost:5000/api/v1/events")
       .then(
         (
           response: AxiosResponse<{
@@ -43,7 +43,7 @@ export default function Home() {
       .catch((error) => {
         console.log(error);
       });
-  });
+  },[]);
 
   return (
     <div>
@@ -83,6 +83,8 @@ export default function Home() {
                     <Image
                       src={event.cover_image}
                       alt="Event Image"
+                      width={380}  // Set width here
+                      height={350}
                       className="w-full h-full object-cover"
                     />
                   </div>
