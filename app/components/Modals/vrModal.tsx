@@ -1,4 +1,4 @@
-'use client'; // Ensures the component runs on the client
+'use client'; 
 
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
@@ -14,7 +14,6 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
     const url = imageURL;
 
     const container = containerRef.current;
-
     const width = window.innerWidth;
     const height = window.innerHeight;
 
@@ -22,8 +21,9 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.set(0, 0, 0.1);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.xr.enabled = true;
 
     if (container) {
@@ -31,15 +31,19 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
     }
 
     if (VRButton && container) {
-      container.appendChild(VRButton.createButton(renderer));
+      const vrButton = VRButton.createButton(renderer);
+      container.appendChild(vrButton);
+      vrButton.style.zIndex = '1100'; 
     }
 
-    // Add texture loading with error handling
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
       url,
       (texture) => {
-        // When the texture loads, set up the material
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.anisotropy = 16;
+
         const geometry = new THREE.SphereGeometry(50, 60, 40);
         geometry.scale(-1, 1, 1); // Invert the geometry for 360 view
 
@@ -80,7 +84,6 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      // Clean up
       renderer.dispose();
       if (container) {
         container.removeChild(renderer.domElement);
@@ -120,7 +123,6 @@ const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: stri
         }}
         src={close_icon} className='' alt='' />
 
-      {/* 360 Viewer */}
       <div ref={containerRef} style={{ width: '100vw', height: '100vh' }} />
     </div>
   );
