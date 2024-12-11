@@ -1,7 +1,5 @@
-"use client"; // Required for Next.js apps
+"use client";
 
-
-import Header from "@/app/components/Header";
 import React from "react";
 import { useRouter } from "next/navigation";
 import Chicken_Image from "../../../public/images/Chicken.png";
@@ -9,14 +7,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 
-
-
 export default function Home() {
 
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push("/recipesPage"); // Navigate to the itineraryCreate Page
+    router.push("/recipesPage"); // Navigate to the recipesPage
   };
 
 
@@ -26,7 +22,7 @@ export default function Home() {
       <div className="container mx-auto py-16 px-6 pt-32">
           <button
             className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200"
-            onClick={handleNavigate} // Add onClick to navigate to itineraryCreate
+            onClick={handleNavigate} // Add onClick to navigate to recipesPage
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
