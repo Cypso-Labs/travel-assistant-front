@@ -103,7 +103,7 @@ export default function Home() {
                   {recipe.cultural_background}
                 </p>
                 <Link
-                  href="#"
+                  href={`recipes/${recipe.id}`}
                   className="text-green-600 font-semibold hover:underline"
                 >
                   Learn More....
