@@ -2,13 +2,10 @@
 
 import React from "react";
 import Image from "next/image";
-import { usePathname } from 'next/navigation'
 
 
 const Page = () => {
-  const pathname = usePathname()
-
-  console.log(pathname)
+  
   return (
     <div className="w-full h-full fixed top-0 left-0 pt-24">
       <div className="relative w-full h-full flex justify-center items-center">
