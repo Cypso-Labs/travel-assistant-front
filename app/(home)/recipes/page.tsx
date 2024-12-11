@@ -1,34 +1,57 @@
 "use client";
 
 import router from "next/router";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import chikenCurry from "../../../public/images/recipe01.png";
 
 export default function RecipesPage() {
+  const [recipe, setRecipe] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const [isFavorited, setIsFavorited] = useState(false);
+  
+   const handleFavoriteClick = () => {
+     setIsFavorited(true); 
+   };
 
-  const recipe = {
-    image: 'https://example.com/chicken-curry.jpg',
-    title: 'Spaghetti Bolognese',
-    description: 'A classic Italian pasta dish.',
-    culturalBackground: 'Chicken curry is an integral part of Sri Lankan cuisine...',
-    ingredients: ['1 kg Chicken', '2 tbsp Oil', '1 Onion, sliced', '2 tsp Chili Powder', '1 tsp Turmeric', '2 Cups Coconut Milk'],
-    instructions: ['Boil pasta', 'Cook beef and onion', 'Mix with sauce', 'Serve']
-  };
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/v1/recipes/1");
+        if (!response.ok) {
+          throw new Error("Failed to fetch recipe data");
+        }
+        const data = await response.json();
+        setRecipe(data.recipe);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRecipe();
+  }, []);
 
   const handleNavigate = () => {
-    router.push("/"); // Navigate to the homepage
+    router.push("/"); 
   };
 
-  return(
+  if (isLoading) {
+    return <div>Loading...</div>; 
+  }
 
-    <div className="bg-gray-50  pt-24">
-    <main className="container mx-auto mt-10 px-4 pb-10">
-      
-    <div className="flex">
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return (
+    <div className="bg-gray-50 pt-24">
+      <main className="container mx-auto mt-10 px-4 pb-10">
+        <div className="flex">
           <button
             className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200 mr-10"
-            onClick={handleNavigate} // Add onClick to navigate to homepage
+            onClick={handleNavigate} 
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -49,22 +72,26 @@ export default function RecipesPage() {
 
         <div className="relative p-4">
           {/* Image */}
-          <Image
-            src={chikenCurry} // Replace with the actual image path
-            alt="Sri Lankan Chicken Curry"
+          {/* <Image
+            src={recipe.cover_image}
+            alt={recipe.name}
             className="w-full object-cover"
-          />
+            width={800}
+            height={400}
+          /> */}
 
-          {/* Content Container */}
+    
           <div className="max-w-5xl bg-white rounded-[50px] shadow-xl p-8 mx-auto -mt-10 relative z-10">
-            {/* Title */}
+        
             <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
-              {recipe.title}
+              {recipe.name}
             </h2>
 
             {/* Description */}
             <section className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-700">Description</h3>
+              <h3 className="text-lg font-semibold text-gray-700">
+                Description
+              </h3>
               <p className="text-gray-600 mt-2">{recipe.description}</p>
             </section>
 
@@ -73,12 +100,14 @@ export default function RecipesPage() {
               <h3 className="text-lg font-semibold text-gray-700">
                 Cultural Background
               </h3>
-              <p className="text-gray-600 mt-2">{recipe.culturalBackground}</p>
+              <p className="text-gray-600 mt-2">{recipe.cultural_background}</p>
             </section>
 
             {/* Ingredients */}
             <section className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-700">Ingredients</h3>
+              <h3 className="text-lg font-semibold text-gray-700">
+                Ingredients
+              </h3>
               <ul className="list-disc list-inside text-gray-600 mt-2">
                 {recipe.ingredients.map((ingredient, index) => (
                   <li key={index}>{ingredient}</li>
@@ -86,9 +115,11 @@ export default function RecipesPage() {
               </ul>
             </section>
 
-            {/* instructions */}
+  
             <section className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-700">Instructions</h3>
+              <h3 className="text-lg font-semibold text-gray-700">
+                Instructions
+              </h3>
               <ul className="list-disc list-inside text-gray-600 mt-2">
                 {recipe.instructions.map((instruction, index) => (
                   <li key={index}>{instruction}</li>
@@ -96,19 +127,22 @@ export default function RecipesPage() {
               </ul>
             </section>
 
-            {/* Favorite Icon */}
-          <button
-            className="absolute top-4 right-4 p-3 rounded-full bg-white shadow-lg hover:shadow-xl text-red-500 hover:text-red-600"
-            aria-label="Add to Favorites"
-          >
-            ❤️
-          </button>
+
+            <button
+              className={`absolute top-4 right-4 p-3 rounded-full bg-white shadow-lg ${
+                isFavorited
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-red-500 hover:text-red-600"
+              }`}
+              aria-label="Add to Favorites"
+              onClick={handleFavoriteClick}
+              disabled={isFavorited} 
+            >
+              {isFavorited ? "🤍" : "❤️"}
+            </button>
           </div>
         </div>
-
-
-    </main>
-  </div>
-
+      </main>
+    </div>
   );
 }
