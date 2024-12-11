@@ -3,6 +3,7 @@
 import router from "next/router";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import image from '../../../public/images/Chicken.png'
 
 export default function RecipesPage() {
   const [recipe, setRecipe] = useState(null); 
@@ -51,7 +52,7 @@ export default function RecipesPage() {
         <div className="flex">
           <button
             className="bg-black text-white px-2 rounded hover:bg-red-600 transition duration-200 mr-10"
-            onClick={handleNavigate} 
+            onClick={handleNavigate}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -72,17 +73,15 @@ export default function RecipesPage() {
 
         <div className="relative p-4">
           {/* Image */}
-          {/* <Image
-            src={recipe.cover_image}
+          <Image
+            src={image}
             alt={recipe.name}
             className="w-full object-cover"
-            width={800}
+            width={400}
             height={400}
-          /> */}
+          />
 
-    
           <div className="max-w-5xl bg-white rounded-[50px] shadow-xl p-8 mx-auto -mt-10 relative z-10">
-        
             <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
               {recipe.name}
             </h2>
@@ -115,7 +114,6 @@ export default function RecipesPage() {
               </ul>
             </section>
 
-  
             <section className="mb-6">
               <h3 className="text-lg font-semibold text-gray-700">
                 Instructions
@@ -127,7 +125,6 @@ export default function RecipesPage() {
               </ul>
             </section>
 
-
             <button
               className={`absolute top-4 right-4 p-3 rounded-full bg-white shadow-lg ${
                 isFavorited
@@ -136,7 +133,7 @@ export default function RecipesPage() {
               }`}
               aria-label="Add to Favorites"
               onClick={handleFavoriteClick}
-              disabled={isFavorited} 
+              disabled={isFavorited}
             >
               {isFavorited ? "🤍" : "❤️"}
             </button>
