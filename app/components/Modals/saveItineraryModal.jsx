@@ -1,25 +1,33 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
-interface PopupProps {
-  onClose: () => void;
-  onItemData: any;
-  onSuccess: () => void; 
-}
 
-const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
+
+const Popup = ({ onClose, onItemData, onSuccess }) => {
   const [itinerary, setItinerary] = useState("");
 
-  console.log(onItemData)
-
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const ItineraryData = JSON.parse(localStorage.getItem("itineraryData") || "{}");
-  const user = JSON.parse(localStorage.getItem("UserData") || "{}");
+  const [user, setUser] = useState(null);
+  const [ItineraryData, setItineraryData] = useState(null);
 
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("UserData");
+      const data = localStorage.getItem("itineraryData");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
+      if (data) {
+        setItineraryData(JSON.parse(data));
+      }
+    }
+  }, []);
+
+
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
         onClose();
       }
     };
@@ -29,13 +37,12 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [onClose]);
+  }, [modalRef, onClose]);
 
 
   const handleSaveItineraryLocations = async (itinerary_id) => {
 
     const locationsIDs = onItemData.locations.map(location => location.location_id);
-    console.log(locationsIDs);
 
     const headers = {
       'Authorization': `Bearer ${user.access_token}`,
@@ -50,14 +57,12 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
         axios.post(`http://localhost:5000/api/v1/iterneries/${itinerary_id}/locations/${location_id}/${user.user_id}`, body, { headers })
           .then(response => {
             if (response.status === 201) {
-              console.log(response.data);
               onSuccess();
             }
           })
           .catch(error => {
             const { response } = error;
             if (response) {
-              console.log(response.data);
             } else {
               console.error('Error without response:', error.message);
             }
@@ -84,9 +89,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
 
     try {
 
-      console.log(data);
 
-      console.log(user.access_token)
 
       const response = await axios.post('http://localhost:5000/api/v1/itineraries', data, {
         headers: {
@@ -95,7 +98,6 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
       });
 
       if (response.status === 201) {
-        console.log(response.data.itinerary)
 
         const itinerary_id = response.data.itinerary.id
 
@@ -103,7 +105,7 @@ const Popup: React.FC<PopupProps> = ({ onClose, onItemData, onSuccess }) => {
       }
     } catch (error) {
       const { response } = error;
-      console.log(response.data)
+      console.log(response.data);
     }
 
     onClose();

@@ -24,8 +24,8 @@ function SignIn() {
 
   return (
     <div className="h-full flex items-center">
-      <div className="max-w-md mx-auto w-full px-10 py-24 rounded-[10px] bg-white">
-        <h1 className="text-[31px] font-[600] text-center">
+      <div className="max-w-md mx-auto w-full px-10 py-6 rounded-[10px] bg-white">
+        <h1 className="text-[23px] sm:text-[31px] font-[600] text-center">
           Log in to your account
         </h1>
 

@@ -1,19 +1,19 @@
 'use client'; // Ensures the component runs on the client
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import close_icon from '../../../public/images/icons/close_icon.png';
 import Image from 'next/image';
 
-const VR360Image = ({ onClose, imageURL }) => {
+const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: string }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const url = imageURL;
 
-    console.log('Image URL:', url);
+    const container = containerRef.current;
 
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -26,12 +26,12 @@ const VR360Image = ({ onClose, imageURL }) => {
     renderer.setSize(width, height);
     renderer.xr.enabled = true;
 
-    if (containerRef.current) {
-      containerRef.current.appendChild(renderer.domElement);
+    if (container) {
+      container.appendChild(renderer.domElement);
     }
 
-    if (VRButton && containerRef.current) {
-      containerRef.current.appendChild(VRButton.createButton(renderer));
+    if (VRButton && container) {
+      container.appendChild(VRButton.createButton(renderer));
     }
 
     // Add texture loading with error handling
@@ -82,11 +82,11 @@ const VR360Image = ({ onClose, imageURL }) => {
       window.removeEventListener('resize', handleResize);
       // Clean up
       renderer.dispose();
-      if (containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (container) {
+        container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [imageURL]);
 
   return (
     <div
@@ -97,7 +97,7 @@ const VR360Image = ({ onClose, imageURL }) => {
         width: '100vw',
         height: '100vh',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        zIndex: 1000, 
+        zIndex: 1000,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

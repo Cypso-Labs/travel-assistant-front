@@ -24,12 +24,12 @@ function SignUp() {
   return (
     <div className="h-full flex items-center">
       <form
-        className="max-w-md w-full mx-auto px-10 py-24 rounded-[10px] bg-white"
+        className="max-w-md w-full mx-auto px-10 py-10 rounded-[10px] bg-white"
         id={form.id}
         onSubmit={form.onSubmit}
         action={action}
       >
-        <h1 className="text-[31px] font-[600] text-center mb-12">
+        <h1 className="text-[25px] sm:text-[31px] font-[600] text-center mb-12">
           Create an account
         </h1>
 
@@ -142,7 +142,7 @@ function SignUp() {
           Already have an account ?
           <Link
             href="/account/sign-in"
-            className="ps-3 text-[#1366D9] hover:underline"
+            className="ps-3 text-sm sm:text-base text-[#1366D9] hover:underline"
           >
             Sign in
           </Link>
