@@ -43,6 +43,10 @@ const Header = () => {
     }
   };
 
+  const handleProfileClick = () => {
+      router.push("/profile");
+  };
+
   // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // const toggleSidebar = () => {
@@ -134,7 +138,10 @@ const Header = () => {
 
             {/* Profile Icon */}
             <div className="relative flex justify-between items-center">
-              <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
+              <button 
+                className="bg-gray-800 p-2 rounded-full hover:bg-gray-700"
+                onClick={handleProfileClick}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

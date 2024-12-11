@@ -1,16 +1,38 @@
 "use client";
 
-import router from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import chikenCurry from "../../../public/images/recipe01.png";
 import edit_image from "../../../public/images/icons/edit_24px.png";
 
-export default function AboutPage() {
+export default function ProfilePage() {
 
   const about = {
     name: 'Tharusha Madhushan',
   };
+
+
+    const [preferences, setPreferences] = useState([
+      "Adventure",
+      "Natural",
+      "Religious",
+      "Mountain",
+      "Wildlife",
+      "History",
+      "Beach",
+    ]);
+    const [selectedPreferences, setSelectedPreferences] = useState<string[]>([]);
+  
+    const handlePreferenceToggle = (name: string) => {
+      setSelectedPreferences((prev) =>
+        prev.includes(name) ? prev.filter((pref) => pref !== name) : [...prev, name]
+      );
+    };
+  
+    const handleAddPreference = () => {
+      setPreferences(selectedPreferences);
+    };
+  
 
   return(
 
@@ -116,6 +138,30 @@ export default function AboutPage() {
             </div>
           </div>
 
+          <div className="mt-7 max-w-md">
+            <h1 className="text-[20px] font-[600] mb-5">Edit Preferences</h1>
+
+            <div className="flex flex-wrap border-2 border-green-300">
+              {preferences.map((preference, index) => (
+                <button
+                  key={index}
+                  className={`m-1 px-3 py-2 rounded-[10px] ${
+                    selectedPreferences.includes(preference)
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 hover:bg-gray-300"
+                  }`}
+                  onClick={() => handlePreferenceToggle(preference)}
+                  >
+                    {preference}
+                  </button>
+                ))}
+                <button
+                  onClick={handleAddPreference}
+                className="px-3 font-bold">
+                + Add
+              </button>
+            </div>
+          </div>
 
         </div>
 

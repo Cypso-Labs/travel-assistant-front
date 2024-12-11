@@ -1,7 +1,7 @@
 "use client";
 
 import router from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import chikenCurry from "../../../public/images/recipe01.png";
 
