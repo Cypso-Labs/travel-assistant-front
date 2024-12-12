@@ -45,7 +45,7 @@ export default function AboutUs() {
             height: "116.89%",
             backgroundPosition: "center",
             backgroundImage:
-              "url(/assets/images/9eb92827-8cf9-4b65-a6fe-e5ace0afa12a.png)",
+              "url(/images/9eb92827-8cf9-4b65-a6fe-e5ace0afa12a.png)",
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             position: "absolute",
@@ -70,7 +70,7 @@ export default function AboutUs() {
               height: "246px",
               backgroundPosition: "center",
               backgroundImage:
-                "url(/assets/images/2ae90ad8a77640b1c7b3e8c83b2c31e5c36cf997.png)",
+                "url(/images/2ae90ad8a77640b1c7b3e8c83b2c31e5c36cf997.png)",
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               borderRadius: "10px",
@@ -85,7 +85,7 @@ export default function AboutUs() {
               height: "215px",
               backgroundPosition: "center",
               backgroundImage:
-                "url(/assets/images/fffec4ff-2208-4807-a346-a30efced972e.png)",
+                "url(/images/fffec4ff-2208-4807-a346-a30efced972e.png)",
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               borderRadius: "10px",
@@ -111,7 +111,7 @@ export default function AboutUs() {
               height: "167px",
               backgroundPosition: "center",
               backgroundImage:
-                "url(/assets/images/8e1ebda3d00e4db16cd07bb88212abd646ebe630.png)",
+                "url(/images/8e1ebda3d00e4db16cd07bb88212abd646ebe630.png)",
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               borderRadius: "10px",
@@ -126,7 +126,7 @@ export default function AboutUs() {
               height: "276px",
               backgroundPosition: "center",
               backgroundImage:
-                "url(/assets/images/2ae9471775c22030b5068b78f70b57dc981cdfb8.png)",
+                "url(/images/2ae9471775c22030b5068b78f70b57dc981cdfb8.png)",
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               borderRadius: "10px",
@@ -174,7 +174,7 @@ export default function AboutUs() {
             height: "82px",
             backgroundPosition: "center",
             backgroundImage:
-              "url(/assets/images/9e77b572-e703-4482-a311-92aabaf6a9fd.png)",
+              "url(/images/9e77b572-e703-4482-a311-92aabaf6a9fd.png)",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             position: "absolute",
@@ -210,7 +210,7 @@ export default function AboutUs() {
             height: "40.494px",
             backgroundPosition: "center",
             backgroundImage:
-              "url(/assets/images/5b28b2de-2625-4350-860e-4808a18ef432.png)",
+              "url(/images/5b28b2de-2625-4350-860e-4808a18ef432.png)",
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             position: "absolute",
@@ -270,7 +270,7 @@ export default function AboutUs() {
             height: "82.683px",
             backgroundPosition: "center",
             backgroundImage:
-              "url(/assets/images/0737e549-8796-4224-9730-124c48668a89.png)",
+              "url(/images/0737e549-8796-4224-9730-124c48668a89.png)",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             position: "absolute",
@@ -296,7 +296,7 @@ export default function AboutUs() {
               height: "40.833px",
               backgroundPosition: "center",
               backgroundImage:
-                "url(/assets/images/3525bcc4-7976-4aad-a2b1-0ef757f1941a.png)",
+                "url(/images/3525bcc4-7976-4aad-a2b1-0ef757f1941a.png)",
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
               position: "relative",
@@ -335,7 +335,7 @@ export default function AboutUs() {
             height: "6.57%",
             backgroundPosition: "center",
             backgroundImage:
-              "url(/assets/images/8364abf3-31ef-4288-a39a-f21465c50ea9.png)",
+              "url(/images/8364abf3-31ef-4288-a39a-f21465c50ea9.png)",
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             position: "absolute",
@@ -416,7 +416,7 @@ export default function AboutUs() {
             height: "6.57%",
             backgroundPosition: "center",
             backgroundImage:
-              "url(/assets/images/173bf8c4-6707-4167-86a5-94b7b3ec7b8c.png)",
+              "url(/images/173bf8c4-6707-4167-86a5-94b7b3ec7b8c.png)",
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             position: "absolute",
@@ -455,7 +455,7 @@ export default function AboutUs() {
             height: "569px",
             backgroundPosition: "center",
             backgroundImage:
-              "url(/assets/images/db74cd10-036e-4643-9fc6-90f41fff34ff.png)",
+              "url(/images/db74cd10-036e-4643-9fc6-90f41fff34ff.png)",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             position: "absolute",
