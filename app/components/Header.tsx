@@ -101,7 +101,7 @@ const Header = () => {
               Emergency
             </Link>
             <Link 
-              href="/about" 
+              href="/aboutUs" 
               className="hover:text-gray-300 text-lg"
               onClick={handleItineraryClick}
             >
