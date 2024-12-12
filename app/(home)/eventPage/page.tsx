@@ -4,6 +4,17 @@ import Header from "@/app/components/Header";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
+import { Dropdown } from "flowbite-react";
+
+interface Location {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  location_image: string;
+  description: string;
+  type: string;
+}
 
 export default function Home() {
   const [eventList, setEventlist] = useState(
@@ -45,12 +56,38 @@ export default function Home() {
       });
   }, []);
 
+  const [locations, setLocations] = useState(Array<Location>);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/v1/locations")
+      .then((response) => {
+        console.log(response);
+        setLocations(response.data.locations);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Header />
-      <main className="w-full bg-white">
-        <section className="w-full container mx-auto py-10  pt-40">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 pb-20">Events nearby you</h2>
+      <main className="bg-white">
+        <section className="container mx-auto py-10  pt-40">
+          <div className="mx-6 flex justify-between">
+            <h2 className="text-5xl font-bold mb-6 pb-20">Events nearby you</h2>
+
+            <div>
+              <div>
+                <Dropdown label="Dropdown button on" dismissOnClick={false}>
+                  {locations.map((location, index) => (
+                    <Dropdown.Item key={index}>{location.name}</Dropdown.Item>
+                  ))}
+                </Dropdown>
+              </div>
+            </div>
+          </div>
 
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 lg:gap-20 2xl:gap-32">
             {/* Card 1 */}
