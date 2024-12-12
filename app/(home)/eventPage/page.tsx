@@ -31,7 +31,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/events")
+      .get("http://localhost:5000/api/v1/events")
       .then(
         (
           response: AxiosResponse<{
@@ -89,13 +89,13 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-40">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 lg:gap-20 2xl:gap-32">
             {/* Card 1 */}
             {eventList.map((event, index) => {
               return (
                 <div
                   key={index}
-                  className="flex w-[380px] h-[350px] bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden items-start"
+                  className="flex w-[280px] h-auto sm:w-[300px] md:w-[320px] lg:w-[350px] 2xl:w-[380px] bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden items-start mx-auto"
                 >
                   {/* Content Section */}
                   <div className="w-2/3 p-4">
@@ -108,7 +108,7 @@ export default function Home() {
                     </p>
 
                     <a
-                      href="https://en.wikipedia.org/wiki/Poson"
+                      href={`eventPage/${event.id}`}
                       className="block mt-4 bg-green-500 text-white text-center py-2 px-4 rounded-md hover:bg-green-600"
                     >
                       Learn More...
@@ -120,6 +120,8 @@ export default function Home() {
                     <Image
                       src={event.cover_image}
                       alt="Event Image"
+                      width={380}  // Set width here
+                      height={350}
                       className="w-full h-full object-cover"
                     />
                   </div>
