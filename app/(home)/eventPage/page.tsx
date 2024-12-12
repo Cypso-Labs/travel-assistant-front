@@ -22,14 +22,18 @@ const fetchEventsByLocationId = (
 };
 
 const fetchEventsByDate = (
-  dateValue: Date,
+  dateValue: Date | null,
   setEvenList: React.Dispatch<React.SetStateAction<Event[]>>
 ) => {
-  const year = dateValue.getFullYear();
-  const month = String(dateValue.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const day = String(dateValue.getDate()).padStart(2, '0');
+  const safeDate = dateValue ?? new Date();
+
+  const year = safeDate.getFullYear();
+  const month = String(safeDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(safeDate.getDate()).padStart(2, '0');
   
   const formattedDate = `${year}-${month}-${day}`;
+  console.log(formattedDate);
+  
 
   axios
     .get(`http://localhost:5000/api/v1/events/by_date?date=${formattedDate}`)
