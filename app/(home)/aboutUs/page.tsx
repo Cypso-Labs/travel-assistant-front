@@ -234,7 +234,7 @@ export default function AboutUs() {
             position: "absolute",
             top: "536px",
             left: "156px",
-            textAlign: "justified",
+            // textAlign: "justified",
             zIndex: "8",
           }}
         >
@@ -319,13 +319,13 @@ export default function AboutUs() {
             position: "absolute",
             top: "675px",
             left: "249px",
-            textAlign: "justified",
+            // textAlign: "justified",
             whiteSpace: "nowrap",
             zIndex: "11",
           }}
         >
           Use our AI feature to learn about the landmarks around you. Whether
-          you're visiting a historical site or wandering through nature, our AI
+          youre visiting a historical site or wandering through nature, our AI
           system provides real-time information about the places you encounter,
           enhancing your understanding and experience.
         </span>
@@ -379,13 +379,13 @@ export default function AboutUs() {
             position: "absolute",
             top: "798px",
             left: "192px",
-            textAlign: "justified",
+            // textAlign: "justified",
             zIndex: "20",
           }}
         >
           Discover the authentic flavors of Sri Lanka through our curated
           collection of recipes. From spicy curries to sweet delicacies, each
-          dish is crafted to bring the island's vibrant culinary heritage to
+          dish is crafted to bring the islands vibrant culinary heritage to
           your table. Explore step-by-step guides and cultural insights to
           create unforgettable meals inspired by Sri Lanka’s rich traditions
         </span>
@@ -439,7 +439,7 @@ export default function AboutUs() {
             position: "absolute",
             top: "925px",
             left: "158px",
-            textAlign: "justified",
+            // textAlign: "justified",
             zIndex: "25",
           }}
         >
@@ -479,14 +479,14 @@ export default function AboutUs() {
             position: "absolute",
             top: "1053px",
             left: "24px",
-            textAlign: "justified",
+            // textAlign: "justified",
             zIndex: "26",
           }}
         >
           Our app is available on both mobile and web platforms, so you can plan
           your trip anytime, anywhere. We are committed to helping you explore
           Sri Lanka in a way that is seamless, enjoyable, and culturally
-          enriching. Whether you're planning a short getaway or an extended
+          enriching. Whether youre planning a short getaway or an extended
           vacation, we’re here to make sure your travel experience is one to
           remember.
         </span>
@@ -672,11 +672,11 @@ export default function AboutUs() {
         <br /> Welcome to your ultimate travel companion for discovering the
         wonders of Sri Lanka! Our mission is to make your journey smooth,
         exciting, and culturally enriching by providing all the tools you need
-        to plan an unforgettable trip. Whether you're a first-time visitor or a
+        to plan an unforgettable trip. Whether youre a first-time visitor or a
         seasoned traveler, our app ensures that your experience is personalized,
         fun, and informative.
         <br />
-        We understand that planning a trip can be overwhelming, so we've created
+        We understand that planning a trip can be overwhelming, so weve created
         an intuitive travel assistant that simplifies the process and offers
         tailored recommendations to enhance your journey. From budgeting tips to
         discovering local flavors, immersive VR experiences, and AI-guided
