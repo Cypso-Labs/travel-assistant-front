@@ -188,11 +188,10 @@ export default function RecipesPage() {
           <Image
             src={recipe.cover_image}
             alt={recipe.name}
-            className="w-full object-cover"
-            width={800}
-            height={400}
+            className="w-50 h-50 object-cover rounded-lg shadow-lg"
+            width={700}
+            height={600}
           />
-
           <div className="max-w-5xl bg-white rounded-[50px] shadow-xl p-8 mx-auto -mt-10 relative z-10">
             <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
               {recipe.name}
