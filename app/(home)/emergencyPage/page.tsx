@@ -1,27 +1,59 @@
 "use client"; // Add this line
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 
 export default function HelpPage() {
   const [locationOn, setLocationOn] = useState(false);
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
+
+  // Fetch locations from the backend
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/v1/locations");
+        setLocations(response.data);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 pt-36">
-      {/* Header Section */}
-      <header className="flex justify-between items-center pb-6">
+     {/* Header Section */}
+     <header className="flex justify-between items-center pb-6">
         <h1 className="text-2xl font-bold">Help When You Need It Most</h1>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
           <span className="text-gray-600 text-sm">Location</span>
           <div className="relative w-full sm:w-auto">
-            <select className="w-full sm:w-40 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring focus:ring-green-300 text-sm">
+            <select
+              className="w-full sm:w-40 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring focus:ring-green-300 text-sm"
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+            >
               <option value="">Select Location</option>
-              <option value="location1">Location 1</option>
-              <option value="location2">Location 2</option>
-              <option value="location3">Location 3</option>
+              {locations.map((location) => (
+                <option key={location.id} value={location.name}>
+                  {location.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
       </header>
+        {/* Display Selected Location */}
+        {selectedLocation && (
+        <div className="mt-4">
+          <p className="text-gray-700">Selected Location: {selectedLocation}</p>
+        </div>
+      )}
+
+
 
       {/* Accordion Section */}
       <div className="mt-8 space-y-4">
