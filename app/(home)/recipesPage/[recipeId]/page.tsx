@@ -23,6 +23,7 @@ export default function RecipesPage() {
   const router = useRouter();
 
   const [user, setUser] = useState<{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [x: string]: any; id: number; access_token: string 
 } | null>(
     null
