@@ -26,7 +26,6 @@ interface EmergencyContact {
 
 export default function HelpPage() {
 
-  const [locationOn, setLocationOn] = useState(false);
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [emergencyContacts, setEmergencyContacts] = useState<Record<string, EmergencyContact[]>>({});
@@ -51,7 +50,7 @@ export default function HelpPage() {
   const fetchEmergencyContacts = async (locationId: number | null) => {
     if (!locationId) return;
     try {
-      const response = await axios.get(`http://localhost:5000/api/v1/locations/${locationId}/emergency_contacts`);
+      const response = await axios.get(http://localhost:5000/api/v1/locations/${locationId}/emergency_contacts);
       console.log(response.data.emergency_contacts)
       const contacts: EmergencyContact[] = response.data.emergency_contacts;
 
@@ -136,7 +135,7 @@ export default function HelpPage() {
                     ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
-                        <a href={`tel:${contact.phone}`} className="text-blue-500">
+                        <a href={tel:${contact.phone}} className="text-blue-500">
                           {contact.phone}
                         </a>
                       </li>
@@ -151,7 +150,7 @@ export default function HelpPage() {
                     ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
-                        <a href={`tel:${contact.phone}`} className="text-blue-500">
+                        <a href={tel:${contact.phone}} className="text-blue-500">
                           {contact.phone}
                         </a>
                       </li>
@@ -166,7 +165,7 @@ export default function HelpPage() {
                     ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
-                        <a href={`tel:${contact.phone}`} className="text-blue-500">
+                        <a href={tel:${contact.phone}} className="text-blue-500">
                           {contact.phone}
                         </a>
                       </li>
@@ -188,35 +187,34 @@ export default function HelpPage() {
             Police Services
             <span className="text-gray-500">▼</span>
           </summary>
-          <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500 h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
-            <ul className="space-y-4">
-              <li>
-                <strong>Police Station Nearby you :</strong>
-                <ul className="list-disc ml-6">
-                  <li>
-                    Station 01 :{" "}
-                    <a href="tel:+94xxxxxxxx" className="text-blue-500">
-                      +94xx xxx xxxx
-                    </a>
-                  </li>
-                  <li>
-                    Hospital 02 :{" "}
-                    <a href="tel:+94xxxxxxxx" className="text-blue-500">
-                      +94xx xxx xxxx
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <strong>
-                  Clinics Nearby You:{" "}
-                  <a href="tel:+94xxxxxxxx" className="text-blue-500">
-                    +94xx xxx xxxx
-                  </a>
-                </strong>
-              </li>
-            </ul>
-          </div>
+          {loadingContacts ? (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500">
+              Loading emergency contacts...
+            </div>
+          ) : emergencyContacts.Police_Services ? (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500 h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
+              <ul className="space-y-4">
+                <li>
+                  <strong>Police Station Nearby you :</strong>
+                  <ul className="list-disc ml-6">
+                    {emergencyContacts.Police_Services.map((contact) => (
+                      <li key={contact.id}>
+                        {contact.name}:{" "}
+                        <a href={tel:${contact.phone}} className="text-blue-500">
+                          {contact.phone}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+
+              </ul>
+            </div>
+          ) : (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500">
+              No emergency contacts available.
+            </div>
+          )}
         </details>
 
         {/* Accordion 3 */}
@@ -225,29 +223,35 @@ export default function HelpPage() {
             Transport Assistance
             <span className="text-gray-500">▼</span>
           </summary>
-          <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500 h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
-            <ul className="space-y-4">
-              <li>
-                <strong>Roadside Assistance :</strong>
-                <ul className="list-disc ml-6">
-                  <li>
-                    Mechanical Garage 01 :{" "}
-                    <a href="tel:+94xxxxxxxx" className="text-blue-500">
-                      +94xx xxx xxxx
-                    </a>
-                  </li>
-                  <li>
-                    Mechanical Garage 02 :{" "}
-                    <a href="tel:+94xxxxxxxx" className="text-blue-500">
-                      +94xx xxx xxxx
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+          {loadingContacts ? (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500">
+              Loading emergency contacts...
+            </div>
+          ) : emergencyContacts.Transport_Assistance ? (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500 h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
+              <ul className="space-y-4">
+                <li>
+                  <strong>Roadside Assistance :</strong>
+                  <ul className="list-disc ml-6">
+                    {emergencyContacts.Transport_Assistance.map((contact) => (
+                      <li key={contact.id}>
+                        {contact.name}:{" "}
+                        <a href={tel:${contact.phone}} className="text-blue-500">
+                          {contact.phone}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500">
+              No emergency contacts available.
+            </div>
+          )}
         </details>
       </div>
-    </div>
-  );
+    </div>
+  );
 }
