@@ -4,14 +4,39 @@ import Header from "@/app/components/Header";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
-import { Dropdown } from "flowbite-react";
+import { Datepicker, Dropdown } from "flowbite-react";
 
-const fetchEventByLocationId = (
+const fetchEventsByLocationId = (
   locationId: number,
   setEvenList: React.Dispatch<React.SetStateAction<Event[]>>
 ) => {
   axios
     .get(`http://localhost:8080/api/v1/events/location/${locationId}`)
+    .then((response) => {
+      console.log(response);
+      setEvenList(response.data.events);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const fetchEventsByDate = (
+  dateValue: Date | null,
+  setEvenList: React.Dispatch<React.SetStateAction<Event[]>>
+) => {
+  const safeDate = dateValue ?? new Date();
+
+  const year = safeDate.getFullYear();
+  const month = String(safeDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(safeDate.getDate()).padStart(2, '0');
+  
+  const formattedDate = `${year}-${month}-${day}`;
+  console.log(formattedDate);
+  
+
+  axios
+    .get(`http://localhost:5000/api/v1/events/by_date?date=${formattedDate}`)
     .then((response) => {
       console.log(response);
       setEvenList(response.data.events);
@@ -89,7 +114,13 @@ export default function Home() {
               </h2>
             </div>
 
-            <div>
+            <div className="flex gap-5">
+              <div>
+                <Datepicker
+                  onChange={(e) => fetchEventsByDate(e, setEventlist)}
+                />
+              </div>
+
               <div>
                 <Dropdown
                   label="Dropdown button on"
@@ -100,7 +131,7 @@ export default function Home() {
                     <Dropdown.Item
                       key={index}
                       onClick={() => {
-                        fetchEventByLocationId(location.id, setEventlist);
+                        fetchEventsByLocationId(location.id, setEventlist);
                       }}
                     >
                       {location.name}
