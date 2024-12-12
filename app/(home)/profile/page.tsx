@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import edit_image from "../../../public/images/icons/edit_24px.png";
 import axios, { AxiosError } from "axios";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
 export default function ProfilePage() {
+  const router = useRouter();
     
   const [userData, setUserData] = useState({
     firstName: "",
