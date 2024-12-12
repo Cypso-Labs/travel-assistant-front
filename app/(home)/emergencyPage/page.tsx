@@ -50,7 +50,7 @@ export default function HelpPage() {
   const fetchEmergencyContacts = async (locationId: number | null) => {
     if (!locationId) return;
     try {
-      const response = await axios.get(http://localhost:5000/api/v1/locations/${locationId}/emergency_contacts);
+      const response = await axios.get("http://localhost:5000/api/v1/locations/" + locationId + "/emergency_contacts");
       console.log(response.data.emergency_contacts)
       const contacts: EmergencyContact[] = response.data.emergency_contacts;
 
