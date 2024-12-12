@@ -43,6 +43,10 @@ const Header = () => {
     }
   };
 
+  const handleProfileClick = () => {
+      router.push("/profile");
+  };
+
   // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // const toggleSidebar = () => {
@@ -87,10 +91,10 @@ const Header = () => {
             >
               View Itineraries
             </Link>
-            <Link href="/events" className="hover:text-gray-300 text-lg">
+            <Link href="/eventPage" className="hover:text-gray-300 text-lg">
               Events
             </Link>
-            <Link href="/recipes" className="hover:text-gray-300 text-lg">
+            <Link href="/recipesPage" className="hover:text-gray-300 text-lg">
               Recipes
             </Link>
             <Link href="/emergency" className="hover:text-gray-300 text-lg">
@@ -126,7 +130,10 @@ const Header = () => {
 
             {/* Profile Icon */}
             <div className="relative flex justify-between items-center">
-              <button className="bg-gray-800 p-2 rounded-full hover:bg-gray-700">
+              <button 
+                className="bg-gray-800 p-2 rounded-full hover:bg-gray-700"
+                onClick={handleProfileClick}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -205,13 +212,21 @@ const Header = () => {
           <Link href="/events" className="block hover:text-gray-300">
             Events
           </Link>
-          <Link href="/recipes" className="block hover:text-gray-300">
+          <Link 
+            href="/recipes" 
+            className="block hover:text-gray-300"
+            onClick={handleItineraryClick}
+          >
             Recipes
           </Link>
           <Link href="/emergency" className="block hover:text-gray-300">
             Emergency
           </Link>
-          <Link href="/about" className="block hover:text-gray-300">
+          <Link
+            href="/about" 
+            className="block hover:text-gray-300"
+            onClick={handleItineraryClick}
+          >
             About Us
           </Link>
         </nav>
