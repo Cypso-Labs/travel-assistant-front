@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 interface Recipe {
   name: string;
@@ -85,8 +86,18 @@ export default function RecipesPage() {
   // Handle save/unsave logic
   const handleFavoriteClick = async () => {
     if (!user) {
-      alert("Please log in to save recipes.");
-      router.push("/account/sign-in");
+      Swal.fire({
+        title: "Please log in",
+        text: "To save recipes, you need to log in.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Log In",
+        cancelButtonText: "Discard",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.push("/account/sign-in");
+        }
+      });
       return;
     }
 
@@ -104,7 +115,7 @@ export default function RecipesPage() {
         );
       } else {
         // Save the recipe
-        await fetch(
+        const response = await fetch(
           `http://localhost:5000/api/v1/users/${user.user_id}/recipes/${recipeId}`,
           {
             method: "POST",
@@ -113,10 +124,26 @@ export default function RecipesPage() {
             },
           }
         );
+
+        if (response.status === 422||response.status === 401) {
+          Swal.fire({
+            title: "Session Expired",
+            text: "Your session has expired. Please log in again.",
+            icon: "error",
+            confirmButtonText: "Log In",
+          }).then(() => {
+            router.push("/account/sign-in");
+          });
+          return;
+        }
       }
       setIsFavorited(!isFavorited);
     } catch (error) {
-      alert("An error occurred while updating favorites.");
+      Swal.fire({
+        title: "Error",
+        text: "An error occurred while updating favorites.",
+        icon: "error",
+      });
     }
   };
 
