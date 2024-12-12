@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
+// Define types for the recipe data
 interface Recipe {
   name: string;
   cover_image: string;
@@ -11,23 +12,18 @@ interface Recipe {
   cultural_background: string;
   ingredients: string[];
   instructions: string[];
+  id: number;
 }
 
 export default function RecipesPage() {
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [recipe, setRecipe] = useState<Recipe | null>(null); // Specify Recipe type or null
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); // Specify string or null for error
   const [isFavorited, setIsFavorited] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
   const recipeId = usePathname().split("/").pop();
   const router = useRouter();
 
-  const [user, setUser] = useState<{
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [x: string]: any; id: number; access_token: string 
-} | null>(
-    null
-  );
+  const [user, setUser] = useState<{ [key: string]: unknown }>({});
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -37,6 +33,78 @@ export default function RecipesPage() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/v1/users/${user.user_id}/recipes`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch favorite recipes");
+        }
+
+        const data = await response.json();
+        const favoriteRecipeIds = data.recipes.map((r: { id: number }) => r.id);
+        setIsFavorited(favoriteRecipeIds.includes(Number(recipeId)));
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
+      }
+    };
+
+    if (user.user_id && user.access_token) {
+      fetchFavoriteStatus();
+    }
+  }, [user, recipeId]);
+
+  const handleFavoriteClick = async () => {
+    try {
+      setIsFavorited(true);
+
+      await fetch(
+        `http://localhost:5000/api/v1/users/${user.user_id}/recipes/${recipeId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error adding to favorites", error);
+    }
+  };
+
+  const handleUnfavoriteClick = async () => {
+    try {
+      setIsFavorited(false);
+
+      await fetch(
+        `http://localhost:5000/api/v1/users/${user.user_id}/recipes/${recipeId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error removing from favorites", error);
+    }
+  };
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -49,7 +117,6 @@ export default function RecipesPage() {
         }
         const data = await response.json();
         setRecipe(data.recipe);
-        setIsFavorited(data.recipe.isFavorited || false); // Adjust based on API response
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -62,42 +129,7 @@ export default function RecipesPage() {
     };
 
     fetchRecipe();
-  }, []);
-
-  const handleFavoriteClick = async () => {
-    if (!user || !recipeId) return;
-
-    setIsProcessing(true);
-    try {
-      const headers = {
-        Authorization: `Bearer ${user.access_token}`,
-      };
-
-      if (isFavorited) {
-        await fetch(
-          `http://localhost:5000/api/v1/users/${user.user_id}/recipes/${recipeId}`,
-          {
-            headers,
-            method: "DELETE",
-          }
-        );
-      } else {
-        await fetch(
-          `http://localhost:5000/api/v1/users/${user.user_id}/recipes/${recipeId}`,
-          {
-            method: "POST",
-            headers,
-          }
-        );
-      }
-
-      setIsFavorited(!isFavorited);
-    } catch (err) {
-      console.error("Failed to update favorite status:", err);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  }, [recipeId]);
 
   const handleNavigate = () => {
     router.push("/recipesPage");
@@ -141,6 +173,7 @@ export default function RecipesPage() {
         </div>
 
         <div className="relative p-4">
+          {/* Image */}
           <Image
             src={recipe.cover_image}
             alt={recipe.name}
@@ -154,6 +187,7 @@ export default function RecipesPage() {
               {recipe.name}
             </h2>
 
+            {/* Description */}
             <section className="mb-6">
               <h3 className="text-lg font-semibold text-gray-700">
                 Description
@@ -161,6 +195,7 @@ export default function RecipesPage() {
               <p className="text-gray-600 mt-2">{recipe.description}</p>
             </section>
 
+            {/* Cultural Background */}
             <section className="mb-6">
               <h3 className="text-lg font-semibold text-gray-700">
                 Cultural Background
@@ -168,6 +203,7 @@ export default function RecipesPage() {
               <p className="text-gray-600 mt-2">{recipe.cultural_background}</p>
             </section>
 
+            {/* Ingredients */}
             <section className="mb-6">
               <h3 className="text-lg font-semibold text-gray-700">
                 Ingredients
@@ -179,6 +215,7 @@ export default function RecipesPage() {
               </ul>
             </section>
 
+            {/* Instructions */}
             <section className="mb-6">
               <h3 className="text-lg font-semibold text-gray-700">
                 Instructions
@@ -194,11 +231,14 @@ export default function RecipesPage() {
               className={`absolute top-4 right-4 p-3 rounded-full bg-white shadow-lg ${
                 isFavorited
                   ? "text-red-500 hover:text-red-600"
-                  : "text-gray-400 hover:text-red-500"
+                  : "text-gray-400 hover:text-gray-500"
               }`}
-              aria-label="Add to Favorites"
-              onClick={handleFavoriteClick}
-              disabled={isProcessing}
+              aria-label={
+                isFavorited ? "Remove from Favorites" : "Add to Favorites"
+              }
+              onClick={
+                isFavorited ? handleUnfavoriteClick : handleFavoriteClick
+              }
             >
               {isFavorited ? "❤️" : "🤍"}
             </button>
