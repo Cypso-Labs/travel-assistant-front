@@ -197,6 +197,7 @@ export default function ProfilePage() {
       birth_of_date: userData.dateOfBirth,
       contact_number: userData.contact,
       profile_image: uploadedImageUrl,
+      password: userData.password
     };
   
     try {
@@ -223,13 +224,23 @@ export default function ProfilePage() {
         });
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
-      Swal.fire({
-        title: "Error",
-        text: "Failed to update profile. Please try again later.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      const err = error as AxiosError;
+              if (err.response && (err.response.status === 401 || err.response.status === 422)) {
+                Swal.fire({
+                  title: "Token Error",
+                  text: "Please login to continue.",
+                  icon: "warning",
+                  showCancelButton: false,
+                  confirmButtonText: "Go to Login",
+                  customClass: {
+                    confirmButton: "swal-login-button"
+                  }
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    router.push("/account/sign-in");
+                  }
+                });
+              }
     }
   };
 
