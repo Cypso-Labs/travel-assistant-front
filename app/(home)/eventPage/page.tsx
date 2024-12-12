@@ -6,6 +6,21 @@ import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { Dropdown } from "flowbite-react";
 
+const fetchEventByLocationId = (
+  locationId: number,
+  setEvenList: React.Dispatch<React.SetStateAction<Event[]>>
+) => {
+  axios
+    .get(`http://localhost:8080/api/v1/events/location/${locationId}`)
+    .then((response) => {
+      console.log(response);
+      setEvenList(response.data.events);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 interface Location {
   id: number;
   name: string;
@@ -16,18 +31,18 @@ interface Location {
   type: string;
 }
 
+interface Event {
+  cover_image: string;
+  description: string;
+  end_date: Date;
+  id: number;
+  name: string;
+  start_date: Date;
+  type: string;
+}
+
 export default function Home() {
-  const [eventList, setEventlist] = useState(
-    Array<{
-      cover_image: string;
-      description: string;
-      end_date: Date;
-      id: number;
-      name: string;
-      start_date: Date;
-      type: string;
-    }>
-  );
+  const [eventList, setEventlist] = useState(Array<Event>);
 
   useEffect(() => {
     axios
@@ -36,15 +51,7 @@ export default function Home() {
         (
           response: AxiosResponse<{
             code: number;
-            events: Array<{
-              cover_image: string;
-              description: string;
-              end_date: Date;
-              id: number;
-              name: string;
-              start_date: Date;
-              type: string;
-            }>;
+            events: Array<Event>;
           }>
         ) => {
           console.log(response);
@@ -76,13 +83,28 @@ export default function Home() {
       <main className="bg-white">
         <section className="container mx-auto py-10  pt-40">
           <div className="mx-6 flex justify-between">
-            <h2 className="text-5xl font-bold mb-6 pb-20">Events nearby you</h2>
+            <div>
+              <h2 className="text-5xl font-bold mb-6 pb-20">
+                Events nearby you
+              </h2>
+            </div>
 
             <div>
               <div>
-                <Dropdown label="Dropdown button on" dismissOnClick={false}>
+                <Dropdown
+                  label="Dropdown button on"
+                  dismissOnClick={false}
+                  className="h-52 overflow-y-scroll"
+                >
                   {locations.map((location, index) => (
-                    <Dropdown.Item key={index}>{location.name}</Dropdown.Item>
+                    <Dropdown.Item
+                      key={index}
+                      onClick={() => {
+                        fetchEventByLocationId(location.id, setEventlist);
+                      }}
+                    >
+                      {location.name}
+                    </Dropdown.Item>
                   ))}
                 </Dropdown>
               </div>
@@ -120,7 +142,7 @@ export default function Home() {
                     <Image
                       src={event.cover_image}
                       alt="Event Image"
-                      width={380}  // Set width here
+                      width={380} // Set width here
                       height={350}
                       className="w-full h-full object-cover"
                     />
