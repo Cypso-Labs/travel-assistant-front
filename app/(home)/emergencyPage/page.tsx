@@ -30,7 +30,7 @@ export default function HelpPage() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [emergencyContacts, setEmergencyContacts] = useState<Record<string, EmergencyContact[]>>({});
-
+  const [loadingContacts, setLoadingContacts] = useState(false);
 
   // Fetch locations from the backend
   useEffect(() => {
@@ -68,6 +68,8 @@ export default function HelpPage() {
       setEmergencyContacts(groupedContacts);
     } catch (error) {
       console.error("Error fetching emergency contacts:", error);
+    } finally {
+      setLoadingContacts(false); // End loading
     }
   };
 
@@ -119,14 +121,19 @@ export default function HelpPage() {
             Medical Assistance
             <span className="text-gray-500">▼</span>
           </summary>
-          <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500 h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
-            <ul className="space-y-4">
-              <li>
-                <strong>Hospital Nearby You:</strong>
-                <ul className="list-disc ml-6">
-                  {emergencyContacts.Medical_Emergency
-                    .filter((contact) => contact.sub_type === "Hospital")
-                    .map((contact) => (
+          {loadingContacts ? (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500">
+              Loading emergency contacts...
+            </div>
+          ) : emergencyContacts.Medical_Emergency ? (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500 h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
+              <ul className="space-y-4">
+                <li>
+                  <strong>Hospital Nearby You:</strong>
+                  <ul className="list-disc ml-6">
+                    {emergencyContacts.Medical_Emergency.filter(
+                      (contact) => contact.sub_type === "Hospital"
+                    ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
                         <a href={`tel:${contact.phone}`} className="text-blue-500">
@@ -134,15 +141,14 @@ export default function HelpPage() {
                         </a>
                       </li>
                     ))}
-
-                </ul>
-              </li>
-              <li>
-                <strong>Clinics Nearby You:</strong>
-                <ul className="list-disc ml-6">
-                  {emergencyContacts.Medical_Emergency
-                    .filter((contact) => contact.sub_type === "Clinic")
-                    .map((contact) => (
+                  </ul>
+                </li>
+                <li>
+                  <strong>Clinics Nearby You:</strong>
+                  <ul className="list-disc ml-6">
+                    {emergencyContacts.Medical_Emergency.filter(
+                      (contact) => contact.sub_type === "Clinic"
+                    ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
                         <a href={`tel:${contact.phone}`} className="text-blue-500">
@@ -150,14 +156,14 @@ export default function HelpPage() {
                         </a>
                       </li>
                     ))}
-                </ul>
-              </li>
-              <li>
-                <strong>Pharmacies Nearby You:</strong>
-                <ul className="list-disc ml-6">
-                  {emergencyContacts.Medical_Emergency
-                    .filter((contact) => contact.sub_type === "Pharmacy")
-                    .map((contact) => (
+                  </ul>
+                </li>
+                <li>
+                  <strong>Pharmacies Nearby You:</strong>
+                  <ul className="list-disc ml-6">
+                    {emergencyContacts.Medical_Emergency.filter(
+                      (contact) => contact.sub_type === "Pharmacy"
+                    ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
                         <a href={`tel:${contact.phone}`} className="text-blue-500">
@@ -165,10 +171,15 @@ export default function HelpPage() {
                         </a>
                       </li>
                     ))}
-                </ul>
-              </li>
-            </ul>
-          </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500">
+              No emergency contacts available.
+            </div>
+          )}
         </details>
 
         {/* Accordion 2 */}
