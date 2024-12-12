@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-
 interface Location {
   id: number;
   name: string;
@@ -22,21 +21,21 @@ interface EmergencyContact {
   type: string;     // e.g., "Medical_Emergency", "Police_Services", etc.
 }
 
-
-
 export default function HelpPage() {
-
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [emergencyContacts, setEmergencyContacts] = useState<Record<string, EmergencyContact[]>>({});
   const [loadingContacts, setLoadingContacts] = useState(false);
+
+  // Cache to store emergency contacts for locations
+  const contactCache = new Map<number, Record<string, EmergencyContact[]>>();
 
   // Fetch locations from the backend
   useEffect(() => {
     const fetchLocations = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/v1/locations");
-        console.log(response.data)
+        console.log(response.data);
         setLocations(response.data.locations);
       } catch (error) {
         console.error("Error fetching locations:", error);
@@ -44,31 +43,35 @@ export default function HelpPage() {
     };
 
     fetchLocations();
-
   }, []);
 
   const fetchEmergencyContacts = async (locationId: number | null) => {
     if (!locationId) return;
+
+    // Check cache
+    if (contactCache.has(locationId)) {
+      setEmergencyContacts(contactCache.get(locationId) || {});
+      return;
+    }
+
+    setLoadingContacts(true);
     try {
-      const response = await axios.get("http://localhost:5000/api/v1/locations/" + locationId + "/emergency_contacts");
-      console.log(response.data.emergency_contacts)
+      const response = await axios.get(`http://localhost:5000/api/v1/locations/${locationId}/emergency_contacts`);
       const contacts: EmergencyContact[] = response.data.emergency_contacts;
 
       // Group contacts by type (e.g., Medical_Emergency, Police_Services)
       const groupedContacts = contacts.reduce((acc: Record<string, EmergencyContact[]>, contact) => {
-        if (!acc[contact.type]) acc[contact.type] = [];
+        acc[contact.type] = acc[contact.type] || [];
         acc[contact.type].push(contact);
         return acc;
       }, {});
 
-
-      console.log(groupedContacts);
-
+      contactCache.set(locationId, groupedContacts);
       setEmergencyContacts(groupedContacts);
     } catch (error) {
       console.error("Error fetching emergency contacts:", error);
     } finally {
-      setLoadingContacts(false); // End loading
+      setLoadingContacts(false);
     }
   };
 
@@ -103,6 +106,7 @@ export default function HelpPage() {
           </div>
         </div>
       </header>
+
       {/* Display Selected Location */}
       {selectedLocation && (
         <div className="mt-4">
@@ -110,11 +114,9 @@ export default function HelpPage() {
         </div>
       )}
 
-
-
       {/* Accordion Section */}
       <div className="mt-8 space-y-4">
-        {/* Accordion 1 */}
+        {/* Medical Assistance Accordion */}
         <details className="border rounded-md overflow-hidden shadow">
           <summary className="bg-white px-6 py-4 font-semibold cursor-pointer flex justify-between items-center">
             Medical Assistance
@@ -135,7 +137,7 @@ export default function HelpPage() {
                     ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
-                        <a href={tel:${contact.phone}} className="text-blue-500">
+                        <a href={`tel:${contact.phone}`} className="text-blue-500">
                           {contact.phone}
                         </a>
                       </li>
@@ -150,7 +152,7 @@ export default function HelpPage() {
                     ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
-                        <a href={tel:${contact.phone}} className="text-blue-500">
+                        <a href={`tel:${contact.phone}`} className="text-blue-500">
                           {contact.phone}
                         </a>
                       </li>
@@ -165,7 +167,7 @@ export default function HelpPage() {
                     ).map((contact) => (
                       <li key={contact.id}>
                         {contact.name}:{" "}
-                        <a href={tel:${contact.phone}} className="text-blue-500">
+                        <a href={`tel:${contact.phone}`} className="text-blue-500">
                           {contact.phone}
                         </a>
                       </li>
@@ -181,7 +183,7 @@ export default function HelpPage() {
           )}
         </details>
 
-        {/* Accordion 2 */}
+        {/* Police Services Accordion */}
         <details className="border rounded-md overflow-hidden shadow">
           <summary className="bg-white px-6 py-4 font-semibold cursor-pointer flex justify-between items-center">
             Police Services
@@ -194,20 +196,14 @@ export default function HelpPage() {
           ) : emergencyContacts.Police_Services ? (
             <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500 h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
               <ul className="space-y-4">
-                <li>
-                  <strong>Police Station Nearby you :</strong>
-                  <ul className="list-disc ml-6">
-                    {emergencyContacts.Police_Services.map((contact) => (
-                      <li key={contact.id}>
-                        {contact.name}:{" "}
-                        <a href={tel:${contact.phone}} className="text-blue-500">
-                          {contact.phone}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-
+                {emergencyContacts.Police_Services.map((contact) => (
+                  <li key={contact.id}>
+                    {contact.name}:{" "}
+                    <a href={`tel:${contact.phone}`} className="text-blue-500">
+                      {contact.phone}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           ) : (
@@ -217,7 +213,7 @@ export default function HelpPage() {
           )}
         </details>
 
-        {/* Accordion 3 */}
+        {/* Transport Assistance Accordion */}
         <details className="border rounded-md overflow-hidden shadow">
           <summary className="bg-white px-6 py-4 font-semibold cursor-pointer flex justify-between items-center">
             Transport Assistance
@@ -230,19 +226,14 @@ export default function HelpPage() {
           ) : emergencyContacts.Transport_Assistance ? (
             <div className="bg-gray-50 px-6 py-4 border-t-2 border-green-500 h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
               <ul className="space-y-4">
-                <li>
-                  <strong>Roadside Assistance :</strong>
-                  <ul className="list-disc ml-6">
-                    {emergencyContacts.Transport_Assistance.map((contact) => (
-                      <li key={contact.id}>
-                        {contact.name}:{" "}
-                        <a href={tel:${contact.phone}} className="text-blue-500">
-                          {contact.phone}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+                {emergencyContacts.Transport_Assistance.map((contact) => (
+                  <li key={contact.id}>
+                    {contact.name}:{" "}
+                    <a href={`tel:${contact.phone}`} className="text-blue-500">
+                      {contact.phone}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           ) : (
@@ -252,6 +243,6 @@ export default function HelpPage() {
           )}
         </details>
       </div>
-    </div>
-  );
+    </div>
+  );
 }
