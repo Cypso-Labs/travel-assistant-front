@@ -3,7 +3,7 @@
 import Header from "@/app/components/Header";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { Datepicker, Dropdown } from "flowbite-react";
 
 const fetchEventsByLocationId = (
@@ -13,20 +13,24 @@ const fetchEventsByLocationId = (
 ) => {
   setLocationPicked(true);
   axios
-    .get(`http://localhost:8080/api/v1/events/location/${locationId}`)
+    .get(`http://localhost:5000/api/v1/events/location/${locationId}`)
     .then((response) => {
       console.log(response);
       setEvenList(response.data.events);
     })
     .catch((error) => {
-      console.log(error);
+      const err = error as AxiosError;
+      if (err.response && (err.response.status === 404)) {
+        setEvenList([]);
+      }
     });
 };
 
 const fetchEventsByDate = (
   dateValue: Date | null,
   setEvenList: React.Dispatch<React.SetStateAction<Event[]>>,
-  setDatePicked: React.Dispatch<React.SetStateAction<boolean>>
+  setDatePicked: React.Dispatch<React.SetStateAction<boolean>>,
+  setSelectedDate: React.Dispatch<React.SetStateAction<string>>
 ) => {
   setDatePicked(true);
   const safeDate = dateValue ?? new Date();
@@ -37,6 +41,7 @@ const fetchEventsByDate = (
 
   const formattedDate = `${year}-${month}-${day}`;
   console.log(formattedDate);
+  setSelectedDate(formattedDate);
 
   axios
     .get(`http://localhost:5000/api/v1/events/by_date?date=${formattedDate}`)
@@ -45,7 +50,10 @@ const fetchEventsByDate = (
       setEvenList(response.data.events);
     })
     .catch((error) => {
-      console.log(error);
+      const err = error as AxiosError;
+      if (err.response && (err.response.status === 404)) {
+        setEvenList([]);
+      }
     });
 };
 
@@ -70,10 +78,10 @@ interface Event {
 }
 
 export default function Home() {
-  const [message, setMessage] = useState("");
-
+  const [pickedLocation, setPickedLocation] = useState<Location | null>(null);
   const [datePicked, setDatePicked] = useState(false);
   const [locationPicked, setLocationPicked] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
 
   const [eventList, setEventlist] = useState(Array<Event>);
 
@@ -93,7 +101,10 @@ export default function Home() {
       )
       .catch((error) => {
         console.log(error);
-        setMessage(error.message);
+        const err = error as AxiosError;
+        if (err.response && (err.response.status === 404)) {
+          setEventlist([]);
+        }
       });
   }, []);
 
@@ -101,7 +112,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/locations")
+      .get("http://localhost:5000/api/v1/locations")
       .then((response) => {
         console.log(response);
         setLocations(response.data.locations);
@@ -111,18 +122,26 @@ export default function Home() {
       });
   }, []);
 
-  if (datePicked && locationPicked) {
-    axios
-      .get(`http://localhost:8080/api/v1/events/by_location_and_date?location_id=${}&date=${}`)
-      .then((response) => {
-        console.log(response);
-        setEventlist(response.data.events)
-      })
-      .catch((error) => {
-        console.log(error);
-        setMessage(error.message);
-      });
-  }
+  useEffect(() => {
+    if (datePicked && locationPicked && pickedLocation && selectedDate) {
+      axios
+        .get(
+          `http://localhost:5000/api/v1/events/by_location_and_date?location_id=${pickedLocation.id}&date=${selectedDate}`
+        )
+        .then((response) => {
+          console.log(response);
+          setEventlist(response.data.events);
+        })
+        .catch((error) => {
+          console.log(error);
+          const err = error as AxiosError;
+          if (err.response && (err.response.status === 404)) {
+            setEventlist([]);
+          }
+        });
+    }
+  }, [datePicked, locationPicked, pickedLocation, selectedDate]);
+
 
   return (
     <div>
@@ -140,21 +159,22 @@ export default function Home() {
               <div>
                 <Datepicker
                   onChange={(e) =>
-                    fetchEventsByDate(e, setEventlist, setDatePicked)
+                    fetchEventsByDate(e, setEventlist, setDatePicked, setSelectedDate)
                   }
                 />
               </div>
 
               <div>
                 <Dropdown
-                  label="Dropdown button on"
-                  dismissOnClick={false}
+                  label={pickedLocation ? pickedLocation.name : 'Select a location'}
+                  dismissOnClick={true}
                   className="h-52 overflow-y-scroll"
                 >
                   {locations.map((location, index) => (
                     <Dropdown.Item
                       key={index}
                       onClick={() => {
+                        setPickedLocation(location);
                         fetchEventsByLocationId(
                           location.id,
                           setEventlist,
@@ -170,7 +190,7 @@ export default function Home() {
             </div>
           </div>
 
-          {!message ? (
+          {eventList.length > 0 ? (
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 lg:gap-20 2xl:gap-32">
               {/* Card 1 */}
               {eventList.map((event, index) => {
@@ -213,7 +233,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="w-full h-64 flex justify-center items-center">
-              <p className="font-poppins text-2xl font-semibold">{message}</p>
+              <p className="font-poppins text-2xl font-semibold">No events found!</p>
             </div>
           )}
         </section>
