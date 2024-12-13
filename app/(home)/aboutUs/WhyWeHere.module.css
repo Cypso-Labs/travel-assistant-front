@@ -1,0 +1,156 @@
+.container {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 38px 42px 213px 9px;
+}
+
+.introSection {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.mainTitle {
+  color: #333;
+  font: 600 40px Rubik, sans-serif;
+  margin-top: 90px;
+}
+
+.introduction {
+  flex: 1;
+  color: rgba(0, 0, 0, 0.85);
+  font: 500 18px RuBriC, RuBriC, RuBriC, RuBriC, sans-serif;
+}
+
+.featuresContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 40px;
+  margin-top: 40px;
+  background: #f0f0f0; /* Light background for visibility */
+  position: relative;
+  border-radius: 50px; /* Rounded corners */
+  clip-path: ellipse(90% 60% at 50% 50%); /* Creates an elliptical curved shape */
+  transition: clip-path 0.3s ease; /* Smooth transition for layout changes */
+}
+
+.newImageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 300px; /* Limit width of image grid */
+}
+
+.newImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.newImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.featureCard {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+}
+
+.featureImage {
+  aspect-ratio: 1.02;
+  object-fit: contain;
+  width: 84px;
+}
+
+.featureContent {
+  flex: 1;
+}
+
+.featureTitle {
+  color: #000;
+  font: 500 20px Rubik, sans-serif;
+  margin-bottom: 6px;
+}
+
+.featureDescription {
+  color: #000;
+  font: 600 12px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+.conclusion {
+  color: #000;
+  margin-top: 72px;
+  font: 500 17px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+.callToAction {
+  color: #000;
+  text-align: center;
+  margin-top: 73px;
+  font: 700 24px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+.highlight {
+  color: rgba(99,171,69,1);
+}
+
+.inlineImage {
+  display: block;
+  margin: 40px auto;
+  max-width: 20%;
+  height: auto;
+}
+
+@media (max-width: 991px) {
+  .container {
+    padding: 0 20px 100px 0;
+  }
+
+  .featuresContainer {
+    flex-direction: column;
+    clip-path: none; /* Removes the curve */
+    border-radius: 0; /* Resets rounded corners */
+    padding: 20px; /* Adjust padding for compact layout */
+  }
+
+  .introduction,
+  .featureDescription,
+  .conclusion,
+  .callToAction {
+    max-width: 100%;
+  }
+
+  .conclusion {
+    margin-top: 40px;
+  }
+
+  .introSection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .newImageGrid {
+    grid-template-columns: 1fr; /* Stack images in a single column */
+    margin-top: 20px;
+  }
+
+  .callToAction {
+    margin-top: 40px;
+  }
+
+
+
+}

@@ -1,20 +1,19 @@
-'use client'; // Ensures the component runs on the client
+'use client'; 
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import close_icon from '../../../public/images/icons/close_icon.png';
 import Image from 'next/image';
 
-const VR360Image = ({ onClose, imageURL }) => {
+const VR360Image = ({ onClose, imageURL }: { onClose: () => void, imageURL: string }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const url = imageURL;
 
-    console.log('Image URL:', url);
-
+    const container = containerRef.current;
     const width = window.innerWidth;
     const height = window.innerHeight;
 
@@ -22,24 +21,29 @@ const VR360Image = ({ onClose, imageURL }) => {
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.set(0, 0, 0.1);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.xr.enabled = true;
 
-    if (containerRef.current) {
-      containerRef.current.appendChild(renderer.domElement);
+    if (container) {
+      container.appendChild(renderer.domElement);
     }
 
-    if (VRButton && containerRef.current) {
-      containerRef.current.appendChild(VRButton.createButton(renderer));
+    if (VRButton && container) {
+      const vrButton = VRButton.createButton(renderer);
+      container.appendChild(vrButton);
+      vrButton.style.zIndex = '1100'; 
     }
 
-    // Add texture loading with error handling
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
       url,
       (texture) => {
-        // When the texture loads, set up the material
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.anisotropy = 16;
+
         const geometry = new THREE.SphereGeometry(50, 60, 40);
         geometry.scale(-1, 1, 1); // Invert the geometry for 360 view
 
@@ -80,13 +84,12 @@ const VR360Image = ({ onClose, imageURL }) => {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      // Clean up
       renderer.dispose();
-      if (containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (container) {
+        container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [imageURL]);
 
   return (
     <div
@@ -97,7 +100,7 @@ const VR360Image = ({ onClose, imageURL }) => {
         width: '100vw',
         height: '100vh',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        zIndex: 1000, 
+        zIndex: 1000,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -120,7 +123,6 @@ const VR360Image = ({ onClose, imageURL }) => {
         }}
         src={close_icon} className='' alt='' />
 
-      {/* 360 Viewer */}
       <div ref={containerRef} style={{ width: '100vw', height: '100vh' }} />
     </div>
   );

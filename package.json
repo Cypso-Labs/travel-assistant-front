@@ -9,13 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@conform-to/react": "^1.2.2",
+    "@conform-to/zod": "^1.2.2",
+    "@react-google-maps/api": "^2.20.3",
     "@types/three": "^0.170.0",
+    "axios": "^1.7.9",
     "flowbite-react": "^0.10.2",
     "next": "15.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "sweetalert2": "^11.14.5",
     "three": "^0.170.0",
-    "travel-assistant-front": "file:"
+    "travel-assistant-front": "file:",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
