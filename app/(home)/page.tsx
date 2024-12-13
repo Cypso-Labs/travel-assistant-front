@@ -8,7 +8,6 @@ import header_image4 from "../../public/images/4.png";
 import Event_Image1 from "../../public/images/event01.png";
 import Event_Image2 from "../../public/images/event02.png";
 import Event_Image3 from "../../public/images/event03.png";
-import Chickn from "../../public/images/Image.png";
 import Image from "next/image";
 import Link from "next/link";
 import MapComponent from "../components/googleMap";
@@ -25,22 +24,8 @@ interface Recipe {
 }
 
 export default function HomePage() {
-  const [user, setUser] = useState<{ [key: string]: unknown }>({});
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const userData = localStorage.getItem("UserData");
-      if (userData) {
-        setUser(JSON.parse(userData));
-      } else {
-        setUserNotLogged(true);
-      }
-    }
-  }, []);
 
   const [allRecipes, setAllRecipes] = useState<Recipe[] | null>(null);
-  const [userRecipes, setUserRecipes] = useState<Recipe[] | null>(null);
-  const [userNotLogged, setUserNotLogged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -52,47 +37,19 @@ export default function HomePage() {
         if (response.status === 200) {
           console.log(response.data);
           setAllRecipes(response.data.recipes);
+          setIsLoading(false)
         }
       } catch (error) {
         const err = error as AxiosError;
         console.log(err);
+        setIsLoading(false)
       }
     };
 
-    const fetchUserRecipes = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/v1/users/${user.user_id}/recipes`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.access_token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          const user_recipes = response.data.recipes;
-          setUserRecipes(user_recipes);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        const err = error as AxiosError;
-        if (err.response && err.response.status === 404) {
-          setUserRecipes(null);
-        }
-        if (
-          err.response &&
-          (err.response.status === 401 || err.response.status === 422)
-        ) {
-          setUserRecipes(null);
-          setUserNotLogged(true);
-        }
-        setIsLoading(false);
-      }
-    };
+
 
     fetchAllRecipes();
-    fetchUserRecipes();
-  }, [user.access_token, user.user_id]);
+  }, []);
 
   return (
     <div>
@@ -332,175 +289,71 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      (!isLoading &&
-      <div className="p-8">
-        <div className="text-left mb-12">
-          <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">
-            Flavors of Sri Lanka
-          </h1>
-          <p className="text-lg text-gray-600">
-            Sri Lankan cuisine is a vibrant blend of bold spices, fresh
-            ingredients, and diverse cultural influences, creating unforgettable
-            flavors. From spicy curries to sweet desserts, each dish reflects
-            the island&apos;s rich heritage and unique cooking traditions.
-            Explore beloved recipes that bring the authentic tastes of Sri Lanka
-            to your kitchen!
-          </p>
-        </div>
+      {!isLoading &&
+        <div className="p-8">
+          <div className="text-left mb-12">
+            <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">
+              Flavors of Sri Lanka
+            </h1>
+            <p className="text-lg text-gray-600">
+              Sri Lankan cuisine is a vibrant blend of bold spices, fresh
+              ingredients, and diverse cultural influences, creating unforgettable
+              flavors. From spicy curries to sweet desserts, each dish reflects
+              the island&apos;s rich heritage and unique cooking traditions.
+              Explore beloved recipes that bring the authentic tastes of Sri Lanka
+              to your kitchen!
+            </p>
+          </div>
 
-        <div className="flex flex-wrap justify-center gap-6">
-          {/* Card 1 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {allRecipes && allRecipes.length !== 0 ? (
-              allRecipes.map((recipe, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]"
-                >
-                  <div className="relative w-full h-48">
-                    <Image
-                      src={recipe.cover_image}
-                      alt={recipe.name}
-                      fill
-                      className="object-cover"
-                    />
+          <div className="flex flex-wrap justify-center gap-6">
+            {/* Card 1 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {allRecipes && allRecipes.length !== 0 ? (
+                allRecipes.map((recipe, index) => (
+                  <div
+                    key={index}
+                    className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]"
+                  >
+                    <div className="relative w-full h-48">
+                      <Image
+                        src={recipe.cover_image}
+                        alt={recipe.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-xl font-semibold mb-2">
+                        {recipe.name}
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        {recipe.cultural_background}
+                      </p>
+                      <Link
+                        href={`/recipes/${recipe.id}`} // Replace with dynamic routing or keep the placeholder
+                        className="text-green-600 font-semibold hover:underline"
+                      >
+                        Learn More...
+                      </Link>
+                    </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {recipe.name}
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      {recipe.cultural_background}
-                    </p>
-                    <Link
-                      href={`/recipes/${recipe.id}`} // Replace with dynamic routing or keep the placeholder
-                      className="text-green-600 font-semibold hover:underline"
-                    >
-                      Learn More...
-                    </Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-600">No recipes available.</p>
-            )}
+                ))
+              ) : (
+                <p className="text-center text-gray-600">No recipes available.</p>
+              )}
+            </div>
+          </div>
 
-            {/* Card 2 */}
-            {allRecipes && allRecipes.length !== 0 ? (
-              allRecipes.map((recipe, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]"
-                >
-                  <div className="relative w-full h-48">
-                    <Image
-                      src={recipe.cover_image}
-                      alt={recipe.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {recipe.name}
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      {recipe.cultural_background}
-                    </p>
-                    <Link
-                      href={`/recipes/${recipe.id}`} // Replace with dynamic routing or keep the placeholder
-                      className="text-green-600 font-semibold hover:underline"
-                    >
-                      Learn More...
-                    </Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-600">No recipes available.</p>
-            )}
-
-            {/* Card 3 */}
-            {allRecipes && allRecipes.length !== 0 ? (
-              allRecipes.map((recipe, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]"
-                >
-                  <div className="relative w-full h-48">
-                    <Image
-                      src={recipe.cover_image}
-                      alt={recipe.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {recipe.name}
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      {recipe.cultural_background}
-                    </p>
-                    <Link
-                      href={`/recipes/${recipe.id}`} // Replace with dynamic routing or keep the placeholder
-                      className="text-green-600 font-semibold hover:underline"
-                    >
-                      Learn More...
-                    </Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-600">No recipes available.</p>
-            )}
-
-            {allRecipes && allRecipes.length !== 0 ? (
-              allRecipes.map((recipe, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]"
-                >
-                  <div className="relative w-full h-48">
-                    <Image
-                      src={recipe.cover_image}
-                      alt={recipe.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {recipe.name}
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      {recipe.cultural_background}
-                    </p>
-                    <Link
-                      href={`/recipes/${recipe.id}`} // Replace with dynamic routing or keep the placeholder
-                      className="text-green-600 font-semibold hover:underline"
-                    >
-                      Learn More...
-                    </Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-600">No recipes available.</p>
-            )}
+          <div className="text-right mt-8">
+            <Link
+              href="#"
+              className="text-lg font-semibold text-green-600 hover:underline"
+            >
+              More Recipes →
+            </Link>
           </div>
         </div>
-
-        <div className="text-right mt-8">
-          <Link
-            href="#"
-            className="text-lg font-semibold text-green-600 hover:underline"
-          >
-            More Recipes →
-          </Link>
-        </div>
-      </div>
-      )
+      }
       <section className="bg-gray-100 min-h-screen p-8">
         <div className="text-left mb-12">
           <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">
