@@ -43,9 +43,28 @@ export default function ItineraryPage() {
       const userData = localStorage.getItem("UserData");
       if (userData) {
         setUser(JSON.parse(userData));
+      }else{
+        showLoginPrompt();
       }
     }
   }, []);
+
+  const showLoginPrompt = () => {
+    Swal.fire({
+      title: "Login Required",
+      text: "You must log in to access your itineraries.",
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonText: "Go to Login",
+      customClass: {
+        confirmButton: "swal-login-button"
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push("/account/sign-in"); // Redirect to login page
+      }
+    });
+  };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [itinerary, setItinerary] = useState<Itinerary[] | null>(null);

@@ -132,38 +132,56 @@ const Header = () => {
               </svg>
             </button>
 
-            {/* Profile Icon */}
-            <div className="relative flex justify-between items-center">
-              <button 
-                className="bg-gray-800 p-2 rounded-full hover:bg-gray-700"
-                onClick={handleProfileClick}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
-                  />
-                </svg>
-              </button>
+           
+            {/* Profile and Login Buttons */}
+            <div className="relative flex items-center space-x-4">
+              {user ? (
+                <>
+                  {/* Profile Icon */}
+                  <button
+                    className="bg-gray-800 p-2 rounded-full hover:bg-gray-700"
+                    onClick={handleProfileClick}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.75 6.75A3.75 3.75 0 1112 3a3.75 3.75 0 013.75 3.75zM3 21a9 9 0 1118 0H3z"
+                      />
+                    </svg>
+                  </button>
 
-              {/* Logout Button - visible only when user is logged in */}
-              {typeof window !== "undefined" && user && (
-                <button
-                  onClick={handleLogout}
-                  className="ml-4 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 text-sm"
-                >
-                  Logout
-                </button>
+                  {/* Logout Button */}
+                  <button
+                    onClick={handleLogout}
+                    className="ml-4 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 text-sm"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Login Button */}
+                  <button
+                    onClick={() => router.push("/account/sign-in")}
+                    className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 text-sm"
+                  >
+                    Login
+                  </button>
+                </>
               )}
             </div>
+
+
+
+
           </div>
         </div>
       </header>
