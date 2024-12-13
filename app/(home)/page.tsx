@@ -24,7 +24,6 @@ interface Recipe {
 }
 
 export default function HomePage() {
-
   const [allRecipes, setAllRecipes] = useState<Recipe[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,16 +36,14 @@ export default function HomePage() {
         if (response.status === 200) {
           console.log(response.data);
           setAllRecipes(response.data.recipes);
-          setIsLoading(false)
+          setIsLoading(false);
         }
       } catch (error) {
         const err = error as AxiosError;
         console.log(err);
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
-
-
 
     fetchAllRecipes();
   }, []);
@@ -239,7 +236,6 @@ export default function HomePage() {
           upcoming events, and discover popular local recipes to make the most
           of your trip
         </p>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1 */}
           <div className="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
@@ -289,7 +285,12 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      {!isLoading &&
+
+
+
+
+
+      {!isLoading && (
         <div className="p-8">
           <div className="text-left mb-12">
             <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">
@@ -297,24 +298,24 @@ export default function HomePage() {
             </h1>
             <p className="text-lg text-gray-600">
               Sri Lankan cuisine is a vibrant blend of bold spices, fresh
-              ingredients, and diverse cultural influences, creating unforgettable
-              flavors. From spicy curries to sweet desserts, each dish reflects
-              the island&apos;s rich heritage and unique cooking traditions.
-              Explore beloved recipes that bring the authentic tastes of Sri Lanka
-              to your kitchen!
+              ingredients, and diverse cultural influences, creating
+              unforgettable flavors. From spicy curries to sweet desserts, each
+              dish reflects the island&apos;s rich heritage and unique cooking
+              traditions. Explore beloved recipes that bring the authentic
+              tastes of Sri Lanka to your kitchen!
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6">
-            {/* Card 1 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex flex-wrap justify-center gap-6 p-4">
+            {/* Grid Layout for Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 w-full">
               {allRecipes && allRecipes.length !== 0 ? (
                 allRecipes.map((recipe, index) => (
                   <div
                     key={index}
-                    className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]"
+                    className="border rounded-lg shadow-md overflow-hidden w-full max-w-[400px] h-[500px]"
                   >
-                    <div className="relative w-full h-48">
+                    <div className="relative w-full h-72">
                       <Image
                         src={recipe.cover_image}
                         alt={recipe.name}
@@ -330,7 +331,7 @@ export default function HomePage() {
                         {recipe.cultural_background}
                       </p>
                       <Link
-                        href={`/recipes/${recipe.id}`} // Replace with dynamic routing or keep the placeholder
+                        href={`/recipes/${recipe.id}`}
                         className="text-green-600 font-semibold hover:underline"
                       >
                         Learn More...
@@ -339,7 +340,9 @@ export default function HomePage() {
                   </div>
                 ))
               ) : (
-                <p className="text-center text-gray-600">No recipes available.</p>
+                <p className="text-center text-gray-600 col-span-full">
+                  No recipes available.
+                </p>
               )}
             </div>
           </div>
@@ -353,7 +356,8 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-      }
+      )}
+
       <section className="bg-gray-100 min-h-screen p-8">
         <div className="text-left mb-12">
           <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">
