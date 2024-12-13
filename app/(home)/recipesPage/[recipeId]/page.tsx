@@ -125,7 +125,7 @@ export default function RecipesPage() {
           }
         );
 
-        if (response.status === 422||response.status === 401) {
+        if (response.status === 422 || response.status === 401) {
           Swal.fire({
             title: "Session Expired",
             text: "Your session has expired. Please log in again.",
@@ -185,13 +185,22 @@ export default function RecipesPage() {
         </div>
 
         <div className="relative p-4">
-          <Image
-            src={recipe.cover_image}
-            alt={recipe.name}
-            className="w-50 h-50 object-cover rounded-lg shadow-lg"
-            width={700}
-            height={600}
-          />
+          <div
+            style={{
+              width: '100%', 
+              height: '50vh',
+              position: 'relative',
+            }}
+          >
+            <Image
+              src={recipe.cover_image}
+              alt={recipe.name}
+              fill 
+              style={{ objectFit: 'cover' }} 
+              className="rounded-lg"
+            />
+          </div>
+
           <div className="max-w-5xl bg-white rounded-[50px] shadow-xl p-8 mx-auto -mt-10 relative z-10">
             <h2 className="text-3xl font-bold text-gray-800 mb-4 text-center">
               {recipe.name}
@@ -230,11 +239,10 @@ export default function RecipesPage() {
             </section>
 
             <button
-              className={`absolute top-4 right-4 p-3 rounded-full bg-white shadow-lg ${
-                isFavorited
-                  ? "text-red-500 hover:text-red-600"
-                  : "text-gray-400 hover:text-gray-500"
-              }`}
+              className={`absolute top-4 right-4 p-3 rounded-full bg-white shadow-lg ${isFavorited
+                ? "text-red-500 hover:text-red-600"
+                : "text-gray-400 hover:text-gray-500"
+                }`}
               aria-label="Add to Favorites"
               onClick={handleFavoriteClick}
             >
