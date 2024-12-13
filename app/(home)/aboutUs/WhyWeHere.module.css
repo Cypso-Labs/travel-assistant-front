@@ -23,14 +23,21 @@
 .introduction {
   flex: 1;
   color: rgba(0, 0, 0, 0.85);
-  font: 500 18px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
+  font: 500 18px RuBriC, RuBriC, RuBriC, RuBriC, sans-serif;
 }
 
 .featuresContainer {
   display: flex;
-  flex-direction: column;
-  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 40px;
   margin-top: 40px;
+  background: #f0f0f0; /* Light background for visibility */
+  position: relative;
+  border-radius: 50px; /* Rounded corners */
+  clip-path: ellipse(90% 60% at 50% 50%); /* Creates an elliptical curved shape */
+  transition: clip-path 0.3s ease; /* Smooth transition for layout changes */
 }
 
 .newImageGrid {
@@ -110,6 +117,13 @@
 @media (max-width: 991px) {
   .container {
     padding: 0 20px 100px 0;
+  }
+
+  .featuresContainer {
+    flex-direction: column;
+    clip-path: none; /* Removes the curve */
+    border-radius: 0; /* Resets rounded corners */
+    padding: 20px; /* Adjust padding for compact layout */
   }
 
   .introduction,
