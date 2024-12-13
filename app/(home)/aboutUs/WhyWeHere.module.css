@@ -6,6 +6,14 @@
   padding: 38px 42px 213px 9px;
 }
 
+.introSection {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
 .mainTitle {
   color: #333;
   font: 600 40px Rubik, sans-serif;
@@ -13,8 +21,8 @@
 }
 
 .introduction {
+  flex: 1;
   color: rgba(0, 0, 0, 0.85);
-  margin: 24px 0 0 24px;
   font: 500 18px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
 }
 
@@ -29,7 +37,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  margin: 40px 0;
+  max-width: 300px; /* Limit width of image grid */
 }
 
 .newImageContainer {
@@ -44,7 +52,6 @@
 .newImage {
   width: 100%;
   height: auto;
-  max-width: 150px;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -116,9 +123,14 @@
     margin-top: 40px;
   }
 
-    .newImageGrid {
-    grid-template-columns: 1fr;
-    gap: 15px;
+  .introSection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .newImageGrid {
+    grid-template-columns: 1fr; /* Stack images in a single column */
+    margin-top: 20px;
   }
 
   .callToAction {
