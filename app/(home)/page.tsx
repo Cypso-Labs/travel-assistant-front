@@ -1,6 +1,6 @@
 "use client"; // Add this line
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import header_image1 from "../../public/images/1.png";
 import header_image2 from "../../public/images/2.png";
 import header_image3 from "../../public/images/3.png";
@@ -8,20 +8,49 @@ import header_image4 from "../../public/images/4.png";
 import Event_Image1 from "../../public/images/event01.png";
 import Event_Image2 from "../../public/images/event02.png";
 import Event_Image3 from "../../public/images/event03.png";
-import Chickn from "../../public/images/Image.png";
 import Image from "next/image";
 import Link from "next/link";
 import MapComponent from "../components/googleMap";
+import axios, { AxiosError } from "axios";
 
+interface Recipe {
+  id: number;
+  name: string;
+  description: string;
+  cultural_background: string;
+  cover_image: string;
+  ingredients: string[];
+  instructions: string[];
+}
 
 export default function HomePage() {
-  
+  const [allRecipes, setAllRecipes] = useState<Recipe[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllRecipes = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/v1/recipes"
+        );
+        if (response.status === 200) {
+          console.log(response.data);
+          setAllRecipes(response.data.recipes);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        const err = error as AxiosError;
+        console.log(err);
+        setIsLoading(false);
+      }
+    };
+
+    fetchAllRecipes();
+  }, []);
+
   return (
     <div>
       <div className="min-h-screen bg-gray-900 text-white ">
-
-
-
         <section
           className="relative flex items-center justify-center h-screen bg-cover bg-center"
           style={{
@@ -43,7 +72,6 @@ export default function HomePage() {
           </div>
         </section>
       </div>
-
       <div className="bg-white text-gray-800 min-h-screen px-6 md:px-12 py-10 ">
         <div className="relative lg:absolute text-left mb-12 w-full lg:w-[45%]">
           <h2 className="text-lg font-bold text-green-500">About Us</h2>
@@ -199,7 +227,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-
       <section className="p-8 text-left">
         <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-5">
           Essential Tools for Travelers
@@ -209,17 +236,18 @@ export default function HomePage() {
           upcoming events, and discover popular local recipes to make the most
           of your trip
         </p>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1 */}
           <div className="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
-            <Image
-              src={Event_Image1}
-              alt="Travel Itinerary"
-              width={600}
-              height={400}
-              className="rounded-t-lg object-cover"
-            />
+            <Link href="/itineraryCreate" className="cursor-pointer">
+              <Image
+                src={Event_Image1}
+                alt="Travel Itinerary"
+                width={600}
+                height={400}
+                className="rounded-t-lg object-cover"
+              />
+            </Link>
             <div className="bg-green-200 text-center py-2 rounded-b-lg text-lg font-semibold">
               Make Your Own Itinerary
             </div>
@@ -227,26 +255,30 @@ export default function HomePage() {
 
           {/* Card 2 */}
           <div className="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
-            <Image
-              src={Event_Image2}
-              alt="Upcoming Events"
-              width={600}
-              height={400}
-              className="rounded-t-lg object-cover"
-            />
+            <Link href="/eventPage" className="cursor-pointer">
+              <Image
+                src={Event_Image2}
+                alt="Upcoming Events"
+                width={600}
+                height={400}
+                className="rounded-t-lg object-cover"
+              />
+            </Link>
             <div className="bg-green-200 text-center py-2 rounded-b-lg text-lg font-semibold">
               Upcoming Events
             </div>
           </div>
 
           <div className="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
-            <Image
-              src={Event_Image3}
-              alt="Popular Recipes"
-              width={600}
-              height={400}
-              className="rounded-t-lg object-cover"
-            />
+            <Link href="/recipesPage" className="cursor-pointer">
+              <Image
+                src={Event_Image3}
+                alt="Popular Recipes"
+                width={600}
+                height={400}
+                className="rounded-t-lg object-cover"
+              />
+            </Link>
             <div className="bg-green-200 text-center py-2 rounded-b-lg text-lg font-semibold">
               Popular Recipes
             </div>
@@ -254,154 +286,90 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="p-8">
-        <div className="text-left mb-12">
-          <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">Flavors of Sri Lanka</h1>
-          <p className="text-lg text-gray-600">
-            Sri Lankan cuisine is a vibrant blend of bold spices, fresh
-            ingredients, and diverse cultural influences, creating unforgettable
-            flavors. From spicy curries to sweet desserts, each dish reflects
-            the island&apos;s rich heritage and unique cooking traditions. Explore
-            beloved recipes that bring the authentic tastes of Sri Lanka to your
-            kitchen!
-          </p>
-        </div>
-        <div className="flex flex-wrap justify-center gap-6">
-          {/* Card 1 */}
-          <div className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]">
-            <div className="relative w-full h-48">
-              <Image
-                src={Chickn} // Replace with actual image path
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">
-                Sri Lankan Chicken Curry (Kukul Mas Curry)
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
+
+
+
+
+      {!isLoading && (
+        <div className="p-8">
+          <div className="text-left mb-12">
+            <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">
+              Flavors of Sri Lanka
+            </h1>
+            <p className="text-lg text-gray-600">
+              Sri Lankan cuisine is a vibrant blend of bold spices, fresh
+              ingredients, and diverse cultural influences, creating
+              unforgettable flavors. From spicy curries to sweet desserts, each
+              dish reflects the island&apos;s rich heritage and unique cooking
+              traditions. Explore beloved recipes that bring the authentic
+              tastes of Sri Lanka to your kitchen!
+            </p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-6 p-4">
+            {/* Grid Layout for Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 w-full">
+              {allRecipes && allRecipes.length !== 0 ? (
+                allRecipes.map((recipe, index) => (
+                  <div
+                    key={index}
+                    className="border rounded-lg shadow-md overflow-hidden w-full max-w-[400px] h-[500px]"
+                  >
+                    <div className="relative w-full h-72">
+                      <Image
+                        src={recipe.cover_image}
+                        alt={recipe.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-xl font-semibold mb-2">
+                        {recipe.name}
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        {recipe.cultural_background}
+                      </p>
+                      <Link
+                        href={`/recipes/${recipe.id}`}
+                        className="text-green-600 font-semibold hover:underline"
+                      >
+                        Learn More...
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-gray-600 col-span-full">
+                  No recipes available.
+                </p>
+              )}
             </div>
           </div>
 
-          {/* Card 2 */}
-          <div className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]">
-            <div className="relative w-full h-48">
-              <Image
-                src={Chickn} // Replace with actual image path
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">
-                Sri Lankan Chicken Curry (Kukul Mas Curry)
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]">
-            <div className="relative w-full h-48">
-              <Image
-                src={Chickn}
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">
-                Sri Lankan Chicken Curry (Kukul Mas Curry)
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
-          </div>
-
-          <div className="border rounded-lg shadow-md overflow-hidden w-[400px] h-[500px]">
-            <div className="relative w-full h-48">
-              <Image
-                src={Chickn}
-                alt="Sri Lankan Chicken Curry"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <h3 className="text-xl font-semibold mb-2">
-                Sri Lankan Chicken Curry (Kukul Mas Curry)
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Sri Lankan Chicken Curry, or Kukul Mas Curry, is a rich and
-                aromatic dish made with a blend of spices, coconut milk, and
-                tender chicken, embodying the vibrant flavors of Sri Lankan
-                cuisine.
-              </p>
-              <Link
-                href="#"
-                className="text-green-600 font-semibold hover:underline"
-              >
-                Learn More....
-              </Link>
-            </div>
+          <div className="text-right mt-8">
+            <Link
+              href="#"
+              className="text-lg font-semibold text-green-600 hover:underline"
+            >
+              More Recipes →
+            </Link>
           </div>
         </div>
-        <div className="text-right mt-8">
-          <Link
-            href="#"
-            className="text-lg font-semibold text-green-600 hover:underline"
-          >
-            More Recipes →
-          </Link>
-        </div>
-      </div>
+      )}
 
       <section className="bg-gray-100 min-h-screen p-8">
         <div className="text-left mb-12">
-          <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">Popular Landmarks</h1>
+          <h1 className="text-2xl sm-text-4xl md:text-5xl font-bold mb-4">
+            Popular Landmarks
+          </h1>
           <p className="text-lg text-gray-600">
             Explore Sri Lanka&apos;s iconic landmarks, from ancient temples to
             breathtaking natural wonders, and uncover the rich history and
             beauty of each destination.
           </p>
         </div>
-        <MapComponent/>
+        <MapComponent />
       </section>
     </div>
   );
