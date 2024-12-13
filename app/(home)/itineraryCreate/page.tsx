@@ -22,8 +22,37 @@ export default function ItineraryPage() {
     router.push("/"); // Navigate to the homepage
   };
 
+  const [user, setUser] = useState<{ [key: string]: unknown }>({});
+
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("UserData") || "{}");
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("UserData");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      } else {
+        showLoginPrompt();
+      }
+    }
+  }, []);
+
+  const showLoginPrompt = () => {
+    Swal.fire({
+      title: "Login Required",
+      text: "You must log in to create itineraries.",
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonText: "Go to Login",
+      customClass: {
+        confirmButton: "swal-login-button"
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push("/account/sign-in"); // Redirect to login page
+      }
+    });
+  };
+
+  useEffect(() => {
 
     const fetchUser = async () => {
       try {
@@ -65,6 +94,50 @@ export default function ItineraryPage() {
   }, [router]);
 
   const handleCreate = async () => {
+
+    if (!user.user_id) {
+      showLoginPrompt();
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/users/${user.user_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+            },
+          }
+        );
+
+        console.log(response);
+
+      } catch (error) {
+        const err = error as AxiosError;
+        if (err.response && (err.response.status === 401 || err.response.status === 422)) {
+          setTokenError(true);
+          Swal.fire({
+            title: "Token Error",
+            text: "Please login to continue.",
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonText: "Go to Login",
+            customClass: {
+              confirmButton: "swal-login-button"
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              router.push("/account/sign-in");
+            }
+          });
+        }
+        return;
+      }
+    };
+
+    fetchUser();
+
     if (!startDate || !endDate || !budget) {
       Swal.fire({
         title: "Empty Fields",
@@ -76,7 +149,7 @@ export default function ItineraryPage() {
 
     const start = new Date(startDate);
     const end = new Date(endDate);
-    
+
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       Swal.fire({
         title: "Invalid Dates",
@@ -85,7 +158,7 @@ export default function ItineraryPage() {
       });
       return;
     }
-    
+
     const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 
     if (days <= 0) {
