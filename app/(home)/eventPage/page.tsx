@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/app/components/Header";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios, { AxiosResponse, AxiosError } from "axios";
@@ -145,7 +144,6 @@ export default function Home() {
 
   return (
     <div>
-      <Header />
       <main className="bg-white">
         <section className="container mx-auto py-10  pt-40">
           <div className="mx-6 flex justify-between">
