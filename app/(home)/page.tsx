@@ -331,7 +331,7 @@ export default function HomePage() {
                         {recipe.cultural_background}
                       </p>
                       <Link
-                        href={`/recipes/${recipe.id}`}
+                        href={`recipesPage/${recipe.id}`}
                         className="text-green-600 font-semibold hover:underline"
                       >
                         Learn More...
@@ -349,7 +349,7 @@ export default function HomePage() {
 
           <div className="text-right mt-8">
             <Link
-              href="#"
+              href="recipeFlavors"
               className="text-lg font-semibold text-green-600 hover:underline"
             >
               More Recipes →
