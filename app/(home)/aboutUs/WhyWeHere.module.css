@@ -25,6 +25,30 @@
   margin-top: 40px;
 }
 
+.newImageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.newImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.newImage {
+  width: 100%;
+  height: auto;
+  max-width: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 .featureCard {
   display: flex;
   gap: 7px;
@@ -90,6 +114,11 @@
 
   .conclusion {
     margin-top: 40px;
+  }
+
+    .newImageGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
   .callToAction {

@@ -37,26 +37,49 @@ const features = [
       "Stay connected to the pulse of your surroundings with our Nearby Event Finder. Discover cultural festivals, local celebrations, and exciting activities happening close to you. Whether you're seeking entertainment, community gatherings, or unique experiences, our tool makes it easy to find events that match your interests and location.",
   },
 ];
+const aboutUs: React.FC = () => {
+  const newImages = [
+    {
+      src: "/images/4.png",
+      alt: "Scenic Beach",
+    },
+    {
+      src: "/images/2.png",
+      alt: "Mountain View",
+    },
+    {
+      src: "/images/2ae90ad8a77640b1c7b3e8c83b2c31e5c36cf997.png",
+      alt: "Cultural Dance",
+    },
+    {
+      src: "/images/3.png",
+      alt: "City Lights",
+    },
+  ];
 
- const aboutUs: React.FC = () => {
   return (
     <div className={styles.container}>
-      <h1 className={styles.mainTitle}>Why We re Here</h1>
+      <h1 className={styles.mainTitle}>Why We’re Here</h1>
+
       <p className={styles.introduction}>
         Welcome to your ultimate travel companion for discovering the wonders of
         Sri Lanka! Our mission is to make your journey smooth, exciting, and
         culturally enriching by providing all the tools you need to plan an
-        unforgettable trip. Whether you re a first-time visitor or a seasoned
+        unforgettable trip. Whether you’re a first-time visitor or a seasoned
         traveler, our app ensures that your experience is personalized, fun, and
-        informative. We understand that planning a trip can be overwhelming, so
-        we ve created an intuitive travel assistant that simplifies the process
-        and offers tailored recommendations to enhance your journey. From
-        budgeting tips to discovering local flavors, immersive VR experiences,
-        and AI-guided landmark identification, our app takes care of the
-        details, leaving you with more time to enjoy what matters most—your
-        adventure! Our Key Features Include:
+        informative.
       </p>
 
+      {/* New image grid */}
+      <div className={styles.newImageGrid}>
+        {newImages.map((image, index) => (
+          <div key={index} className={styles.newImageContainer}>
+            <img src={image.src} alt={image.alt} className={styles.newImage} />
+          </div>
+        ))}
+      </div>
+
+      {/* Existing features */}
       <div className={styles.featuresContainer}>
         {features.map((feature, index) => (
           <FeatureCard key={index} {...feature} />
@@ -67,7 +90,7 @@ const features = [
         Our app is available on both mobile and web platforms, so you can plan
         your trip anytime, anywhere. We are committed to helping you explore Sri
         Lanka in a way that is seamless, enjoyable, and culturally enriching.
-        Whether you re planning a short getaway or an extended vacation, we re
+        Whether you’re planning a short getaway or an extended vacation, we’re
         here to make sure your travel experience is one to remember.
       </p>
 
@@ -86,4 +109,6 @@ const features = [
     </div>
   );
 };
+
 export default aboutUs;
+
