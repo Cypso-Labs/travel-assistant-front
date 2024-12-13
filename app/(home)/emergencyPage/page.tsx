@@ -1,6 +1,8 @@
 "use client"; // Add this line
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Dropdown } from "flowbite-react";
+
 
 interface Location {
   id: number;
@@ -78,31 +80,32 @@ export default function HelpPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6 pt-36">
       {/* Header Section */}
-      <header className="flex justify-between items-center pb-6">
-        <h1 className="text-2xl font-bold">Help When You Need It Most</h1>
+      <header className="flex flex-col space-y-5 sm:space-y-0 sm:flex-row justify-between items-center pb-6">
+        <h1 className="text-lg sm:text-2xl font-bold">Help When You Need It Most</h1>
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
-          <span className="text-gray-600 text-sm">Location</span>
-          <div className="relative w-full sm:w-auto">
-            <select
-              className="w-full sm:w-40 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring focus:ring-green-300 text-sm"
-              value={selectedLocation}
-              onChange={(e) => {
-                const selectedName = e.target.value;
-                const selectedLocationObject = locations.find(
-                  (location) => location.name === selectedName
-                );
-                setSelectedLocation(selectedName);
-                fetchEmergencyContacts(selectedLocationObject?.id || null);
-              }}
+        <div className="w-full sm:w-auto flex justify-center sm:justify-start items-center ">
+          <div className="relativew-auto">
+            <Dropdown
+              label={selectedLocation ? selectedLocation : "Select Location"}
+              dismissOnClick={true}
+              className="h-52 overflow-y-scroll"
             >
-              <option value="">Select Location</option>
               {locations.map((location) => (
-                <option key={location.id} value={location.name}>
+                <Dropdown.Item
+                  key={location.id}
+                  onClick={() => {
+                    const selectedName = location.name;
+                    const selectedLocationObject = locations.find(
+                      (location) => location.name === selectedName
+                    );
+                    setSelectedLocation(selectedName);
+                    fetchEmergencyContacts(selectedLocationObject?.id || null);
+                  }}
+                >
                   {location.name}
-                </option>
+                </Dropdown.Item>
               ))}
-            </select>
+            </Dropdown>
           </div>
         </div>
       </header>
