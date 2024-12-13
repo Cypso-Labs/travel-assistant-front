@@ -85,7 +85,7 @@ export default function Home() {
         {/* Main Container */}
         <div className="container mx-auto py-16 px-6 pt-40">
           {/* Title */}
-          <h1 className="text-4xl font-bold text-gray-800 mb-12 ">
+          <h1 className="text-[28px] sm:text-3xl md:text-4xl font-bold text-gray-800 mb-12 ">
             Flavors of Sri Lanka
           </h1>
 
@@ -134,7 +134,7 @@ export default function Home() {
 
           {!userNotLogged &&
             <div className="container mx-auto pt-10">
-              <span className="block w-full sm:w-[500px] md:w-[800px] lg:w-[1500px] h-[10px] bg-green-500"></span>
+              <span className="block w-full h-[10px] bg-green-500"></span>
             </div>}
         </div>
 
