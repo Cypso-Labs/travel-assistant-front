@@ -61,25 +61,32 @@ const aboutUs: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.mainTitle}>Why We’re Here</h1>
 
-      <p className={styles.introduction}>
-        Welcome to your ultimate travel companion for discovering the wonders of
-        Sri Lanka! Our mission is to make your journey smooth, exciting, and
-        culturally enriching by providing all the tools you need to plan an
-        unforgettable trip. Whether you’re a first-time visitor or a seasoned
-        traveler, our app ensures that your experience is personalized, fun, and
-        informative.
-      </p>
+      {/* Paragraph and New Images */}
+      <div className={styles.introSection}>
+        <p className={styles.introduction}>
+          Welcome to your ultimate travel companion for discovering the wonders
+          of Sri Lanka! Our mission is to make your journey smooth, exciting,
+          and culturally enriching by providing all the tools you need to plan
+          an unforgettable trip. Whether you’re a first-time visitor or a
+          seasoned traveler, our app ensures that your experience is
+          personalized, fun, and informative.
+        </p>
 
-      {/* New image grid */}
-      <div className={styles.newImageGrid}>
-        {newImages.map((image, index) => (
-          <div key={index} className={styles.newImageContainer}>
-            <img src={image.src} alt={image.alt} className={styles.newImage} />
-          </div>
-        ))}
+        {/* New Image Grid */}
+        <div className={styles.newImageGrid}>
+          {newImages.map((image, index) => (
+            <div key={index} className={styles.newImageContainer}>
+              <img
+                src={image.src}
+                alt={image.alt}
+                className={styles.newImage}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Existing features */}
+      {/* Existing Features */}
       <div className={styles.featuresContainer}>
         {features.map((feature, index) => (
           <FeatureCard key={index} {...feature} />
@@ -111,4 +118,3 @@ const aboutUs: React.FC = () => {
 };
 
 export default aboutUs;
-
