@@ -3,14 +3,29 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import logo from "../../public/images/logo.png";
+import HeaderBackground from '../../public/images/header_background.png';
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const Header = () => {
   const [user, setUser] = useState(null);
   const router = useRouter();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const pathname = usePathname(); // Get current route
+
+  // Centralized route titles
+  const pageTitles = {
+    "/": "HOME",
+    "/itineraryCreate": "CREATE ITINERARY",
+    "/itineraryView": "VIEW ITINERARIES",
+    "/eventPage": "EVENTS",
+    "/recipesPage": "RECIPES",
+    "/emergencyPage": "EMERGENCY",
+    "/aboutUs": "ABOUT US",
+  };
+
+  const currentTitle = pageTitles[pathname as keyof typeof pageTitles] || "ITINERARY";
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -44,19 +59,28 @@ const Header = () => {
   };
 
   const handleProfileClick = () => {
-      router.push("/profile");
+    router.push("/profile");
   };
-
-  // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // const toggleSidebar = () => {
-  //   setIsSidebarOpen((prev) => !prev);
-  // };
 
   return (
     <>
+      {/* Background image div */}
+      {currentTitle !== "HOME" &&
+      <div
+        className="absolute inset-0 z-0 flex justify-center items-center rounded-b-xl "
+        style={{
+          backgroundImage: `url(${HeaderBackground.src})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          height: '250px',
+        }}
+      >
+        <p className="font-poppins font-bold uppercase text-4xl mt-10 text-white">{currentTitle}</p>
+      </div>}
+
+      {/* Header component */}
       <header className="fixed left-1/2 transform -translate-x-1/2 w-[96vw] h-16 bg-black text-white shadow-lg z-50 mt-5 rounded-lg py-3 mx-auto">
-        <div className="absolute inset-0 ">
+        <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[#262626] rounded-[10px]"></div>
         </div>
 
@@ -98,8 +122,8 @@ const Header = () => {
             <Link href="/emergencyPage" className="hover:text-gray-300 text-lg">
               Emergency
             </Link>
-            <Link 
-              href="/aboutUs" 
+            <Link
+              href="/aboutUs"
               className="hover:text-gray-300 text-lg"
               onClick={handleItineraryClick}
             >
@@ -130,7 +154,6 @@ const Header = () => {
               </svg>
             </button>
 
-           
             {/* Profile and Login Buttons */}
             <div className="relative flex items-center space-x-4">
               {user ? (
@@ -176,18 +199,13 @@ const Header = () => {
                 </>
               )}
             </div>
-
-
-
-
           </div>
         </div>
       </header>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 z-50`}
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 z-50`}
       >
         <div className="flex justify-between items-center p-4 border-b border-gray-700">
           <h2 className="text-xl font-bold">Menu</h2>
@@ -232,8 +250,8 @@ const Header = () => {
           <Link href="/events" className="block hover:text-gray-300">
             Events
           </Link>
-          <Link 
-            href="/recipes" 
+          <Link
+            href="/recipes"
             className="block hover:text-gray-300"
             onClick={handleItineraryClick}
           >
@@ -243,7 +261,7 @@ const Header = () => {
             Emergency
           </Link>
           <Link
-            href="/about" 
+            href="/about"
             className="block hover:text-gray-300"
             onClick={handleItineraryClick}
           >
@@ -251,6 +269,9 @@ const Header = () => {
           </Link>
         </nav>
       </div>
+
+      {currentTitle !== "HOME" &&<div className="h-48">
+      </div>}
     </>
   );
 };
