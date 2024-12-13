@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import header_image from "../../public/images/homePage.png";
+import logo from "../../public/images/logo.png";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -56,20 +56,18 @@ const Header = () => {
   return (
     <>
       <header className="fixed left-1/2 transform -translate-x-1/2 w-[96vw] h-16 bg-black text-white shadow-lg z-50 mt-5 rounded-lg py-3 mx-auto">
-        <div className="absolute inset-0">
-          <Image
-            src={header_image}
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="absolute inset-0 ">
+          <div className="absolute inset-0 bg-[#262626] rounded-[10px]"></div>
         </div>
 
         <div className="relative container mx-auto flex justify-between items-center px-4 z-10">
           {/* Logo */}
           <div className="flex items-center space-x-4">
-            <div className="bg-gray-500 rounded-full w-10 h-10"></div>
-            <h1 className="text-2xl font-bold hidden lg:block">ITINERARY</h1>
+            <Image
+              src={logo}
+              alt="logo"
+              className="w-14 h-10"
+            />
           </div>
 
           {/* Navigation for larger screens */}
