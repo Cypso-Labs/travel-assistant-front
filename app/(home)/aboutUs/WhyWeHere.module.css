@@ -1,0 +1,101 @@
+.container {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 38px 42px 213px 9px;
+}
+
+.mainTitle {
+  color: #333;
+  font: 600 40px Rubik, sans-serif;
+  margin-top: 90px;
+}
+
+.introduction {
+  color: rgba(0, 0, 0, 0.85);
+  margin: 24px 0 0 24px;
+  font: 500 18px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+.featuresContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.featureCard {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+}
+
+.featureImage {
+  aspect-ratio: 1.02;
+  object-fit: contain;
+  width: 84px;
+}
+
+.featureContent {
+  flex: 1;
+}
+
+.featureTitle {
+  color: #000;
+  font: 500 20px Rubik, sans-serif;
+  margin-bottom: 6px;
+}
+
+.featureDescription {
+  color: #000;
+  font: 600 12px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+.conclusion {
+  color: #000;
+  margin-top: 72px;
+  font: 500 17px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+.callToAction {
+  color: #000;
+  text-align: center;
+  margin-top: 73px;
+  font: 700 24px Source Code Pro, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+.highlight {
+  color: rgba(99,171,69,1);
+}
+
+.inlineImage {
+  display: block;
+  margin: 40px auto;
+  max-width: 20%;
+  height: auto;
+}
+
+@media (max-width: 991px) {
+  .container {
+    padding: 0 20px 100px 0;
+  }
+
+  .introduction,
+  .featureDescription,
+  .conclusion,
+  .callToAction {
+    max-width: 100%;
+  }
+
+  .conclusion {
+    margin-top: 40px;
+  }
+
+  .callToAction {
+    margin-top: 40px;
+  }
+
+
+
+}
